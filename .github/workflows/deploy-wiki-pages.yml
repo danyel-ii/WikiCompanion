@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout source repo
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -37,6 +39,7 @@ jobs:
           repository: danyel-ii/cyber-research-wiki
           token: ${{ secrets.WIKI_PAGES_DEPLOY_TOKEN }}
           path: .wiki-publish
+          persist-credentials: false
 
       - name: Sync wiki build into target repo
         run: |
@@ -44,14 +47,17 @@ jobs:
           cp -R site/wiki-build/. .wiki-publish/
 
       - name: Commit and push wiki update
+        env:
+          DEPLOY_TOKEN: ${{ secrets.WIKI_PAGES_DEPLOY_TOKEN }}
         run: |
           cd .wiki-publish
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${DEPLOY_TOKEN}@github.com/danyel-ii/cyber-research-wiki.git"
           git add -A
           if git diff --cached --quiet; then
             echo "No wiki changes to publish"
             exit 0
           fi
           git commit -m "Deploy wiki from WikiCompanion"
-          git push
+          git push origin HEAD:main
