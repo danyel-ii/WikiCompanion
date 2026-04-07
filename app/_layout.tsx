@@ -45,6 +45,7 @@ function RootNavigator() {
           }}>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="group/[slug]" options={{ title: 'Atlas Group' }} />
+          <Stack.Screen name="search" options={{ title: 'Search' }} />
           <Stack.Screen name="tool/[slug]" options={{ title: 'Tool Atlas' }} />
           <Stack.Screen name="+not-found" options={{ title: 'Not found' }} />
         </Stack>

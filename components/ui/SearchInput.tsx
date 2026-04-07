@@ -6,10 +6,12 @@ export function SearchInput({
   value,
   onChangeText,
   placeholder,
+  autoFocus = false,
 }: {
   value: string;
   onChangeText: (next: string) => void;
   placeholder: string;
+  autoFocus?: boolean;
 }) {
   const theme = useTheme();
   const styles = createStyles(theme);
@@ -18,6 +20,7 @@ export function SearchInput({
     <View style={styles.container}>
       <TextInput
         accessibilityLabel="Search tools"
+        autoFocus={autoFocus}
         autoCapitalize="none"
         autoCorrect={false}
         onChangeText={onChangeText}

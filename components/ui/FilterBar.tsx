@@ -27,8 +27,11 @@ export function FilterBar(props: FilterBarProps) {
 
   return (
     <View style={styles.wrapper}>
-      <Text style={styles.label}>Filters</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <View style={styles.rowHeader}>
+        <Text style={styles.label}>Filters</Text>
+        <Text style={[styles.label, styles.labelRight]}>Sort</Text>
+      </View>
+      <ScrollView contentContainerStyle={styles.rowContent} horizontal showsHorizontalScrollIndicator={false}>
         <Pill active={props.selectedSubdomain === null} label="All domains" onPress={() => props.onSubdomainChange(null)} />
         {props.subdomains.slice(0, 12).map((subdomain) => (
           <Pill
@@ -40,10 +43,6 @@ export function FilterBar(props: FilterBarProps) {
         ))}
         <Pill active={props.hasWikiOnly} label="Has wiki" onPress={props.onToggleWikiOnly} />
         <Pill active={props.savedOnly} label="Saved only" onPress={props.onToggleSavedOnly} />
-      </ScrollView>
-
-      <Text style={[styles.label, styles.sortLabel]}>Sort</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {sortLabels.map((item) => (
           <Pill key={item.value} active={props.sort === item.value} label={item.label} onPress={() => props.onSortChange(item.value)} />
         ))}
@@ -55,16 +54,23 @@ export function FilterBar(props: FilterBarProps) {
 const createStyles = (theme: ReturnType<typeof useTheme>) =>
   StyleSheet.create({
     wrapper: {
-      marginBottom: theme.spacing.md,
+      gap: 6,
+    },
+    rowHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    rowContent: {
+      paddingRight: theme.spacing.md,
     },
     label: {
       color: theme.colors.textMuted,
-      fontSize: 12,
-      marginBottom: 8,
+      fontSize: 11,
       textTransform: 'uppercase',
       letterSpacing: 0.8,
     },
-    sortLabel: {
-      marginTop: 4,
+    labelRight: {
+      textAlign: 'right',
     },
   });

@@ -1,10 +1,12 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { useNavigationHistory } from '@/src/hooks/useNavigationHistory';
 import { useTheme } from '@/src/hooks/useTheme';
 
 export function HeaderNavControls() {
+  const router = useRouter();
   const theme = useTheme();
   const styles = createStyles(theme);
   const { canGoBack, canGoForward, goBack, goForward } = useNavigationHistory();
@@ -26,6 +28,13 @@ export function HeaderNavControls() {
         onPress={goForward}
         style={[styles.button, !canGoForward ? styles.buttonDisabled : undefined]}>
         <FontAwesome6 color={canGoForward ? theme.colors.text : theme.colors.textMuted} name="chevron-right" size={14} />
+      </Pressable>
+      <Pressable
+        accessibilityLabel="Search tools"
+        accessibilityRole="button"
+        onPress={() => router.push('/search')}
+        style={styles.button}>
+        <FontAwesome6 color={theme.colors.text} name="magnifying-glass" size={14} />
       </Pressable>
     </View>
   );

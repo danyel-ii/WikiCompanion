@@ -1,10 +1,9 @@
 import { useMemo, useRef, useState } from 'react';
-import { FlatList, RefreshControl, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, RefreshControl, SafeAreaView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 
 import { FilterBar } from '@/components/ui/FilterBar';
 import { GroupDeckCard, type ToolGroupCardData } from '@/components/ui/GroupDeckCard';
-import { SearchInput } from '@/components/ui/SearchInput';
 import { groupToolsByTrack } from '@/src/lib/content/groups';
 import { useAppState } from '@/src/hooks/useAppState';
 import { useTheme } from '@/src/hooks/useTheme';
@@ -23,6 +22,7 @@ export default function AtlasScreen() {
   const router = useRouter();
   const theme = useTheme();
   const styles = createStyles(theme);
+  const { height } = useWindowDimensions();
   const { manifest, favorites, refreshState, refreshContent } = useAppState();
   const [filters, setFilters] = useState<ToolFilters>(initialFilters);
   const [activeGroupIndex, setActiveGroupIndex] = useState(0);
@@ -43,23 +43,17 @@ export default function AtlasScreen() {
 
   const groupHeight = 132;
   const groupSnap = groupHeight + theme.spacing.sm;
+  const rolodexMinHeight = Math.max(420, Math.floor(height * 0.72));
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
-        <Text style={styles.kicker}>Pocket atlas</Text>
-        <Text style={styles.title}>Choose a discovery track first. Open the stack after that.</Text>
-        <Text style={styles.subtitle}>
-          {tools.length} of {manifest.toolCount} tools available after the current filters. Tap a track to enter its postcard stack.
-        </Text>
-      </View>
-
-      <View style={styles.controls}>
-        <SearchInput
-          onChangeText={(query) => setFilters((current) => ({ ...current, query }))}
-          placeholder="Search names, aliases, topics, tracks"
-          value={filters.query}
-        />
+        <View style={styles.headerRow}>
+          <Text style={styles.title}>Pocket Atlas</Text>
+          <Pressable onPress={() => router.push('/search')} style={styles.searchButton}>
+            <Text style={styles.searchButtonLabel}>Search</Text>
+          </Pressable>
+        </View>
         <FilterBar
           hasWikiOnly={filters.hasWikiOnly}
           onSortChange={(sort) => setFilters((current) => ({ ...current, sort }))}
@@ -71,10 +65,12 @@ export default function AtlasScreen() {
           sort={filters.sort}
           subdomains={[]}
         />
+        <Text style={styles.countLabel}>
+          {tools.length} / {manifest.toolCount}
+        </Text>
       </View>
 
-      <View style={styles.rolodexFrame}>
-        <Text style={styles.sectionLabel}>Discovery tracks</Text>
+      <View style={[styles.rolodexFrame, { minHeight: rolodexMinHeight }]}>
         <FlatList
           ref={groupListRef}
           contentContainerStyle={styles.groupContent}
@@ -98,7 +94,6 @@ export default function AtlasScreen() {
                   pathname: '/group/[slug]',
                   params: {
                     slug: item.key,
-                    q: filters.query,
                     wiki: filters.hasWikiOnly ? '1' : '0',
                     saved: filters.savedOnly ? '1' : '0',
                     sort: filters.sort,
@@ -124,32 +119,42 @@ const createStyles = (theme: ReturnType<typeof useTheme>) =>
     },
     header: {
       paddingHorizontal: theme.spacing.lg,
-      paddingTop: theme.spacing.xl,
+      paddingTop: theme.spacing.md,
       paddingBottom: theme.spacing.sm,
+      gap: theme.spacing.sm,
     },
-    kicker: {
-      color: theme.colors.accentWarm,
-      textTransform: 'uppercase',
-      letterSpacing: 1,
-      fontSize: 12,
-      marginBottom: 8,
+    headerRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: theme.spacing.md,
     },
     title: {
       color: theme.colors.text,
-      fontSize: 30,
-      lineHeight: 36,
+      fontSize: 26,
+      lineHeight: 30,
       fontWeight: '700',
     },
-    subtitle: {
-      color: theme.colors.textMuted,
-      fontSize: 14,
-      marginTop: theme.spacing.sm,
-      lineHeight: 20,
-      maxWidth: 620,
+    searchButton: {
+      borderRadius: 999,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+      backgroundColor: theme.colors.panel,
+      paddingHorizontal: theme.spacing.md,
+      paddingVertical: 10,
     },
-    controls: {
-      paddingHorizontal: theme.spacing.lg,
-      paddingBottom: theme.spacing.md,
+    searchButtonLabel: {
+      color: theme.colors.text,
+      fontSize: 13,
+      fontWeight: '700',
+      textTransform: 'uppercase',
+      letterSpacing: 0.6,
+    },
+    countLabel: {
+      color: theme.colors.textMuted,
+      fontSize: 12,
+      textTransform: 'uppercase',
+      letterSpacing: 0.8,
     },
     rolodexFrame: {
       flex: 1,
@@ -159,19 +164,10 @@ const createStyles = (theme: ReturnType<typeof useTheme>) =>
       borderRadius: theme.radius.xl,
       borderWidth: 1,
       borderColor: theme.colors.border,
-      paddingTop: theme.spacing.md,
-    },
-    sectionLabel: {
-      color: theme.colors.accentWarm,
-      fontSize: 11,
-      textTransform: 'uppercase',
-      letterSpacing: 1,
-      fontWeight: '700',
-      marginBottom: 4,
-      paddingHorizontal: theme.spacing.lg,
+      paddingTop: theme.spacing.sm,
     },
     groupContent: {
       paddingBottom: 120,
-      paddingTop: theme.spacing.sm,
+      paddingTop: theme.spacing.md,
     },
   });

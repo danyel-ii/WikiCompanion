@@ -27,24 +27,22 @@ export default function GroupScreen() {
   const styles = createStyles(theme);
   const params = useLocalSearchParams<{
     slug: string;
-    q?: string;
     wiki?: string;
     saved?: string;
     sort?: string;
   }>();
   const { manifest, favorites, preferences, refreshState, refreshContent, toggleFavorite } = useAppState();
   const groupSlug = firstParam(params.slug);
-  const query = firstParam(params.q);
 
   const filters = useMemo<ToolFilters>(
     () => ({
-      query,
+      query: '',
       subdomain: null,
       hasWikiOnly: firstParam(params.wiki) === '1',
       savedOnly: firstParam(params.saved) === '1',
       sort: parseSortMode(params.sort),
     }),
-    [params.saved, params.sort, params.wiki, query],
+    [params.saved, params.sort, params.wiki],
   );
 
   const baseTools = useMemo(() => filterTools(manifest.tools, filters, favorites), [favorites, filters, manifest.tools]);
