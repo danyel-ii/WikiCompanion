@@ -44,7 +44,6 @@ function RootNavigator() {
             headerRight: () => <HeaderNavControls />,
           }}>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="admin" options={{ title: 'Editorial Admin' }} />
           <Stack.Screen name="group/[slug]" options={{ title: 'Atlas Group' }} />
           <Stack.Screen name="tool/[slug]" options={{ title: 'Tool Atlas' }} />
           <Stack.Screen name="+not-found" options={{ title: 'Not found' }} />

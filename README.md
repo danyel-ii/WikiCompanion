@@ -7,7 +7,7 @@ Cyber Tool Atlas is a standalone Expo / React Native mobile app that turns the `
 - Expo Router app with three tabs: atlas, saved tools, and settings
 - Manifest-driven tool list built from normalized tool records rather than raw skill entries
 - Mobile bundle trimmed to reader-facing fields only: essential tool metadata, article markdown, favorites/preferences, and refresh/cache logic
-- Separate editorial manifest for desktop review, source inspection, dossier triage, and wiki operations
+- Separate editorial manifest and admin package for desktop review, source inspection, dossier triage, and wiki operations
 - Tool detail screens with markdown essays, metadata, and wiki CTA states
 - Offline favorites and display preferences via AsyncStorage
 - Static-content refresh path using a bundled snapshot, cached manifest, and optional remote manifest URL
@@ -45,6 +45,7 @@ The command should read grounded notes from stdin and return markdown on stdout.
 npm run content:sync
 npm run content:generate
 npm run content:all
+npm run build:admin:web
 npm run build:android:apk
 npm run build:android:release
 npm run wiki:site
@@ -86,7 +87,7 @@ adb install -r releases/android/cyber-tool-atlas-v1.1.0-release.apk
 
 - `app/(tabs)/index.tsx`: atlas list, search, filters, refresh
 - `app/tool/[slug].tsx`: detail screen with article and core metadata
-- `app/admin.tsx`: web-only editorial admin surface
+- `apps/admin-web/`: desktop editorial admin package
 - `src/providers/AppStateProvider.tsx`: bundled/cache/remote mobile manifest flow plus local persistence
 - `scripts/`: end-to-end content pipeline
 - `content/wiki-map.json`: manual wiki mapping layer
@@ -100,6 +101,7 @@ adb install -r releases/android/cyber-tool-atlas-v1.1.0-release.apk
 This repository is the authoring source for both public URLs:
 
 - App: `https://danyel-ii.github.io/WikiCompanion/`
+- Desktop admin: `https://danyel-ii.github.io/WikiCompanion/admin/`
 - Wiki: `https://danyel-ii.github.io/cyber-research-wiki/`
 
 GitHub Pages only serves one Pages site per repository, so the wiki remains published from the separate `cyber-research-wiki` repository. The difference is that you no longer maintain that repo by hand. This repo generates the wiki build and a GitHub Action pushes it there automatically.

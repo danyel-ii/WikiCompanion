@@ -34,10 +34,20 @@ jobs:
         run: npm ci
 
       - name: Verify generated manifest exists
-        run: test -f src/content/generated/tools-manifest.json
+        run: |
+          test -f content/generated/tools-manifest.json
+          test -f content/generated/tools-editorial-manifest.json
 
       - name: Build Expo web app
         run: npm run build:web
+
+      - name: Build admin web app
+        run: npm run build:admin:web
+
+      - name: Merge admin web into Pages artifact
+        run: |
+          mkdir -p dist/admin
+          cp -R apps/admin-web/dist/. dist/admin/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -50,4 +60,3 @@ jobs:
       - name: Deploy app to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-

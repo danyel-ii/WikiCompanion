@@ -7,7 +7,8 @@ The app never scrapes GitHub on-device. All runtime content comes from generated
 1. `npm run content:sync`
 2. `npm run content:generate`
 3. `npm run wiki:site`
-4. Launch the app and it loads `content/generated/tools-manifest.json`
+4. Build desktop admin if needed with `npm run build:admin:web`
+5. Launch the app and it loads `content/generated/tools-manifest.json`
 
 The Android packaging flow is separate from the content pipeline:
 
@@ -66,6 +67,12 @@ The generated `content/generated/tools-manifest.json` can be hosted as a plain s
   - review-oriented metadata
 
 This keeps the phone bundle focused on reading while preserving richer material for desktop/admin review.
+
+## Desktop admin package
+
+- `apps/admin-web/` contains the standalone editorial admin surface.
+- `scripts/build-admin-web.ts` renders it from `content/generated/tools-editorial-manifest.json`.
+- The Pages deploy workflow merges that output into the app site under `/admin/`.
 
 ## Dual-site publishing
 

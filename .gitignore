@@ -53,3 +53,4 @@ yarn-error.*
 content/upstream/
 content/generated/cache/
 site/wiki-build/
+apps/admin-web/dist/
