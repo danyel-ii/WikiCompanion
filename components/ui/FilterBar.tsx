@@ -7,7 +7,6 @@ import type { SortMode } from '@/src/types/content';
 const sortLabels: { value: SortMode; label: string }[] = [
   { value: 'alphabetical', label: 'A-Z' },
   { value: 'most-referenced', label: 'Most referenced' },
-  { value: 'recently-updated', label: 'Recently updated' },
 ];
 
 interface FilterBarProps {

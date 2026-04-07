@@ -1,5 +1,6 @@
 import * as WebBrowser from 'expo-web-browser';
-import { SafeAreaView, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Platform, SafeAreaView, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 
 import { MetadataRow } from '@/components/ui/MetadataRow';
 import { Pill } from '@/components/ui/Pill';
@@ -12,6 +13,7 @@ const sourceRepo = 'https://github.com/mukul975/Anthropic-Cybersecurity-Skills';
 const wikiBase = 'https://danyel-ii.github.io/cyber-research-wiki/';
 
 export default function SettingsScreen() {
+  const router = useRouter();
   const theme = useTheme();
   const styles = createStyles(theme);
   const { manifest, preferences, refreshState, refreshContent, setPreference } = useAppState();
@@ -78,6 +80,11 @@ export default function SettingsScreen() {
           <Pressable onPress={() => WebBrowser.openBrowserAsync(wikiBase)} style={styles.linkButton}>
             <Text style={styles.linkLabel}>Open wiki base</Text>
           </Pressable>
+          {Platform.OS === 'web' ? (
+            <Pressable onPress={() => router.push('/admin')} style={styles.linkButton}>
+              <Text style={styles.linkLabel}>Open editorial admin</Text>
+            </Pressable>
+          ) : null}
         </SectionCard>
       </ScrollView>
     </SafeAreaView>

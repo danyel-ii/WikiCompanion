@@ -4,11 +4,11 @@ import { getBundledManifest, loadCachedManifest, refreshRemoteManifest, clearCac
 import { loadFavorites, saveFavorites } from '@/src/lib/storage/favorites';
 import { defaultPreferences, loadPreferences, savePreferences } from '@/src/lib/storage/preferences';
 import { getTheme } from '@/src/styles/theme';
-import type { AppPreferences, RefreshState, ToolManifest } from '@/src/types/content';
+import type { AppPreferences, MobileToolManifest, RefreshState } from '@/src/types/content';
 import type { AppTheme } from '@/src/styles/theme';
 
 interface AppStateContextValue {
-  manifest: ToolManifest;
+  manifest: MobileToolManifest;
   favorites: Set<string>;
   preferences: AppPreferences;
   theme: AppTheme;
@@ -21,7 +21,7 @@ interface AppStateContextValue {
 export const AppStateContext = createContext<AppStateContextValue | null>(null);
 
 export function AppStateProvider({ children }: React.PropsWithChildren) {
-  const [manifest, setManifest] = useState<ToolManifest>(getBundledManifest());
+  const [manifest, setManifest] = useState<MobileToolManifest>(getBundledManifest());
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [preferences, setPreferences] = useState<AppPreferences>(defaultPreferences);
   const [refreshState, setRefreshState] = useState<RefreshState>({

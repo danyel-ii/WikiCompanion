@@ -1,24 +1,20 @@
 import Fuse from 'fuse.js';
 
-import type { SortMode, ToolFilters, ToolRecord } from '@/src/types/content';
+import type { MobileToolRecord, SortMode, ToolFilters } from '@/src/types/content';
 
-function compareBySort(left: ToolRecord, right: ToolRecord, sort: SortMode): number {
+function compareBySort(left: MobileToolRecord, right: MobileToolRecord, sort: SortMode): number {
   if (sort === 'most-referenced') {
     return right.referenceCount - left.referenceCount || left.displayName.localeCompare(right.displayName);
-  }
-
-  if (sort === 'recently-updated') {
-    return right.generatedAt.localeCompare(left.generatedAt) || left.displayName.localeCompare(right.displayName);
   }
 
   return left.displayName.localeCompare(right.displayName);
 }
 
 export function filterTools(
-  tools: ToolRecord[],
+  tools: MobileToolRecord[],
   filters: ToolFilters,
   favorites: Set<string>,
-): ToolRecord[] {
+): MobileToolRecord[] {
   const filtered = tools.filter((tool) => {
     if (filters.subdomain && !tool.subdomains.includes(filters.subdomain)) {
       return false;

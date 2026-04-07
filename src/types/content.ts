@@ -2,7 +2,7 @@ import type { AppTheme, ColorSchemeId } from '@/src/styles/theme';
 
 export type WikiStatus = 'ready' | 'missing';
 export type ArticleMode = 'template' | 'llm';
-export type SortMode = 'alphabetical' | 'most-referenced' | 'recently-updated';
+export type SortMode = 'alphabetical' | 'most-referenced';
 
 export interface ToolSourceSkill {
   slug: string;
@@ -13,7 +13,7 @@ export interface ToolSourceSkill {
   confidence?: number;
 }
 
-export interface ToolRecord {
+export interface MobileToolRecord {
   slug: string;
   displayName: string;
   aliases: string[];
@@ -24,19 +24,31 @@ export interface ToolRecord {
   topics: string[];
   subdomains: string[];
   referenceCount: number;
+}
+
+export interface EditorialToolRecord extends MobileToolRecord {
   sourceSkills: ToolSourceSkill[];
   generatedAt: string;
   articleMode: ArticleMode;
   confidence: number;
 }
 
-export interface ToolManifest {
+export interface MobileToolManifest {
   version: string;
   generatedAt: string;
   sourceRepo: string;
   wikiBaseUrl: string;
   toolCount: number;
-  tools: ToolRecord[];
+  tools: MobileToolRecord[];
+}
+
+export interface EditorialToolManifest {
+  version: string;
+  generatedAt: string;
+  sourceRepo: string;
+  wikiBaseUrl: string;
+  toolCount: number;
+  tools: EditorialToolRecord[];
 }
 
 export interface RefreshState {
@@ -64,3 +76,6 @@ export interface ToolFilters {
 export interface ThemedState {
   theme: AppTheme;
 }
+
+export type ToolRecord = MobileToolRecord;
+export type ToolManifest = MobileToolManifest;

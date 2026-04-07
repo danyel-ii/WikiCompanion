@@ -16,7 +16,7 @@ function firstParam(value: string | string[] | undefined): string {
 
 function parseSortMode(value: string | string[] | undefined): SortMode {
   const sort = firstParam(value);
-  if (sort === 'alphabetical' || sort === 'most-referenced' || sort === 'recently-updated') {
+  if (sort === 'alphabetical' || sort === 'most-referenced') {
     return sort;
   }
   return 'most-referenced';

@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Pill } from '@/components/ui/Pill';
 import { useTheme } from '@/src/hooks/useTheme';
 import { getToolGroup } from '@/src/lib/content/groups';
-import type { ToolRecord } from '@/src/types/content';
+import type { MobileToolRecord } from '@/src/types/content';
 
 export function ToolCard({
   tool,
@@ -15,7 +15,7 @@ export function ToolCard({
   saved,
   onToggleSaved,
 }: {
-  tool: ToolRecord;
+  tool: MobileToolRecord;
   dense: boolean;
   index: number;
   mode?: 'stack' | 'deck';

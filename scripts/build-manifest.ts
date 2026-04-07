@@ -1,9 +1,9 @@
 import { readdir } from 'node:fs/promises';
 import path from 'node:path';
 
-import { toolManifestSchema } from '../src/lib/content/schema';
-import type { ToolManifest, ToolRecord } from '../src/types/content';
-import { generatedDir, outputWikiDir, readJson, repoRoot, writeJson, writeText } from './lib/fs';
+import { editorialToolManifestSchema, mobileToolManifestSchema } from '../src/lib/content/schema';
+import type { EditorialToolManifest, EditorialToolRecord, MobileToolManifest, MobileToolRecord } from '../src/types/content';
+import { generatedDir, outputWikiDir, readJson, repoRoot, writeJson } from './lib/fs';
 
 const wikiBaseUrl = 'https://danyel-ii.github.io/cyber-research-wiki/';
 const sourceRepo = 'https://github.com/mukul975/Anthropic-Cybersecurity-Skills';
@@ -21,12 +21,12 @@ function resolveWikiUrl(entry: string | undefined): string | null {
 }
 
 async function main() {
-  const payload = await readJson<{ tools: Array<Omit<ToolRecord, 'wikiUrl' | 'wikiStatus'>> }>(path.join(generatedDir, 'tools-with-articles.json'));
+  const payload = await readJson<{ tools: Array<Omit<EditorialToolRecord, 'wikiUrl' | 'wikiStatus'>> }>(path.join(generatedDir, 'tools-with-articles.json'));
   const wikiMap = await readJson<Record<string, string>>(path.join(repoRoot, 'content', 'wiki-map.json'));
   const wikiFiles = await readdir(outputWikiDir).catch(() => []);
   const generatedWikiSlugs = new Set(wikiFiles.filter((file) => file.endsWith('.md')).map((file) => file.replace(/\.md$/, '')));
 
-  const tools: ToolRecord[] = payload.tools.map((tool) => {
+  const editorialTools: EditorialToolRecord[] = payload.tools.map((tool) => {
     const wikiEntry = wikiMap[tool.slug] ?? (generatedWikiSlugs.has(tool.slug) ? `/tools/${tool.slug}/` : undefined);
     const wikiUrl = resolveWikiUrl(wikiEntry);
 
@@ -37,22 +37,30 @@ async function main() {
     };
   });
 
-  const manifest: ToolManifest = toolManifestSchema.parse({
+  const mobileTools: MobileToolRecord[] = editorialTools.map(({ sourceSkills, generatedAt, articleMode, confidence, ...tool }) => tool);
+
+  const baseManifest = {
     version: `snapshot-${payload.tools.length}`,
     generatedAt: new Date().toISOString(),
     sourceRepo,
     wikiBaseUrl,
-    toolCount: tools.length,
-    tools,
+    toolCount: editorialTools.length,
+  };
+
+  const mobileManifest: MobileToolManifest = mobileToolManifestSchema.parse({
+    ...baseManifest,
+    tools: mobileTools,
   });
 
-  await writeJson(path.join(generatedDir, 'tools-manifest.json'), manifest);
-  await writeText(
-    path.join(repoRoot, 'src', 'content', 'generated', 'tools-manifest.json'),
-    JSON.stringify(manifest, null, 2) + '\n',
-  );
+  const editorialManifest: EditorialToolManifest = editorialToolManifestSchema.parse({
+    ...baseManifest,
+    tools: editorialTools,
+  });
 
-  console.log(`Built manifest with ${manifest.toolCount} tools`);
+  await writeJson(path.join(generatedDir, 'tools-manifest.json'), mobileManifest);
+  await writeJson(path.join(generatedDir, 'tools-editorial-manifest.json'), editorialManifest);
+
+  console.log(`Built mobile and editorial manifests with ${mobileManifest.toolCount} tools`);
 }
 
 main().catch((error: unknown) => {

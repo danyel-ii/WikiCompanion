@@ -1,4 +1,4 @@
-import type { ToolRecord } from '@/src/types/content';
+import type { MobileToolRecord } from '@/src/types/content';
 
 export type ToolGroupSlug = 'recon' | 'web' | 'exploit' | 'creds' | 'post' | 'pivot' | 'other';
 
@@ -211,7 +211,7 @@ const keywordWeights: Record<ToolGroupSlug, string[]> = {
   other: [],
 };
 
-function searchableText(tool: ToolRecord): string {
+function searchableText(tool: MobileToolRecord): string {
   return [tool.displayName, ...tool.aliases, tool.summary, ...tool.topics, ...tool.subdomains]
     .join(' ')
     .toLowerCase();
@@ -225,7 +225,7 @@ export function getToolGroupDefinition(key: string): ToolGroupDefinition | undef
   return groupDefinitions.find((group) => group.key === key);
 }
 
-export function getToolGroup(tool: ToolRecord): ToolGroupDefinition {
+export function getToolGroup(tool: MobileToolRecord): ToolGroupDefinition {
   const haystack = searchableText(tool);
   const score = new Map<ToolGroupSlug, number>();
 
@@ -261,8 +261,8 @@ export function getToolGroup(tool: ToolRecord): ToolGroupDefinition {
   return ordered[0]!.group;
 }
 
-export function groupToolsByTrack(tools: ToolRecord[]): (ToolGroupDefinition & { tools: ToolRecord[] })[] {
-  const grouped = new Map<ToolGroupSlug, ToolRecord[]>();
+export function groupToolsByTrack(tools: MobileToolRecord[]): (ToolGroupDefinition & { tools: MobileToolRecord[] })[] {
+  const grouped = new Map<ToolGroupSlug, MobileToolRecord[]>();
 
   for (const group of groupDefinitions) {
     grouped.set(group.key, []);

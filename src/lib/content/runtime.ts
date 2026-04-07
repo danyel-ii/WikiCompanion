@@ -1,17 +1,17 @@
 import * as FileSystem from 'expo-file-system/legacy';
 
-import bundledManifest from '@/src/content/generated/tools-manifest.json';
-import { toolManifestSchema } from '@/src/lib/content/schema';
-import type { RefreshState, ToolManifest } from '@/src/types/content';
+import bundledManifest from '@/content/generated/tools-manifest.json';
+import { mobileToolManifestSchema } from '@/src/lib/content/schema';
+import type { MobileToolManifest, RefreshState } from '@/src/types/content';
 
 const CACHE_DIRECTORY = `${FileSystem.documentDirectory ?? ''}content-cache/`;
 const CACHE_FILE = `${CACHE_DIRECTORY}tools-manifest.json`;
 
-export function getBundledManifest(): ToolManifest {
-  return toolManifestSchema.parse(bundledManifest);
+export function getBundledManifest(): MobileToolManifest {
+  return mobileToolManifestSchema.parse(bundledManifest);
 }
 
-export async function loadCachedManifest(): Promise<ToolManifest | null> {
+export async function loadCachedManifest(): Promise<MobileToolManifest | null> {
   if (!FileSystem.documentDirectory) {
     return null;
   }
@@ -23,7 +23,7 @@ export async function loadCachedManifest(): Promise<ToolManifest | null> {
 
   try {
     const raw = await FileSystem.readAsStringAsync(CACHE_FILE);
-    return toolManifestSchema.parse(JSON.parse(raw));
+    return mobileToolManifestSchema.parse(JSON.parse(raw));
   } catch {
     return null;
   }
@@ -40,14 +40,14 @@ export async function clearCachedManifest(): Promise<void> {
   }
 }
 
-async function writeCachedManifest(manifest: ToolManifest): Promise<void> {
+async function writeCachedManifest(manifest: MobileToolManifest): Promise<void> {
   await FileSystem.makeDirectoryAsync(CACHE_DIRECTORY, { intermediates: true });
   await FileSystem.writeAsStringAsync(CACHE_FILE, JSON.stringify(manifest));
 }
 
 export async function refreshRemoteManifest(
-  currentManifest: ToolManifest,
-): Promise<{ manifest: ToolManifest; source: RefreshState['source'] } | null> {
+  currentManifest: MobileToolManifest,
+): Promise<{ manifest: MobileToolManifest; source: RefreshState['source'] } | null> {
   const remoteUrl = process.env.EXPO_PUBLIC_CONTENT_MANIFEST_URL;
   if (!remoteUrl) {
     return null;
@@ -58,7 +58,7 @@ export async function refreshRemoteManifest(
     throw new Error(`Remote manifest request failed with ${response.status}`);
   }
 
-  const parsed = toolManifestSchema.parse(await response.json());
+  const parsed = mobileToolManifestSchema.parse(await response.json());
   if (parsed.generatedAt <= currentManifest.generatedAt) {
     return null;
   }

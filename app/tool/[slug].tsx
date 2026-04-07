@@ -6,7 +6,6 @@ import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'rea
 import { ArticleMarkdown } from '@/components/article/ArticleMarkdown';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { MetadataRow } from '@/components/ui/MetadataRow';
-import { Pill } from '@/components/ui/Pill';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { useAppState } from '@/src/hooks/useAppState';
 import { useTheme } from '@/src/hooks/useTheme';
@@ -48,8 +47,8 @@ export default function ToolDetailScreen() {
               <Text style={styles.heroMetaValue}>{tool.wikiStatus === 'ready' ? 'Ready' : 'Pending'}</Text>
             </View>
             <View>
-              <Text style={styles.heroMetaCaption}>Confidence</Text>
-              <Text style={styles.heroMetaValue}>{tool.confidence.toFixed(2)}</Text>
+              <Text style={styles.heroMetaCaption}>Aliases</Text>
+              <Text style={styles.heroMetaValue}>{tool.aliases.length}</Text>
             </View>
           </View>
 
@@ -76,22 +75,7 @@ export default function ToolDetailScreen() {
           <MetadataRow label="Subdomains" value={tool.subdomains.join(', ') || 'Unspecified'} />
           <MetadataRow label="Aliases" value={tool.aliases.join(', ') || 'None listed'} />
           <MetadataRow label="Reference count" value={String(tool.referenceCount)} />
-          <MetadataRow label="Article mode" value={tool.articleMode} />
-          <MetadataRow label="Confidence" value={tool.confidence.toFixed(2)} />
-          <MetadataRow label="Generated" value={new Date(tool.generatedAt).toLocaleString()} />
-        </SectionCard>
-
-        <SectionCard title="Related skills">
-          {tool.sourceSkills.map((skill) => (
-            <View key={skill.slug} style={styles.skillRow}>
-              <Text style={styles.skillTitle}>{skill.title}</Text>
-              <Text style={styles.skillDescription}>{skill.description}</Text>
-              <View style={styles.skillPills}>
-                {skill.subdomain ? <Pill label={skill.subdomain} /> : null}
-                <Pill label={`confidence ${skill.confidence?.toFixed(2) ?? 'n/a'}`} />
-              </View>
-            </View>
-          ))}
+          <MetadataRow label="Atlas snapshot" value={new Date(manifest.generatedAt).toLocaleString()} />
         </SectionCard>
       </ScrollView>
     </SafeAreaView>
@@ -198,26 +182,5 @@ const createStyles = (theme: ReturnType<typeof useTheme>) =>
       color: theme.colors.textDark,
       textAlign: 'center',
       fontWeight: '600',
-    },
-    skillRow: {
-      paddingVertical: theme.spacing.sm,
-      borderBottomWidth: StyleSheet.hairlineWidth,
-      borderBottomColor: theme.colors.border,
-    },
-    skillTitle: {
-      color: theme.colors.text,
-      fontSize: 15,
-      fontWeight: '700',
-      marginBottom: 6,
-    },
-    skillDescription: {
-      color: theme.colors.textMuted,
-      fontSize: 14,
-      lineHeight: 20,
-    },
-    skillPills: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      marginTop: theme.spacing.sm,
     },
   });

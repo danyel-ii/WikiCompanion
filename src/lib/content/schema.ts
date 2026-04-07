@@ -9,7 +9,7 @@ export const toolSourceSkillSchema = z.object({
   confidence: z.number().optional(),
 });
 
-export const toolRecordSchema = z.object({
+export const mobileToolRecordSchema = z.object({
   slug: z.string(),
   displayName: z.string(),
   aliases: z.array(z.string()),
@@ -20,19 +20,32 @@ export const toolRecordSchema = z.object({
   topics: z.array(z.string()),
   subdomains: z.array(z.string()),
   referenceCount: z.number().int().nonnegative(),
+});
+
+export const editorialToolRecordSchema = mobileToolRecordSchema.extend({
   sourceSkills: z.array(toolSourceSkillSchema),
   generatedAt: z.string(),
   articleMode: z.enum(['template', 'llm']),
   confidence: z.number().min(0).max(1),
 });
 
-export const toolManifestSchema = z.object({
+export const mobileToolManifestSchema = z.object({
   version: z.string(),
   generatedAt: z.string(),
   sourceRepo: z.string().url(),
   wikiBaseUrl: z.string().url(),
   toolCount: z.number().int().nonnegative(),
-  tools: z.array(toolRecordSchema),
+  tools: z.array(mobileToolRecordSchema),
 });
 
-export type ToolManifestInput = z.infer<typeof toolManifestSchema>;
+export const editorialToolManifestSchema = z.object({
+  version: z.string(),
+  generatedAt: z.string(),
+  sourceRepo: z.string().url(),
+  wikiBaseUrl: z.string().url(),
+  toolCount: z.number().int().nonnegative(),
+  tools: z.array(editorialToolRecordSchema),
+});
+
+export type MobileToolManifestInput = z.infer<typeof mobileToolManifestSchema>;
+export type EditorialToolManifestInput = z.infer<typeof editorialToolManifestSchema>;

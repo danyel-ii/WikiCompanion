@@ -6,7 +6,9 @@ Cyber Tool Atlas is a standalone Expo / React Native mobile app that turns the `
 
 - Expo Router app with three tabs: atlas, saved tools, and settings
 - Manifest-driven tool list built from normalized tool records rather than raw skill entries
-- Tool detail screens with markdown essays, metadata, related skills, and wiki CTA states
+- Mobile bundle trimmed to reader-facing fields only: essential tool metadata, article markdown, favorites/preferences, and refresh/cache logic
+- Separate editorial manifest for desktop review, source inspection, dossier triage, and wiki operations
+- Tool detail screens with markdown essays, metadata, and wiki CTA states
 - Offline favorites and display preferences via AsyncStorage
 - Static-content refresh path using a bundled snapshot, cached manifest, and optional remote manifest URL
 - Local content pipeline for fetching upstream skills, parsing markdown, grouping tools, generating articles, and building the final manifest
@@ -44,6 +46,7 @@ npm run content:sync
 npm run content:generate
 npm run content:all
 npm run build:android:apk
+npm run build:android:release
 npm run wiki:site
 npm run typecheck
 npm run test
@@ -53,31 +56,38 @@ npm run build:web
 
 ## Android installation build
 
-The repository now uses one local Android packaging path instead of a separate EAS-local flow.
-
-Build an installable debug APK with:
+For a local debug install:
 
 ```bash
 npm run build:android:apk
 ```
 
-The APK will be written to:
+For a signed release APK:
 
 ```bash
-android/app/build/outputs/apk/debug/app-debug.apk
+npm run build:android:release
 ```
 
-Install it on a connected Android device with:
+Artifacts are copied to:
 
 ```bash
-adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+releases/android/
+```
+
+The release build script will generate a local keystore under `.secrets/android/` if one does not already exist. Keep that directory private.
+
+Install a built APK on a connected Android device with:
+
+```bash
+adb install -r releases/android/cyber-tool-atlas-v1.1.0-release.apk
 ```
 
 ## Key files
 
 - `app/(tabs)/index.tsx`: atlas list, search, filters, refresh
-- `app/tool/[slug].tsx`: detail screen with article and related skills
-- `src/providers/AppStateProvider.tsx`: bundled/cache/remote manifest flow plus local persistence
+- `app/tool/[slug].tsx`: detail screen with article and core metadata
+- `app/admin.tsx`: web-only editorial admin surface
+- `src/providers/AppStateProvider.tsx`: bundled/cache/remote mobile manifest flow plus local persistence
 - `scripts/`: end-to-end content pipeline
 - `content/wiki-map.json`: manual wiki mapping layer
 - `content/tool-overrides.json`: canonicalization and alias overrides
@@ -101,6 +111,8 @@ The canonical encyclopedia source lives here:
 - markdown pages: `output/wiki/`
 - structured article JSON: `output/wiki-json/`
 - research dossiers: `output/wiki-research/`
+- editorial manifest: `content/generated/tools-editorial-manifest.json`
+- mobile manifest: `content/generated/tools-manifest.json`
 - static wiki build: `site/wiki-build/`
 
 Build the static wiki locally with:

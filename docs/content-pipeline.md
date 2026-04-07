@@ -7,13 +7,13 @@ The app never scrapes GitHub on-device. All runtime content comes from generated
 1. `npm run content:sync`
 2. `npm run content:generate`
 3. `npm run wiki:site`
-4. Launch the app and it loads `src/content/generated/tools-manifest.json`
+4. Launch the app and it loads `content/generated/tools-manifest.json`
 
 The Android packaging flow is separate from the content pipeline:
 
 1. regenerate content if needed
-2. run `npm run build:android:apk`
-3. install `android/app/build/outputs/apk/debug/app-debug.apk`
+2. run `npm run build:android:release`
+3. install `releases/android/cyber-tool-atlas-v<version>-release.apk`
 
 ## Script responsibilities
 
@@ -26,7 +26,9 @@ The Android packaging flow is separate from the content pipeline:
 - `scripts/generate-articles.ts`
   Produces per-tool markdown essays under `content/generated/articles/` and a merged `tools-with-articles.json`.
 - `scripts/build-manifest.ts`
-  Applies wiki mappings, auto-detects locally generated wiki pages, validates the final shape, and writes both `content/generated/tools-manifest.json` and the bundled app snapshot in `src/content/generated/tools-manifest.json`.
+  Applies wiki mappings, auto-detects locally generated wiki pages, validates the final shape, and writes:
+  - the mobile runtime manifest at `content/generated/tools-manifest.json`
+  - the editorial manifest at `content/generated/tools-editorial-manifest.json`
 - `scripts/build-wiki-site.ts`
   Converts `output/wiki/*.md` plus the final article JSON into a static GitHub Pages wiki under `site/wiki-build/`.
 
@@ -50,6 +52,20 @@ The generated `content/generated/tools-manifest.json` can be hosted as a plain s
 2. load a newer cached manifest if present
 3. check the remote manifest in the background
 4. cache and apply it only when `generatedAt` is newer
+
+## Mobile vs editorial content
+
+- Mobile runtime uses the compact manifest only:
+  - essential tool metadata
+  - article markdown
+  - wiki availability
+- Editorial workflows use the separate editorial manifest:
+  - source skill provenance
+  - generation mode
+  - confidence values
+  - review-oriented metadata
+
+This keeps the phone bundle focused on reading while preserving richer material for desktop/admin review.
 
 ## Dual-site publishing
 

@@ -47,6 +47,7 @@ yarn-error.*
 
 # packaged release artifacts
 /releases
+/.secrets
 
 # content pipeline artifacts
 content/upstream/
