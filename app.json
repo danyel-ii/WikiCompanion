@@ -2,9 +2,9 @@
   "expo": {
     "name": "Cyber Tool Atlas",
     "slug": "cyber-tool-atlas",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "orientation": "portrait",
-    "icon": "./assets/images/icon-pyr.png",
+    "icon": "./assets/images/lock.png",
     "scheme": "cybertools",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
@@ -20,7 +20,7 @@
     "android": {
       "package": "io.danyel.wikicompanion",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon-pyr.png",
+        "foregroundImage": "./assets/images/lock.png",
         "backgroundColor": "#091018"
       },
       "edgeToEdgeEnabled": true,
@@ -29,7 +29,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/lock.png"
     },
     "plugins": [
       "expo-router",

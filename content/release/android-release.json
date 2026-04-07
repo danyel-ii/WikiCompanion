@@ -1,8 +1,8 @@
 {
-  "version": "1.2.2",
-  "apkFileName": "cyber-tool-atlas-v1.2.2-release.apk",
-  "apkSizeBytes": 37586752,
-  "sha256": "43fe7cc302575e1eb7f5b834df798356eb08e50c2ee12be5b4433d27b3e9ddc4",
-  "releaseUrl": "https://github.com/danyel-ii/WikiCompanion/releases/tag/v1.2.2",
-  "downloadUrl": "https://github.com/danyel-ii/WikiCompanion/releases/download/v1.2.2/cyber-tool-atlas-v1.2.2-release.apk"
+  "version": "1.2.3",
+  "apkFileName": "cyber-tool-atlas-v1.2.3-release.apk",
+  "apkSizeBytes": 37894336,
+  "sha256": "f2a27f3ea582dac52f38dfa14554e1213d96bd62cc7908d11590d3b0b8e2a0aa",
+  "releaseUrl": "https://github.com/danyel-ii/WikiCompanion/releases/tag/v1.2.3",
+  "downloadUrl": "https://github.com/danyel-ii/WikiCompanion/releases/download/v1.2.3/cyber-tool-atlas-v1.2.3-release.apk"
 }

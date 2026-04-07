@@ -82,10 +82,10 @@ content/release/android-release.json
 
 The APK itself is written to `releases/android/`, and the build script generates a local keystore under `.secrets/android/` if one does not already exist. Keep that directory private.
 
-For `v1.2.2`:
+For `v1.2.3`:
 
-- Release page: `https://github.com/danyel-ii/WikiCompanion/releases/tag/v1.2.2`
-- Direct APK: `https://github.com/danyel-ii/WikiCompanion/releases/download/v1.2.2/cyber-tool-atlas-v1.2.2-release.apk`
+- Release page: `https://github.com/danyel-ii/WikiCompanion/releases/tag/v1.2.3`
+- Direct APK: `https://github.com/danyel-ii/WikiCompanion/releases/download/v1.2.3/cyber-tool-atlas-v1.2.3-release.apk`
 - SHA-256: generated into `content/release/android-release.json`
 
 ## Security notes
@@ -97,13 +97,13 @@ For `v1.2.2`:
 Verify the APK before installing:
 
 ```bash
-shasum -a 256 releases/android/cyber-tool-atlas-v1.2.2-release.apk
+shasum -a 256 releases/android/cyber-tool-atlas-v1.2.3-release.apk
 ```
 
 Install the release APK on a connected Android device with:
 
 ```bash
-adb install -r releases/android/cyber-tool-atlas-v1.2.2-release.apk
+adb install -r releases/android/cyber-tool-atlas-v1.2.3-release.apk
 ```
 
 ## Key files
