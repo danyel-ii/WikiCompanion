@@ -3,12 +3,15 @@ import React, { createContext, useCallback, useEffect, useMemo, useRef, useState
 import { getBundledManifest, loadCachedManifest, refreshRemoteManifest, clearCachedManifest } from '@/src/lib/content/runtime';
 import { loadFavorites, saveFavorites } from '@/src/lib/storage/favorites';
 import { defaultPreferences, loadPreferences, savePreferences } from '@/src/lib/storage/preferences';
+import { getTheme } from '@/src/styles/theme';
 import type { AppPreferences, RefreshState, ToolManifest } from '@/src/types/content';
+import type { AppTheme } from '@/src/styles/theme';
 
 interface AppStateContextValue {
   manifest: ToolManifest;
   favorites: Set<string>;
   preferences: AppPreferences;
+  theme: AppTheme;
   refreshState: RefreshState;
   toggleFavorite: (slug: string) => void;
   setPreference: <K extends keyof AppPreferences>(key: K, value: AppPreferences[K]) => void;
@@ -144,6 +147,7 @@ export function AppStateProvider({ children }: React.PropsWithChildren) {
       manifest,
       favorites,
       preferences,
+      theme: getTheme(preferences.colorScheme),
       refreshState,
       toggleFavorite,
       setPreference,

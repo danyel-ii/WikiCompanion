@@ -2,8 +2,8 @@ import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Pill } from '@/components/ui/Pill';
+import { useTheme } from '@/src/hooks/useTheme';
 import { getToolGroup } from '@/src/lib/content/groups';
-import { theme } from '@/src/styles/theme';
 import type { ToolRecord } from '@/src/types/content';
 
 export function ToolCard({
@@ -24,6 +24,8 @@ export function ToolCard({
   onToggleSaved: () => void;
 }) {
   const router = useRouter();
+  const theme = useTheme();
+  const styles = createStyles(theme);
   const group = getToolGroup(tool);
   const rotation = `${((index % 5) - 2) * 0.6}deg`;
   const offset = mode === 'stack' && index !== 0 ? -Math.min(34, 12 + (index % 4) * 4) : 0;
@@ -125,183 +127,184 @@ export function ToolCard({
   );
 }
 
-const styles = StyleSheet.create({
-  cardWrap: {
-    position: 'relative',
-    marginBottom: theme.spacing.lg,
-  },
-  cardWrapDeck: {
-    marginBottom: 0,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.lg,
-  },
-  backLayer: {
-    position: 'absolute',
-    top: 10,
-    left: 8,
-    right: 8,
-    bottom: -6,
-    borderRadius: theme.radius.lg,
-    backgroundColor: '#0d1822',
-    borderWidth: 1,
-    borderColor: '#274255',
-  },
-  backLayerDeck: {
-    top: 18,
-    left: 22,
-    right: 22,
-    bottom: 6,
-  },
-  backLayerSecondary: {
-    position: 'absolute',
-    top: 18,
-    left: 15,
-    right: 15,
-    bottom: -12,
-    borderRadius: theme.radius.lg,
-    backgroundColor: '#0b131b',
-    borderWidth: 1,
-    borderColor: '#1b2c38',
-  },
-  backLayerSecondaryDeck: {
-    top: 10,
-    left: 14,
-    right: 14,
-    bottom: 0,
-  },
-  backLayerMuted: {
-    opacity: 0.45,
-  },
-  card: {
-    backgroundColor: theme.colors.panelWarm,
-    borderRadius: theme.radius.lg,
-    borderWidth: 1,
-    borderColor: '#a8936f',
-    padding: theme.spacing.lg,
-  },
-  cardDeck: {
-    minHeight: 280,
-    justifyContent: 'space-between',
-  },
-  cardDense: {
-    padding: theme.spacing.md,
-  },
-  cardMuted: {
-    opacity: 0.72,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: theme.spacing.md,
-  },
-  postmark: {
-    borderWidth: 1,
-    borderColor: '#b39b73',
-    borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: 'rgba(255,255,255,0.16)',
-  },
-  postmarkLabel: {
-    color: theme.colors.textDark,
-    fontSize: 12,
-    textTransform: 'uppercase',
-    letterSpacing: 0.9,
-    fontWeight: '700',
-  },
-  inspectLabel: {
-    color: '#60482d',
-    fontSize: 12,
-    textTransform: 'uppercase',
-    letterSpacing: 1.1,
-    fontWeight: '700',
-  },
-  topRow: {
-    flexDirection: 'row',
-    gap: theme.spacing.md,
-  },
-  headerBlock: {
-    flex: 1,
-  },
-  title: {
-    color: theme.colors.textDark,
-    fontSize: 22,
-    fontWeight: '700',
-    marginBottom: 6,
-  },
-  summary: {
-    color: '#334251',
-    fontSize: 14,
-    lineHeight: 22,
-  },
-  saveButton: {
-    alignSelf: 'flex-start',
-    borderWidth: 1,
-    borderColor: '#ad946a',
-    borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-  },
-  saveLabel: {
-    color: '#5a472c',
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  saveLabelActive: {
-    color: '#352615',
-  },
-  rule: {
-    height: 1,
-    backgroundColor: '#b59a70',
-    opacity: 0.8,
-    marginTop: theme.spacing.md,
-    marginBottom: theme.spacing.md,
-  },
-  metaBand: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: theme.spacing.md,
-  },
-  metaCaption: {
-    color: '#68533a',
-    fontSize: 11,
-    textTransform: 'uppercase',
-    letterSpacing: 0.9,
-    marginBottom: 4,
-    fontWeight: '700',
-  },
-  metaValue: {
-    color: theme.colors.textDark,
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  topicBlock: {
-    flex: 1,
-    alignItems: 'flex-end',
-  },
-  pillRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: theme.spacing.md,
-  },
-  footerRow: {
-    marginTop: theme.spacing.sm,
-    paddingTop: theme.spacing.sm,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: '#b59a70',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  footerText: {
-    color: '#5e4a31',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  footerSlug: {
-    color: '#7a6242',
-    fontSize: 11,
-  },
-});
+const createStyles = (theme: ReturnType<typeof useTheme>) =>
+  StyleSheet.create({
+    cardWrap: {
+      position: 'relative',
+      marginBottom: theme.spacing.lg,
+    },
+    cardWrapDeck: {
+      marginBottom: 0,
+      paddingHorizontal: theme.spacing.md,
+      paddingVertical: theme.spacing.lg,
+    },
+    backLayer: {
+      position: 'absolute',
+      top: 10,
+      left: 8,
+      right: 8,
+      bottom: -6,
+      borderRadius: theme.radius.lg,
+      backgroundColor: theme.colors.backgroundRaised,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+    },
+    backLayerDeck: {
+      top: 18,
+      left: 22,
+      right: 22,
+      bottom: 6,
+    },
+    backLayerSecondary: {
+      position: 'absolute',
+      top: 18,
+      left: 15,
+      right: 15,
+      bottom: -12,
+      borderRadius: theme.radius.lg,
+      backgroundColor: theme.colors.background,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+    },
+    backLayerSecondaryDeck: {
+      top: 10,
+      left: 14,
+      right: 14,
+      bottom: 0,
+    },
+    backLayerMuted: {
+      opacity: 0.45,
+    },
+    card: {
+      backgroundColor: theme.colors.panelWarm,
+      borderRadius: theme.radius.lg,
+      borderWidth: 1,
+      borderColor: theme.colors.accentWarm,
+      padding: theme.spacing.lg,
+    },
+    cardDeck: {
+      minHeight: 280,
+      justifyContent: 'space-between',
+    },
+    cardDense: {
+      padding: theme.spacing.md,
+    },
+    cardMuted: {
+      opacity: 0.72,
+    },
+    cardHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: theme.spacing.md,
+    },
+    postmark: {
+      borderWidth: 1,
+      borderColor: theme.colors.accentWarm,
+      borderRadius: 999,
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      backgroundColor: 'rgba(255,255,255,0.16)',
+    },
+    postmarkLabel: {
+      color: theme.colors.textDark,
+      fontSize: 12,
+      textTransform: 'uppercase',
+      letterSpacing: 0.9,
+      fontWeight: '700',
+    },
+    inspectLabel: {
+      color: theme.colors.textDark,
+      fontSize: 12,
+      textTransform: 'uppercase',
+      letterSpacing: 1.1,
+      fontWeight: '700',
+    },
+    topRow: {
+      flexDirection: 'row',
+      gap: theme.spacing.md,
+    },
+    headerBlock: {
+      flex: 1,
+    },
+    title: {
+      color: theme.colors.textDark,
+      fontSize: 22,
+      fontWeight: '700',
+      marginBottom: 6,
+    },
+    summary: {
+      color: theme.colors.textDark,
+      fontSize: 14,
+      lineHeight: 22,
+    },
+    saveButton: {
+      alignSelf: 'flex-start',
+      borderWidth: 1,
+      borderColor: theme.colors.accentWarm,
+      borderRadius: 999,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      backgroundColor: 'rgba(255,255,255,0.2)',
+    },
+    saveLabel: {
+      color: theme.colors.textDark,
+      fontSize: 13,
+      fontWeight: '600',
+    },
+    saveLabelActive: {
+      color: theme.colors.textDark,
+    },
+    rule: {
+      height: 1,
+      backgroundColor: theme.colors.accentWarm,
+      opacity: 0.8,
+      marginTop: theme.spacing.md,
+      marginBottom: theme.spacing.md,
+    },
+    metaBand: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      gap: theme.spacing.md,
+    },
+    metaCaption: {
+      color: theme.colors.textDark,
+      fontSize: 11,
+      textTransform: 'uppercase',
+      letterSpacing: 0.9,
+      marginBottom: 4,
+      fontWeight: '700',
+    },
+    metaValue: {
+      color: theme.colors.textDark,
+      fontSize: 15,
+      fontWeight: '700',
+    },
+    topicBlock: {
+      flex: 1,
+      alignItems: 'flex-end',
+    },
+    pillRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      marginTop: theme.spacing.md,
+    },
+    footerRow: {
+      marginTop: theme.spacing.sm,
+      paddingTop: theme.spacing.sm,
+      borderTopWidth: StyleSheet.hairlineWidth,
+      borderTopColor: theme.colors.accentWarm,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    footerText: {
+      color: theme.colors.textDark,
+      fontSize: 12,
+      fontWeight: '600',
+    },
+    footerSlug: {
+      color: theme.colors.textDark,
+      fontSize: 11,
+    },
+  });

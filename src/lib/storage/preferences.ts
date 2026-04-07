@@ -7,6 +7,7 @@ const PREFERENCES_KEY = 'cta:preferences';
 export const defaultPreferences: AppPreferences = {
   reducedMotion: false,
   denseList: false,
+  colorScheme: 'night',
 };
 
 export async function loadPreferences(): Promise<AppPreferences> {

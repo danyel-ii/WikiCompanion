@@ -1,6 +1,6 @@
 import { StyleSheet, TextInput, View } from 'react-native';
 
-import { theme } from '@/src/styles/theme';
+import { useTheme } from '@/src/hooks/useTheme';
 
 export function SearchInput({
   value,
@@ -11,6 +11,9 @@ export function SearchInput({
   onChangeText: (next: string) => void;
   placeholder: string;
 }) {
+  const theme = useTheme();
+  const styles = createStyles(theme);
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -27,18 +30,19 @@ export function SearchInput({
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: theme.colors.panel,
-    borderRadius: theme.radius.md,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    marginBottom: theme.spacing.md,
-  },
-  input: {
-    color: theme.colors.text,
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
-    fontSize: 16,
-  },
-});
+const createStyles = (theme: ReturnType<typeof useTheme>) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: theme.colors.panel,
+      borderRadius: theme.radius.md,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+      marginBottom: theme.spacing.md,
+    },
+    input: {
+      color: theme.colors.text,
+      paddingHorizontal: theme.spacing.lg,
+      paddingVertical: theme.spacing.md,
+      fontSize: 16,
+    },
+  });

@@ -1,8 +1,10 @@
 import Markdown from 'react-native-markdown-display';
 
-import { theme } from '@/src/styles/theme';
+import { useTheme } from '@/src/hooks/useTheme';
 
 export function ArticleMarkdown({ markdown }: { markdown: string }) {
+  const theme = useTheme();
+
   return (
     <Markdown
       style={{

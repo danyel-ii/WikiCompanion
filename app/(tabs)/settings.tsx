@@ -1,15 +1,19 @@
 import * as WebBrowser from 'expo-web-browser';
-import { SafeAreaView, Pressable, ScrollView, StyleSheet, Switch, Text } from 'react-native';
+import { SafeAreaView, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 
 import { MetadataRow } from '@/components/ui/MetadataRow';
+import { Pill } from '@/components/ui/Pill';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { useAppState } from '@/src/hooks/useAppState';
-import { theme } from '@/src/styles/theme';
+import { useTheme } from '@/src/hooks/useTheme';
+import { palettes } from '@/src/styles/theme';
 
 const sourceRepo = 'https://github.com/mukul975/Anthropic-Cybersecurity-Skills';
 const wikiBase = 'https://danyel-ii.github.io/cyber-research-wiki/';
 
 export default function SettingsScreen() {
+  const theme = useTheme();
+  const styles = createStyles(theme);
   const { manifest, preferences, refreshState, refreshContent, setPreference } = useAppState();
 
   return (
@@ -51,6 +55,20 @@ export default function SettingsScreen() {
               value={preferences.denseList}
             />
           </Pressable>
+          <View style={styles.paletteBlock}>
+            <Text style={styles.paletteLabel}>Color palette</Text>
+            <Text style={styles.paletteCaption}>Switch between the full built-in daisyUI theme range.</Text>
+            <View style={styles.paletteRow}>
+              {Object.values(palettes).map((palette) => (
+                <Pill
+                  key={palette.id}
+                  active={preferences.colorScheme === palette.id}
+                  label={palette.label}
+                  onPress={() => setPreference('colorScheme', palette.id)}
+                />
+              ))}
+            </View>
+          </View>
         </SectionCard>
 
         <SectionCard title="Links">
@@ -66,69 +84,88 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
-  content: {
-    padding: theme.spacing.lg,
-  },
-  title: {
-    color: theme.colors.text,
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: theme.spacing.sm,
-  },
-  subtitle: {
-    color: theme.colors.textMuted,
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: theme.spacing.lg,
-  },
-  actionButton: {
-    marginTop: theme.spacing.md,
-    borderRadius: theme.radius.sm,
-    backgroundColor: theme.colors.accentSoft,
-    padding: theme.spacing.md,
-  },
-  actionButtonSecondary: {
-    marginTop: theme.spacing.sm,
-    borderRadius: theme.radius.sm,
-    backgroundColor: theme.colors.background,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    padding: theme.spacing.md,
-  },
-  actionLabel: {
-    color: theme.colors.text,
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-  errorText: {
-    marginTop: theme.spacing.sm,
-    color: theme.colors.danger,
-    fontSize: 13,
-  },
-  switchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: theme.spacing.sm,
-  },
-  switchText: {
-    color: theme.colors.text,
-    fontSize: 15,
-  },
-  linkButton: {
-    borderRadius: theme.radius.sm,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    padding: theme.spacing.md,
-    marginBottom: theme.spacing.sm,
-  },
-  linkLabel: {
-    color: theme.colors.text,
-    fontSize: 14,
-  },
-});
+const createStyles = (theme: ReturnType<typeof useTheme>) =>
+  StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    },
+    content: {
+      padding: theme.spacing.lg,
+    },
+    title: {
+      color: theme.colors.text,
+      fontSize: 28,
+      fontWeight: '700',
+      marginBottom: theme.spacing.sm,
+    },
+    subtitle: {
+      color: theme.colors.textMuted,
+      fontSize: 14,
+      lineHeight: 20,
+      marginBottom: theme.spacing.lg,
+    },
+    actionButton: {
+      marginTop: theme.spacing.md,
+      borderRadius: theme.radius.sm,
+      backgroundColor: theme.colors.accentSoft,
+      padding: theme.spacing.md,
+    },
+    actionButtonSecondary: {
+      marginTop: theme.spacing.sm,
+      borderRadius: theme.radius.sm,
+      backgroundColor: theme.colors.background,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+      padding: theme.spacing.md,
+    },
+    actionLabel: {
+      color: theme.colors.text,
+      fontWeight: '700',
+      textAlign: 'center',
+    },
+    errorText: {
+      marginTop: theme.spacing.sm,
+      color: theme.colors.danger,
+      fontSize: 13,
+    },
+    switchRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingVertical: theme.spacing.sm,
+    },
+    switchText: {
+      color: theme.colors.text,
+      fontSize: 15,
+    },
+    paletteBlock: {
+      marginTop: theme.spacing.md,
+    },
+    paletteLabel: {
+      color: theme.colors.text,
+      fontSize: 15,
+      fontWeight: '700',
+      marginBottom: 4,
+    },
+    paletteCaption: {
+      color: theme.colors.textMuted,
+      fontSize: 13,
+      marginBottom: theme.spacing.sm,
+    },
+    paletteRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+    linkButton: {
+      borderRadius: theme.radius.sm,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+      padding: theme.spacing.md,
+      marginBottom: theme.spacing.sm,
+    },
+    linkLabel: {
+      color: theme.colors.text,
+      fontSize: 14,
+    },
+  });

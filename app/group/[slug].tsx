@@ -5,9 +5,9 @@ import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ToolCard } from '@/components/ui/ToolCard';
 import { useAppState } from '@/src/hooks/useAppState';
+import { useTheme } from '@/src/hooks/useTheme';
 import { getToolGroupDefinition, getToolGroup } from '@/src/lib/content/groups';
 import { filterTools } from '@/src/lib/content/search';
-import { theme } from '@/src/styles/theme';
 import type { SortMode, ToolFilters } from '@/src/types/content';
 
 function firstParam(value: string | string[] | undefined): string {
@@ -23,6 +23,8 @@ function parseSortMode(value: string | string[] | undefined): SortMode {
 }
 
 export default function GroupScreen() {
+  const theme = useTheme();
+  const styles = createStyles(theme);
   const params = useLocalSearchParams<{
     slug: string;
     q?: string;
@@ -59,9 +61,7 @@ export default function GroupScreen() {
         <View style={styles.header}>
           <Text style={styles.kicker}>Discovery stack</Text>
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.subtitle}>
-            {groupDefinition?.description ?? 'Focused tool phase.'} {groupTools.length} cards in this track.
-          </Text>
+          <Text style={styles.subtitle}>{groupDefinition?.description ?? 'Focused tool phase.'} {groupTools.length} cards in this track.</Text>
         </View>
 
         {groupTools.length === 0 ? (
@@ -87,37 +87,38 @@ export default function GroupScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
-  content: {
-    paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.xl,
-    paddingBottom: 120,
-  },
-  header: {
-    marginBottom: theme.spacing.lg,
-  },
-  kicker: {
-    color: theme.colors.accentWarm,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    fontSize: 12,
-    marginBottom: 8,
-  },
-  title: {
-    color: theme.colors.text,
-    fontSize: 30,
-    lineHeight: 36,
-    fontWeight: '700',
-  },
-  subtitle: {
-    color: theme.colors.textMuted,
-    fontSize: 14,
-    marginTop: theme.spacing.sm,
-    lineHeight: 20,
-    maxWidth: 620,
-  },
-});
+const createStyles = (theme: ReturnType<typeof useTheme>) =>
+  StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    },
+    content: {
+      paddingHorizontal: theme.spacing.lg,
+      paddingTop: theme.spacing.xl,
+      paddingBottom: 120,
+    },
+    header: {
+      marginBottom: theme.spacing.lg,
+    },
+    kicker: {
+      color: theme.colors.accentWarm,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+      fontSize: 12,
+      marginBottom: 8,
+    },
+    title: {
+      color: theme.colors.text,
+      fontSize: 30,
+      lineHeight: 36,
+      fontWeight: '700',
+    },
+    subtitle: {
+      color: theme.colors.textMuted,
+      fontSize: 14,
+      marginTop: theme.spacing.sm,
+      lineHeight: 20,
+      maxWidth: 620,
+    },
+  });

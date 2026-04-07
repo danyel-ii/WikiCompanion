@@ -9,6 +9,12 @@ The app never scrapes GitHub on-device. All runtime content comes from generated
 3. `npm run wiki:site`
 4. Launch the app and it loads `src/content/generated/tools-manifest.json`
 
+The Android packaging flow is separate from the content pipeline:
+
+1. regenerate content if needed
+2. run `npm run build:android:apk`
+3. install `android/app/build/outputs/apk/debug/app-debug.apk`
+
 ## Script responsibilities
 
 - `scripts/fetch-upstream.ts`

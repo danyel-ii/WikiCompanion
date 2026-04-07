@@ -43,11 +43,34 @@ The command should read grounded notes from stdin and return markdown on stdout.
 npm run content:sync
 npm run content:generate
 npm run content:all
+npm run build:android:apk
 npm run wiki:site
 npm run typecheck
 npm run test
 npm run lint
 npm run build:web
+```
+
+## Android installation build
+
+The repository now uses one local Android packaging path instead of a separate EAS-local flow.
+
+Build an installable debug APK with:
+
+```bash
+npm run build:android:apk
+```
+
+The APK will be written to:
+
+```bash
+android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+Install it on a connected Android device with:
+
+```bash
+adb install -r android/app/build/outputs/apk/debug/app-debug.apk
 ```
 
 ## Key files

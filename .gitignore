@@ -40,6 +40,13 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+/android/app/build
+/android/build
+/android/.gradle
+/android/.kotlin
+
+# packaged release artifacts
+/releases
 
 # content pipeline artifacts
 content/upstream/

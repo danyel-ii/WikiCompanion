@@ -7,8 +7,8 @@ import { GroupDeckCard, type ToolGroupCardData } from '@/components/ui/GroupDeck
 import { SearchInput } from '@/components/ui/SearchInput';
 import { groupToolsByTrack } from '@/src/lib/content/groups';
 import { useAppState } from '@/src/hooks/useAppState';
+import { useTheme } from '@/src/hooks/useTheme';
 import { filterTools } from '@/src/lib/content/search';
-import { theme } from '@/src/styles/theme';
 import type { ToolFilters } from '@/src/types/content';
 
 const initialFilters: ToolFilters = {
@@ -21,6 +21,8 @@ const initialFilters: ToolFilters = {
 
 export default function AtlasScreen() {
   const router = useRouter();
+  const theme = useTheme();
+  const styles = createStyles(theme);
   const { manifest, favorites, refreshState, refreshContent } = useAppState();
   const [filters, setFilters] = useState<ToolFilters>(initialFilters);
   const [activeGroupIndex, setActiveGroupIndex] = useState(0);
@@ -114,61 +116,62 @@ export default function AtlasScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
-  header: {
-    paddingHorizontal: theme.spacing.lg,
-    paddingTop: theme.spacing.xl,
-    paddingBottom: theme.spacing.sm,
-  },
-  kicker: {
-    color: theme.colors.accentWarm,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    fontSize: 12,
-    marginBottom: 8,
-  },
-  title: {
-    color: theme.colors.text,
-    fontSize: 30,
-    lineHeight: 36,
-    fontWeight: '700',
-  },
-  subtitle: {
-    color: theme.colors.textMuted,
-    fontSize: 14,
-    marginTop: theme.spacing.sm,
-    lineHeight: 20,
-    maxWidth: 620,
-  },
-  controls: {
-    paddingHorizontal: theme.spacing.lg,
-    paddingBottom: theme.spacing.md,
-  },
-  rolodexFrame: {
-    flex: 1,
-    marginHorizontal: theme.spacing.lg,
-    marginBottom: theme.spacing.xl,
-    backgroundColor: theme.colors.backgroundRaised,
-    borderRadius: theme.radius.xl,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    paddingTop: theme.spacing.md,
-  },
-  sectionLabel: {
-    color: theme.colors.accentWarm,
-    fontSize: 11,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    fontWeight: '700',
-    marginBottom: 4,
-    paddingHorizontal: theme.spacing.lg,
-  },
-  groupContent: {
-    paddingBottom: 120,
-    paddingTop: theme.spacing.sm,
-  },
-});
+const createStyles = (theme: ReturnType<typeof useTheme>) =>
+  StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    },
+    header: {
+      paddingHorizontal: theme.spacing.lg,
+      paddingTop: theme.spacing.xl,
+      paddingBottom: theme.spacing.sm,
+    },
+    kicker: {
+      color: theme.colors.accentWarm,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+      fontSize: 12,
+      marginBottom: 8,
+    },
+    title: {
+      color: theme.colors.text,
+      fontSize: 30,
+      lineHeight: 36,
+      fontWeight: '700',
+    },
+    subtitle: {
+      color: theme.colors.textMuted,
+      fontSize: 14,
+      marginTop: theme.spacing.sm,
+      lineHeight: 20,
+      maxWidth: 620,
+    },
+    controls: {
+      paddingHorizontal: theme.spacing.lg,
+      paddingBottom: theme.spacing.md,
+    },
+    rolodexFrame: {
+      flex: 1,
+      marginHorizontal: theme.spacing.lg,
+      marginBottom: theme.spacing.xl,
+      backgroundColor: theme.colors.backgroundRaised,
+      borderRadius: theme.radius.xl,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+      paddingTop: theme.spacing.md,
+    },
+    sectionLabel: {
+      color: theme.colors.accentWarm,
+      fontSize: 11,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+      fontWeight: '700',
+      marginBottom: 4,
+      paddingHorizontal: theme.spacing.lg,
+    },
+    groupContent: {
+      paddingBottom: 120,
+      paddingTop: theme.spacing.sm,
+    },
+  });

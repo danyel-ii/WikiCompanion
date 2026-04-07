@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { theme } from '@/src/styles/theme';
+import { useTheme } from '@/src/hooks/useTheme';
 
 export interface ToolGroupCardData {
   key: string;
@@ -20,6 +20,8 @@ export function GroupDeckCard({
   index: number;
   onPress: () => void;
 }) {
+  const theme = useTheme();
+  const styles = createStyles(theme);
   const rotation = `${((index % 3) - 1) * 0.5}deg`;
 
   return (
@@ -39,66 +41,67 @@ export function GroupDeckCard({
   );
 }
 
-const styles = StyleSheet.create({
-  wrap: {
-    height: 132,
-    justifyContent: 'center',
-    paddingHorizontal: theme.spacing.md,
-  },
-  shadowLayer: {
-    position: 'absolute',
-    top: 18,
-    left: 18,
-    right: 18,
-    bottom: 10,
-    borderRadius: theme.radius.md,
-    backgroundColor: '#0d1721',
-    borderWidth: 1,
-    borderColor: '#294252',
-    opacity: 0.45,
-  },
-  shadowLayerActive: {
-    opacity: 0.85,
-  },
-  card: {
-    backgroundColor: theme.colors.panelAlt,
-    borderRadius: theme.radius.md,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    padding: theme.spacing.lg,
-    opacity: 0.7,
-  },
-  cardActive: {
-    opacity: 1,
-    borderColor: theme.colors.accentWarm,
-    backgroundColor: '#192937',
-  },
-  topRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: theme.spacing.sm,
-  },
-  kicker: {
-    color: theme.colors.accentWarm,
-    fontSize: 11,
-    textTransform: 'uppercase',
-    letterSpacing: 0.9,
-    fontWeight: '700',
-  },
-  count: {
-    color: theme.colors.text,
-    fontSize: 22,
-    fontWeight: '700',
-  },
-  title: {
-    color: theme.colors.text,
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: 4,
-  },
-  teaser: {
-    color: theme.colors.textMuted,
-    fontSize: 13,
-    lineHeight: 18,
-  },
-});
+const createStyles = (theme: ReturnType<typeof useTheme>) =>
+  StyleSheet.create({
+    wrap: {
+      height: 132,
+      justifyContent: 'center',
+      paddingHorizontal: theme.spacing.md,
+    },
+    shadowLayer: {
+      position: 'absolute',
+      top: 18,
+      left: 18,
+      right: 18,
+      bottom: 10,
+      borderRadius: theme.radius.md,
+      backgroundColor: theme.colors.backgroundRaised,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+      opacity: 0.45,
+    },
+    shadowLayerActive: {
+      opacity: 0.85,
+    },
+    card: {
+      backgroundColor: theme.colors.panelAlt,
+      borderRadius: theme.radius.md,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+      padding: theme.spacing.lg,
+      opacity: 0.7,
+    },
+    cardActive: {
+      opacity: 1,
+      borderColor: theme.colors.accentWarm,
+      backgroundColor: theme.colors.backgroundRaised,
+    },
+    topRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: theme.spacing.sm,
+    },
+    kicker: {
+      color: theme.colors.accentWarm,
+      fontSize: 11,
+      textTransform: 'uppercase',
+      letterSpacing: 0.9,
+      fontWeight: '700',
+    },
+    count: {
+      color: theme.colors.text,
+      fontSize: 22,
+      fontWeight: '700',
+    },
+    title: {
+      color: theme.colors.text,
+      fontSize: 18,
+      fontWeight: '700',
+      marginBottom: 4,
+    },
+    teaser: {
+      color: theme.colors.textMuted,
+      fontSize: 13,
+      lineHeight: 18,
+    },
+  });

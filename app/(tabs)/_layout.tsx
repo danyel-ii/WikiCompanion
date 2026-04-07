@@ -1,15 +1,19 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Tabs } from 'expo-router';
 
-import { theme } from '@/src/styles/theme';
+import { HeaderNavControls } from '@/components/ui/HeaderNavControls';
+import { useTheme } from '@/src/hooks/useTheme';
 
 export default function TabLayout() {
+  const theme = useTheme();
+
   return (
     <Tabs
       screenOptions={{
         headerStyle: { backgroundColor: theme.colors.background },
         headerTintColor: theme.colors.text,
         headerShadowVisible: false,
+        headerRight: () => <HeaderNavControls />,
         tabBarStyle: {
           backgroundColor: theme.colors.panel,
           borderTopColor: theme.colors.border,

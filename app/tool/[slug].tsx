@@ -9,10 +9,12 @@ import { MetadataRow } from '@/components/ui/MetadataRow';
 import { Pill } from '@/components/ui/Pill';
 import { SectionCard } from '@/components/ui/SectionCard';
 import { useAppState } from '@/src/hooks/useAppState';
-import { theme } from '@/src/styles/theme';
+import { useTheme } from '@/src/hooks/useTheme';
 
 export default function ToolDetailScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
+  const theme = useTheme();
+  const styles = createStyles(theme);
   const { manifest, favorites, toggleFavorite } = useAppState();
   const tool = manifest.tools.find((entry) => entry.slug === slug);
 
@@ -96,125 +98,126 @@ export default function ToolDetailScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
-  content: {
-    padding: theme.spacing.lg,
-    paddingBottom: 120,
-  },
-  heroCard: {
-    backgroundColor: theme.colors.panelWarm,
-    borderRadius: theme.radius.lg,
-    borderWidth: 1,
-    borderColor: '#aa8f67',
-    padding: theme.spacing.lg,
-    marginBottom: theme.spacing.lg,
-  },
-  heroTopRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: theme.spacing.sm,
-  },
-  heroKicker: {
-    color: '#725739',
-    fontSize: 12,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    fontWeight: '700',
-  },
-  heroSlug: {
-    color: '#816847',
-    fontSize: 11,
-  },
-  title: {
-    color: theme.colors.textDark,
-    fontSize: 32,
-    fontWeight: '700',
-    marginBottom: theme.spacing.sm,
-  },
-  summary: {
-    color: '#34404d',
-    fontSize: 16,
-    lineHeight: 24,
-    marginBottom: theme.spacing.lg,
-  },
-  heroMetaRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: theme.spacing.lg,
-    gap: theme.spacing.md,
-  },
-  heroMetaCaption: {
-    color: '#6b5338',
-    fontSize: 11,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-    marginBottom: 4,
-    fontWeight: '700',
-  },
-  heroMetaValue: {
-    color: theme.colors.textDark,
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  actionRow: {
-    flexDirection: 'row',
-    gap: theme.spacing.md,
-  },
-  primaryButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    backgroundColor: 'rgba(255,255,255,0.22)',
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.md,
-    borderRadius: theme.radius.sm,
-    borderWidth: 1,
-    borderColor: '#af946d',
-  },
-  primaryButtonText: {
-    color: theme.colors.textDark,
-    fontWeight: '700',
-  },
-  secondaryButton: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#af946d',
-    borderRadius: theme.radius.sm,
-    justifyContent: 'center',
-    paddingHorizontal: theme.spacing.md,
-  },
-  secondaryButtonDisabled: {
-    opacity: 0.7,
-  },
-  secondaryButtonText: {
-    color: theme.colors.textDark,
-    textAlign: 'center',
-    fontWeight: '600',
-  },
-  skillRow: {
-    paddingVertical: theme.spacing.sm,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: theme.colors.border,
-  },
-  skillTitle: {
-    color: theme.colors.text,
-    fontSize: 15,
-    fontWeight: '700',
-    marginBottom: 6,
-  },
-  skillDescription: {
-    color: theme.colors.textMuted,
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  skillPills: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: theme.spacing.sm,
-  },
-});
+const createStyles = (theme: ReturnType<typeof useTheme>) =>
+  StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    },
+    content: {
+      padding: theme.spacing.lg,
+      paddingBottom: 120,
+    },
+    heroCard: {
+      backgroundColor: theme.colors.panelWarm,
+      borderRadius: theme.radius.lg,
+      borderWidth: 1,
+      borderColor: theme.colors.accentWarm,
+      padding: theme.spacing.lg,
+      marginBottom: theme.spacing.lg,
+    },
+    heroTopRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: theme.spacing.sm,
+    },
+    heroKicker: {
+      color: theme.colors.textDark,
+      fontSize: 12,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+      fontWeight: '700',
+    },
+    heroSlug: {
+      color: theme.colors.textDark,
+      fontSize: 11,
+    },
+    title: {
+      color: theme.colors.textDark,
+      fontSize: 32,
+      fontWeight: '700',
+      marginBottom: theme.spacing.sm,
+    },
+    summary: {
+      color: theme.colors.textDark,
+      fontSize: 16,
+      lineHeight: 24,
+      marginBottom: theme.spacing.lg,
+    },
+    heroMetaRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: theme.spacing.lg,
+      gap: theme.spacing.md,
+    },
+    heroMetaCaption: {
+      color: theme.colors.textDark,
+      fontSize: 11,
+      textTransform: 'uppercase',
+      letterSpacing: 0.8,
+      marginBottom: 4,
+      fontWeight: '700',
+    },
+    heroMetaValue: {
+      color: theme.colors.textDark,
+      fontSize: 16,
+      fontWeight: '700',
+    },
+    actionRow: {
+      flexDirection: 'row',
+      gap: theme.spacing.md,
+    },
+    primaryButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      backgroundColor: 'rgba(255,255,255,0.22)',
+      paddingHorizontal: theme.spacing.md,
+      paddingVertical: theme.spacing.md,
+      borderRadius: theme.radius.sm,
+      borderWidth: 1,
+      borderColor: theme.colors.accentWarm,
+    },
+    primaryButtonText: {
+      color: theme.colors.textDark,
+      fontWeight: '700',
+    },
+    secondaryButton: {
+      flex: 1,
+      borderWidth: 1,
+      borderColor: theme.colors.accentWarm,
+      borderRadius: theme.radius.sm,
+      justifyContent: 'center',
+      paddingHorizontal: theme.spacing.md,
+    },
+    secondaryButtonDisabled: {
+      opacity: 0.7,
+    },
+    secondaryButtonText: {
+      color: theme.colors.textDark,
+      textAlign: 'center',
+      fontWeight: '600',
+    },
+    skillRow: {
+      paddingVertical: theme.spacing.sm,
+      borderBottomWidth: StyleSheet.hairlineWidth,
+      borderBottomColor: theme.colors.border,
+    },
+    skillTitle: {
+      color: theme.colors.text,
+      fontSize: 15,
+      fontWeight: '700',
+      marginBottom: 6,
+    },
+    skillDescription: {
+      color: theme.colors.textMuted,
+      fontSize: 14,
+      lineHeight: 20,
+    },
+    skillPills: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      marginTop: theme.spacing.sm,
+    },
+  });

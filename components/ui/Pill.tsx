@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
 
-import { theme } from '@/src/styles/theme';
+import { useTheme } from '@/src/hooks/useTheme';
 
 interface PillProps {
   label: string;
@@ -9,6 +9,9 @@ interface PillProps {
 }
 
 export function Pill({ label, active, onPress }: PillProps) {
+  const theme = useTheme();
+  const styles = createStyles(theme);
+
   return (
     <Pressable
       accessibilityRole={onPress ? 'button' : undefined}
@@ -19,29 +22,30 @@ export function Pill({ label, active, onPress }: PillProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  base: {
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  active: {
-    backgroundColor: theme.colors.accentSoft,
-    borderColor: theme.colors.accent,
-  },
-  inactive: {
-    backgroundColor: theme.colors.panel,
-  },
-  label: {
-    color: theme.colors.textMuted,
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  labelActive: {
-    color: theme.colors.text,
-  },
-});
+const createStyles = (theme: ReturnType<typeof useTheme>) =>
+  StyleSheet.create({
+    base: {
+      borderRadius: 999,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+      paddingHorizontal: 12,
+      paddingVertical: 7,
+      marginRight: 8,
+      marginBottom: 8,
+    },
+    active: {
+      backgroundColor: theme.colors.accentSoft,
+      borderColor: theme.colors.accent,
+    },
+    inactive: {
+      backgroundColor: theme.colors.panel,
+    },
+    label: {
+      color: theme.colors.textMuted,
+      fontSize: 13,
+      fontWeight: '600',
+    },
+    labelActive: {
+      color: theme.colors.text,
+    },
+  });

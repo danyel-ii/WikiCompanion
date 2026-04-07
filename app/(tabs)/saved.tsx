@@ -4,9 +4,11 @@ import { SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ToolCard } from '@/components/ui/ToolCard';
 import { useAppState } from '@/src/hooks/useAppState';
-import { theme } from '@/src/styles/theme';
+import { useTheme } from '@/src/hooks/useTheme';
 
 export default function SavedScreen() {
+  const theme = useTheme();
+  const styles = createStyles(theme);
   const { manifest, favorites, preferences, toggleFavorite } = useAppState();
   const tools = useMemo(
     () => manifest.tools.filter((tool) => favorites.has(tool.slug)).sort((left, right) => left.displayName.localeCompare(right.displayName)),
@@ -40,24 +42,25 @@ export default function SavedScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
-  content: {
-    padding: theme.spacing.lg,
-  },
-  title: {
-    color: theme.colors.text,
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: theme.spacing.sm,
-  },
-  subtitle: {
-    color: theme.colors.textMuted,
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: theme.spacing.lg,
-  },
-});
+const createStyles = (theme: ReturnType<typeof useTheme>) =>
+  StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    },
+    content: {
+      padding: theme.spacing.lg,
+    },
+    title: {
+      color: theme.colors.text,
+      fontSize: 28,
+      fontWeight: '700',
+      marginBottom: theme.spacing.sm,
+    },
+    subtitle: {
+      color: theme.colors.textMuted,
+      fontSize: 14,
+      lineHeight: 20,
+      marginBottom: theme.spacing.lg,
+    },
+  });

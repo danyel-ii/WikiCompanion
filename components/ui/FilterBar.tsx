@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { Pill } from '@/components/ui/Pill';
-import { theme } from '@/src/styles/theme';
+import { useTheme } from '@/src/hooks/useTheme';
 import type { SortMode } from '@/src/types/content';
 
 const sortLabels: { value: SortMode; label: string }[] = [
@@ -23,6 +23,9 @@ interface FilterBarProps {
 }
 
 export function FilterBar(props: FilterBarProps) {
+  const theme = useTheme();
+  const styles = createStyles(theme);
+
   return (
     <View style={styles.wrapper}>
       <Text style={styles.label}>Filters</Text>
@@ -50,18 +53,19 @@ export function FilterBar(props: FilterBarProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  wrapper: {
-    marginBottom: theme.spacing.md,
-  },
-  label: {
-    color: theme.colors.textMuted,
-    fontSize: 12,
-    marginBottom: 8,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-  },
-  sortLabel: {
-    marginTop: 4,
-  },
-});
+const createStyles = (theme: ReturnType<typeof useTheme>) =>
+  StyleSheet.create({
+    wrapper: {
+      marginBottom: theme.spacing.md,
+    },
+    label: {
+      color: theme.colors.textMuted,
+      fontSize: 12,
+      marginBottom: 8,
+      textTransform: 'uppercase',
+      letterSpacing: 0.8,
+    },
+    sortLabel: {
+      marginTop: 4,
+    },
+  });

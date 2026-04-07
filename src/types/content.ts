@@ -1,3 +1,5 @@
+import type { AppTheme, ColorSchemeId } from '@/src/styles/theme';
+
 export type WikiStatus = 'ready' | 'missing';
 export type ArticleMode = 'template' | 'llm';
 export type SortMode = 'alphabetical' | 'most-referenced' | 'recently-updated';
@@ -48,6 +50,7 @@ export interface RefreshState {
 export interface AppPreferences {
   reducedMotion: boolean;
   denseList: boolean;
+  colorScheme: ColorSchemeId;
 }
 
 export interface ToolFilters {
@@ -56,4 +59,8 @@ export interface ToolFilters {
   hasWikiOnly: boolean;
   savedOnly: boolean;
   sort: SortMode;
+}
+
+export interface ThemedState {
+  theme: AppTheme;
 }
