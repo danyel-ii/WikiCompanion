@@ -2,6 +2,13 @@
 
 The app never scrapes GitHub on-device. All runtime content comes from generated static artifacts.
 
+## Runtime baseline
+
+- CI / recommended Node: `24`
+- Supported local Node range: `20` to `24`
+- Mobile app consumes `content/generated/tools-manifest.json`
+- Desktop/editorial tools consume `content/generated/tools-editorial-manifest.json`
+
 ## Flow
 
 1. `npm run content:sync`
@@ -15,6 +22,13 @@ The Android packaging flow is separate from the content pipeline:
 1. regenerate content if needed
 2. run `npm run build:android:release`
 3. install `releases/android/cyber-tool-atlas-v<version>-release.apk`
+
+For repo hygiene and security checks:
+
+1. `npm run typecheck`
+2. `npm run lint`
+3. `npm run test`
+4. `npm audit`
 
 ## Script responsibilities
 

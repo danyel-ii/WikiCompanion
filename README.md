@@ -19,7 +19,10 @@ Cyber Tool Atlas is a standalone Expo / React Native mobile app that turns the `
 
 ## Getting started
 
+This repository is standardized on Node `24` in CI and recommended local usage. The supported local range is Node `20` to `24`, but the workflows now run on `24`.
+
 ```bash
+nvm use
 npm install
 npm run content:all
 npm run start
@@ -50,6 +53,7 @@ npm run build:android:apk
 npm run build:android:release
 npm run wiki:site
 npm run typecheck
+npm audit
 npm run test
 npm run lint
 npm run build:web
@@ -76,6 +80,12 @@ releases/android/
 ```
 
 The release build script will generate a local keystore under `.secrets/android/` if one does not already exist. Keep that directory private.
+
+## Security notes
+
+- `.env` and `.secrets/` stay out of version control.
+- The app no longer depends on `react-native-markdown-display`; article rendering is handled by the local renderer in `components/article/ArticleMarkdown.tsx`.
+- `npm audit` should currently return no unresolved production vulnerabilities after install.
 
 Install a built APK on a connected Android device with:
 
