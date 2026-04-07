@@ -1,0 +1,168 @@
+{
+  "canonical_name": "DNSRecon",
+  "aliases": [
+    "dnsrecon"
+  ],
+  "classification": "Open-source DNS enumeration and reconnaissance utility",
+  "short_description": "DNSRecon is a Python-based DNS enumeration tool for security assessments that automates record discovery, zone transfer testing, DNSSEC zone walking, cache snooping, reverse lookups, and wordlist-based subdomain brute forcing, with export to XML/CSV/JSON and optional REST API and Shodan-assisted enrichment.",
+  "overview_notes": "DNSRecon focuses on gathering and validating DNS-related information to support mapping and risk assessment of Internet-exposed assets. It combines standard DNS queries with optional passive and active enrichment (e.g., search-engine and certificate transparency lookups) and can test for common misconfigurations such as unauthorized AXFR zone transfers and cache recursion. Recent versions add an optional REST API server and Shodan-powered netblock expansion. It is packaged in major security distributions (e.g., Kali Linux) and maintained on GitHub, with 1.6.0 released on February 28, 2026.",
+  "what_it_is_notes": "- A reconnaissance/assessment aid for DNS, not an exploit framework.\n- Implements multiple DNS discovery methods (standard queries, brute force, reverse lookups) and checks (AXFR attempts, wildcard detection, cache snooping, DNSSEC zone walking via NSEC where feasible).\n- Provides structured outputs and a small local datastore to integrate with broader workflows.",
+  "how_it_works_notes": "- Uses dnspython for DNS resolution and record retrieval. Core functions enumerate NS/SOA, MX, A/AAAA, TXT/SPF, and SRV records and attempt zone transfers against authoritative NS.\n- Supports subdomain discovery via: wordlist brute force, search-engine scraping (Bing/Yandex), certificate transparency via crt.sh, and optional WHOIS/SPF-derived netblock expansion with Shodan (passive and active validation modes).\n- Can perform reverse lookups for ranges/CIDRs and cache snooping against nameservers using a supplied list of hostnames.\n- Implements DNSSEC zone walking when NSEC is present and not fully covered by NSEC3 with opt-out protections.\n- Exposes results via CLI or an optional REST API and can export to XML/CSV/JSON or SQLite for downstream analysis.",
+  "inputs": [
+    "Target domain(s) or zone (FQDN).",
+    "Optional specific DNS server(s) to query.",
+    "Wordlist(s) for brute-force subdomain/host discovery.",
+    "IP range or CIDR for reverse lookups.",
+    "Optional flags to enable Bing/Yandex/crt.sh scraping and WHOIS/SPF analysis.",
+    "Optional Shodan API key to expand/validate netblocks discovered via SPF/WHOIS.",
+    "Type selector for enumeration modes (std, axfr, brt, rvl, srv, snoop, tld, zonewalk, bing, yand, crt)."
+  ],
+  "outputs": [
+    "Enumerated DNS records (SOA, NS, A, AAAA, MX, TXT/SPF, SRV).",
+    "Discovered subdomains/hosts and associated IPs.",
+    "Zone transfer results and evidence (success/failure per NS).",
+    "Reverse PTR mappings for ranges/CIDRs.",
+    "DNSSEC-related observations (e.g., zone-walk results when NSEC exposed).",
+    "Cache snooping findings per NS for queried names.",
+    "Structured exports: XML, CSV, JSON, and optional SQLite database file.",
+    "Optional Shodan-enriched hostlists tied to discovered netblocks."
+  ],
+  "core_concepts": [
+    "Authoritative vs. recursive DNS and zone transfers (AXFR).",
+    "Record-type enumeration (SOA, NS, MX, A/AAAA, TXT/SPF, SRV).",
+    "Subdomain discovery: brute force and passive sources (search engines, CT logs).",
+    "Wildcard DNS detection and filtering implications.",
+    "Reverse DNS (PTR) mapping for ranges/CIDRs.",
+    "Cache snooping to infer resolver cache contents.",
+    "DNSSEC NSEC-based zone walking constraints.",
+    "Data export/serialization for integration with other tools."
+  ],
+  "typical_workflow": [
+    "Identify target domain(s) and choose enumeration mode(s) (e.g., std for baseline records).",
+    "Optionally specify authoritative nameservers and enable AXFR tests against all NS.",
+    "Augment discovery via crt.sh/Bing/Yandex and WHOIS/SPF analysis; optionally enable Shodan expansion if an API key is available.",
+    "Run wordlist-based brute-force enumeration for additional subdomains, with wildcard checks enabled to reduce noise.",
+    "Conduct reverse lookups for relevant ranges/CIDRs and perform cache snooping as needed.",
+    "Export results to XML/CSV/JSON or persist to SQLite for correlation with other reconnaissance outputs.",
+    "Review findings for misconfigurations (e.g., AXFR permitted, recursion open, DNSSEC zone walking possible) and feed discovered assets into follow-on testing."
+  ],
+  "use_cases": [
+    "Scoping and mapping external attack surface by cataloging domains, subdomains, and DNS infrastructure for authorized tests.",
+    "Validating DNS hygiene: checking for unauthorized AXFR, recursion exposure, and wildcard behavior.",
+    "Discovering infrastructure pivots via MX/SRV/NS relationships and CT-derived hostnames.",
+    "Building seed hostlists for web/service enumeration and vulnerability scanning pipelines.",
+    "Enriching SPF/WHOIS-derived netblocks with Shodan to identify additional in-scope hosts before validation.",
+    "Assessing DNSSEC posture where NSEC-based zone walking inadvertently enables name enumeration."
+  ],
+  "limitations": [
+    "AXFR is rarely permitted in well-managed zones; successful transfers are uncommon.",
+    "Search-engine scraping (Bing/Yandex) and some passive sources may be rate-limited, captcha-gated, or incomplete; results can vary over time.",
+    "DNSSEC zone walking only works where NSEC records expose walkable ranges; NSEC3 and proper configurations prevent this.",
+    "Wildcard DNS and CDN CNAME patterns can inflate false positives in brute-force results if not filtered.",
+    "Reverse PTR coverage depends on rDNS delegation; many ranges have sparse or outdated PTRs.",
+    "Shodan enrichment requires an API key and reflects Shodan’s crawl freshness; active validation is recommended.",
+    "Output reflects resolver and network conditions (timeouts, filtering, DNS over TCP/UDP behavior) and may miss transient records."
+  ],
+  "related_tools": [
+    {
+      "name": "Amass",
+      "relationship": "Broader asset discovery (passive/active) with many data sources; complementary for large-scale subdomain enumeration."
+    },
+    {
+      "name": "Subfinder",
+      "relationship": "Fast passive subdomain enumeration; pairs well with DNSRecon’s active checks and AXFR/zone-walk tests."
+    },
+    {
+      "name": "dnsenum",
+      "relationship": "Another DNS enumeration script with AXFR and brute force; overlapping scope."
+    },
+    {
+      "name": "dig",
+      "relationship": "Low-level DNS query utility; useful for validation of individual findings."
+    },
+    {
+      "name": "massdns",
+      "relationship": "High-speed DNS resolution for very large wordlists; can post-process DNSRecon candidate names."
+    },
+    {
+      "name": "fierce",
+      "relationship": "DNS reconnaissance with different heuristics for host discovery; complementary approach."
+    },
+    {
+      "name": "dnsx (ProjectDiscovery)",
+      "relationship": "Fast DNS probing/resolution utility to validate large host sets discovered by DNSRecon."
+    },
+    {
+      "name": "Gobuster (DNS mode)",
+      "relationship": "Focused, fast wordlist-based DNS brute forcing; alternative to DNSRecon’s brt mode."
+    }
+  ],
+  "evidence_gaps": [
+    "The GitHub README lists core capabilities but omits a full CLI flag reference; the Kali tools page currently serves as the most complete public reference for modes/flags, which may lag or differ from upstream in future versions.",
+    "Historical claims of Google-based enumeration appear in some secondary sources; current maintained documentation emphasizes Bing/Yandex and crt.sh. Modern Google scraping behavior is not confirmed in upstream docs.",
+    "Detailed behavior and stability guarantees of the new REST API are described mainly in release notes and README snippets; a formal upstream API specification is limited."
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "DNSRecon GitHub repository (README, version info)",
+      "url": "https://github.com/darkoperator/dnsrecon",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "DNSRecon releases (introduces REST API; recent versions)",
+      "url": "https://github.com/darkoperator/dnsrecon/releases",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "dnsrecon | Kali Linux Tools (CLI options, modes, exports)",
+      "url": "https://www.kali.org/tools/dnsrecon/",
+      "publisher": "OffSec/Kali Linux"
+    },
+    {
+      "title": "dnsrecon · PyPI (packaging overview)",
+      "url": "https://pypi.org/project/dnsrecon/",
+      "publisher": "Python Package Index"
+    },
+    {
+      "title": "https://www.geeksforgeeks.org/dnsrecon-a-powerful-dns-enumeration-script/",
+      "url": "https://www.geeksforgeeks.org/dnsrecon-a-powerful-dns-enumeration-script/",
+      "publisher": "geeksforgeeks.org"
+    },
+    {
+      "title": "https://www.patreon.com/posts/dnsrecon-now-123526865",
+      "url": "https://www.patreon.com/posts/dnsrecon-now-123526865",
+      "publisher": "patreon.com"
+    },
+    {
+      "title": "https://linuxhandbook.com/enumerate-dns-records-dnsrecon/",
+      "url": "https://linuxhandbook.com/enumerate-dns-records-dnsrecon/",
+      "publisher": "linuxhandbook.com"
+    },
+    {
+      "title": "https://wiredgorilla.com/enumerate-dns-records-from-the-command-line-with-dnsrecon/",
+      "url": "https://wiredgorilla.com/enumerate-dns-records-from-the-command-line-with-dnsrecon/",
+      "publisher": "wiredgorilla.com"
+    },
+    {
+      "title": "https://www.reddit.com/r/Pentesting/comments/1otced8",
+      "url": "https://www.reddit.com/r/Pentesting/comments/1otced8",
+      "publisher": "reddit.com"
+    },
+    {
+      "title": "https://thelinuxcode.com/dnsrecon-a-powerful-dns-enumeration-script/",
+      "url": "https://thelinuxcode.com/dnsrecon-a-powerful-dns-enumeration-script/",
+      "publisher": "thelinuxcode.com"
+    },
+    {
+      "title": "https://www.aldeid.com/wiki/Dnsrecon",
+      "url": "https://www.aldeid.com/wiki/Dnsrecon",
+      "publisher": "aldeid.com"
+    },
+    {
+      "title": "https://www.reddit.com/r/Infosec/comments/1otcfox",
+      "url": "https://www.reddit.com/r/Infosec/comments/1otcfox",
+      "publisher": "reddit.com"
+    }
+  ]
+}

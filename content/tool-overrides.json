@@ -1,0 +1,25 @@
+{
+  "aliasToCanonical": {
+    "volatility 3": "Volatility",
+    "volatility3": "Volatility",
+    "burpsuite": "Burp Suite",
+    "burp": "Burp Suite",
+    "dnspy/dnspyex": "dnSpy",
+    "dnspyex": "dnSpy",
+    "mitre navigator": "MITRE ATT&CK Navigator",
+    "attack navigator": "MITRE ATT&CK Navigator",
+    "ghidra/ida pro": "Ghidra",
+    "ida pro": "IDA Pro",
+    "apktool/jadx": "APKTool",
+    "certstream": "CertStream",
+    "crt.sh": "crt.sh",
+    "kibana/elasticsearch": "Kibana",
+    "suricata/evebox": "Suricata"
+  },
+  "slugOverrides": {
+    "MITRE ATT&CK Navigator": "mitre-att-ck-navigator",
+    "Burp Suite": "burp-suite",
+    "IDA Pro": "ida-pro",
+    "dnSpy": "dnspy"
+  }
+}

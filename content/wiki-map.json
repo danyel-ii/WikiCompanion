@@ -1,0 +1,12 @@
+{
+  "ghidra": "/tools/ghidra/",
+  "volatility": "/tools/volatility/",
+  "wireshark": "/tools/wireshark/",
+  "nmap": "/tools/nmap/",
+  "burp-suite": "/tools/burp-suite/",
+  "yara": "/tools/yara/",
+  "autopsy": "/tools/autopsy/",
+  "trivy": "/tools/trivy/",
+  "nessus": "/tools/nessus/",
+  "mitre-att-ck-navigator": "/tools/mitre-attck-navigator/"
+}

@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "model": "gpt-5",
+  "sourceFile": "/Users/danyel-ii/WikiCompanion/output/tools_structured.json",
+  "createdAt": "2026-04-07T08:45:33.036Z",
+  "updatedAt": "2026-04-07T09:08:10.969Z",
+  "queue": [
+    "volatility",
+    "wireshark"
+  ],
+  "progress": {
+    "volatility": {
+      "updatedAt": "2026-04-07T09:06:34.608Z",
+      "researchCompleted": true,
+      "articleCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/volatility.json",
+      "sourceCount": 12,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/volatility.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/volatility.md"
+    },
+    "wireshark": {
+      "updatedAt": "2026-04-07T09:08:10.969Z",
+      "researchCompleted": true,
+      "articleCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/wireshark.json",
+      "sourceCount": 12,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/wireshark.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/wireshark.md"
+    }
+  },
+  "failures": {}
+}

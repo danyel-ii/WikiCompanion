@@ -1,0 +1,150 @@
+{
+  "canonical_name": "CrackMapExec (CME)",
+  "aliases": [
+    "crackmapexec",
+    "CME"
+  ],
+  "classification": "Offensive security tool (post-exploitation and network/Active Directory assessment)",
+  "short_description": "Open-source post-exploitation and lateral movement framework for automating credential validation, enumeration, and command execution across Windows/Active Directory networks over protocols like SMB, WinRM/WMI, MSSQL, and LDAP.",
+  "overview_notes": "CrackMapExec (CME) is widely referenced across internal network and Active Directory penetration tests as a \"Swiss‑army\" framework that streamlines common tasks—enumeration, credential reuse/spraying, share and service discovery, and remote command execution—at enterprise scale. It integrates protocol-specific logic and a plug‑in module system to collect artifacts (e.g., AD data, shares, credentials) and to trigger post‑exploitation actions. Historically created by Marcello (@byt3bl33d3r), the project later saw stewardship by community contributors. In 2023–2024, the most active maintainers continued the project under the name NetExec (nxc), positioning it as CME’s community-driven successor; CME remains widely known and cited while NetExec receives ongoing updates.",
+  "what_it_is_notes": "- A post‑exploitation and lateral movement framework targeting Windows/AD environments.\n- Provides a unified interface to interact with multiple network protocols/services and perform credential-based actions at scale.\n- Commonly used in red-team, internal pentest, and purple-team labs; also useful for blue-team detection engineering due to recognizable execution patterns.",
+  "how_it_works_notes": "- Protocol backends implement service-specific workflows (e.g., SMB for auth and remote execution, WinRM/WMI for command execution, MSSQL for query/command execution via xp_cmdshell when misconfigurations allow, LDAP for domain object enumeration and roasting tasks).\n- A module system extends functionality (e.g., share crawling, GPP password retrieval, LAPS/DPAPI/LSA secrets interactions, BloodHound data collection, Kerberoasting/ASREPRoasting). Availability varies by version.\n- Relies heavily on underlying Windows/AD protocols and, historically, the Impacket library for network protocol operations, enabling “living off the land” behaviors that blend with normal domain traffic.\n- Designed to operate across many hosts with credential sets, producing consolidated results and status indicators of access/privilege.",
+  "inputs": [
+    "Target hosts or network ranges (e.g., domain members, servers)",
+    "Authentication material (usernames/passwords, NTLM hashes, Kerberos tickets, or domain context)",
+    "Protocol selection and options (SMB, WinRM/WMI, MSSQL, LDAP)",
+    "Module parameters (e.g., collection scopes, filters)",
+    "Name resolution/DNS or domain controller information when using LDAP/Kerberos"
+  ],
+  "outputs": [
+    "Enumerated host/service and domain information (OS, shares, users, group attributes)",
+    "Authentication success/failure and access level indicators",
+    "Remote command execution outputs and status per host",
+    "Collected artifacts (e.g., BloodHound data, share file inventories, LAPS passwords where readable, DPAPI/LSA material)",
+    "Logs suitable for later correlation or reporting"
+  ],
+  "core_concepts": [
+    "Enterprise‑scale credential validation and spraying",
+    "Lateral movement via SMB, WinRM, WMI, and MSSQL",
+    "Active Directory reconnaissance via LDAP",
+    "Module-based post‑exploitation (e.g., share spidering, GPP secrets, LAPS/DPAPI)",
+    "Kerberoasting/ASREPRoasting for service account tickets where permitted",
+    "Integration with Impacket-style protocol operations",
+    "Data export/collection for tools like BloodHound",
+    "Operational security considerations (noise, lockouts, detections)"
+  ],
+  "typical_workflow": [
+    "Enumerate reachable Windows/AD hosts and identify accessible services (SMB/WinRM/MSSQL/LDAP).",
+    "Validate available credentials or tickets across the environment to map where access exists and at what privilege levels.",
+    "Use LDAP-backed enumeration to understand users, groups, SPNs, policies, and potentially roastable accounts.",
+    "Leverage protocol backends for remote command execution or data collection on systems where access is granted.",
+    "Run modules to collect domain/host artifacts (e.g., shares, LAPS data, BloodHound ingestion files) to support path analysis and privilege escalation hypotheses.",
+    "Aggregate results to guide targeted follow-on testing and to inform defensive detections and compensating controls."
+  ],
+  "use_cases": [
+    "Internal AD penetration testing and red-team operations to assess credential hygiene, segmentation, and lateral movement resistance.",
+    "Purple-team exercises to validate SIEM/EDR detections for credential spraying, remote execution, and AD enumeration patterns.",
+    "Blue-team lab replication of common adversary tradecraft for rule tuning and alert triage playbooks.",
+    "Post-hardening validation to confirm that mitigations (e.g., LAPS scoping, SMB signing, WinRM restrictions) reduce feasible attack paths."
+  ],
+  "limitations": [
+    "Changes in project stewardship: active community maintenance and new features are concentrated in NetExec (nxc) as CME’s successor; some CME documentation and modules may be outdated relative to NetExec.",
+    "High operational visibility if misused: credential spraying and remote execution can trigger lockouts and detections; improper rate/targeting can disrupt services.",
+    "Credential and permission dependency: meaningful actions require valid credentials and appropriate network reachability; constrained environments limit effectiveness.",
+    "Version variance: module availability and behavior differ across releases; third-party environment or Python dependency issues may affect stability.",
+    "Legal/authorization constraints: usage must be explicitly authorized; activity can resemble real intrusion behavior and may violate policy without clear scope."
+  ],
+  "related_tools": [
+    {
+      "name": "NetExec (nxc)",
+      "relationship": "Community-driven successor/continuation of CrackMapExec with ongoing updates and new modules."
+    },
+    {
+      "name": "Impacket",
+      "relationship": "Underlying Python library historically leveraged for SMB/LDAP and other protocol operations."
+    },
+    {
+      "name": "BloodHound",
+      "relationship": "Downstream consumer of AD data collected by modules; CME historically included collectors compatible with BloodHound."
+    },
+    {
+      "name": "Mimikatz",
+      "relationship": "Complementary credential extraction tool often used alongside CME outputs to pursue privilege escalation."
+    },
+    {
+      "name": "Metasploit Framework",
+      "relationship": "Adjacent exploitation framework; some overlapping capabilities but different architecture and module ecosystem."
+    },
+    {
+      "name": "Evil‑WinRM",
+      "relationship": "Protocol-specific tool for PowerShell remoting; overlaps with CME/NetExec WinRM execution paths."
+    }
+  ],
+  "evidence_gaps": [
+    "The original CME wiki and some community posts are dated; precise module inventories and behaviors vary by version and are not comprehensively documented in a single authoritative, current source.",
+    "Public statements indicate a stewardship shift to NetExec, but not all official CME pages explicitly mark deprecation; some organizations still reference Porchetta‑Industries/CrackMapExec or byt3bl33d3r’s repo, causing version/status ambiguity."
+  ],
+  "confidence": "medium",
+  "sources": [
+    {
+      "title": "CrackMapExec releases (feature notes incl. LDAP, Kerberoast/ASREPRoast, modules)",
+      "url": "https://github.com/byt3bl33d3r/CrackMapExec/releases",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "NetExec v1.0.0 release (NetExec as the continuation of CrackMapExec)",
+      "url": "https://www.netexec.wiki/news/v1.0.0-release",
+      "publisher": "NetExec (GitBook)"
+    },
+    {
+      "title": "NetExec repository (project history and maintainers; formerly CrackMapExec)",
+      "url": "https://github.com/Pennyw0rth/NetExec",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "HackTool - CrackMapExec execution patterns (Sigma rule, blue‑team detection context)",
+      "url": "https://detection.fyi/sigmahq/sigma/windows/process_creation/proc_creation_win_hktl_crackmapexec_execution_patterns/",
+      "publisher": "Detection.FYI / SigmaHQ"
+    },
+    {
+      "title": "Top Penetration Testing Tools (mentions CME usage and capabilities)",
+      "url": "https://www.netspi.com/blog/executive-blog/penetration-testing-as-a-service/top-penetration-testing-tools/",
+      "publisher": "NetSPI"
+    },
+    {
+      "title": "A Decade of AD Attacks (notes CME purpose and Impacket reliance)",
+      "url": "https://troopers.de/downloads/troopers24/TR24_A_Decade_of_Active_Directory_Attacks_VXS8WY.pdf",
+      "publisher": "TROOPERS / Trimarc Security (Sean Metcalf)"
+    },
+    {
+      "title": "CME SMB command reference (historic protocol usage example)",
+      "url": "https://github.com/byt3bl33d3r/CrackMapExec/wiki/SMB-Command-Reference",
+      "publisher": "GitHub Wiki"
+    },
+    {
+      "title": "LeHack 2023 CME workshop write‑up (examples of modules like gpp_password, spider_plus, BloodHound collector, LAPS/DPAPI)",
+      "url": "https://www.rayanle.cat/write-up-workshop-cme-lehack-2023/",
+      "publisher": "rayanle.cat blog"
+    },
+    {
+      "title": "https://www.isec.ne.jp/wp-content/uploads/2017/11/77CrackMapExec.pdf",
+      "url": "https://www.isec.ne.jp/wp-content/uploads/2017/11/77CrackMapExec.pdf",
+      "publisher": "isec.ne.jp"
+    },
+    {
+      "title": "https://gnarizard.github.io/cyberjutsu/cheatsheets/Pentest-Guide/",
+      "url": "https://gnarizard.github.io/cyberjutsu/cheatsheets/Pentest-Guide/",
+      "publisher": "gnarizard.github.io"
+    },
+    {
+      "title": "https://www.reddit.com/r/hackthebox/comments/1oxyhkz",
+      "url": "https://www.reddit.com/r/hackthebox/comments/1oxyhkz",
+      "publisher": "reddit.com"
+    },
+    {
+      "title": "https://github.com/byt3bl33d3r/CrackMapExec/discussions/801",
+      "url": "https://github.com/byt3bl33d3r/CrackMapExec/discussions/801",
+      "publisher": "github.com"
+    }
+  ]
+}

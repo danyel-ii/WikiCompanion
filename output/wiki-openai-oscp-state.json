@@ -1,0 +1,272 @@
+{
+  "version": 2,
+  "model": "gpt-5",
+  "sourceFile": "/Users/danyel-ii/WikiCompanion/output/tools_structured.json",
+  "createdAt": "2026-04-07T09:27:38.184Z",
+  "updatedAt": "2026-04-07T09:59:36.186Z",
+  "queue": [
+    "nmap",
+    "amass",
+    "theharvester",
+    "dnsrecon",
+    "gobuster",
+    "burp-suite",
+    "nikto",
+    "sqlmap",
+    "ffuf",
+    "wfuzz",
+    "metasploit-framework",
+    "impacket",
+    "hashcat",
+    "john-the-ripper",
+    "hydra",
+    "mimikatz",
+    "responder",
+    "crackmapexec",
+    "bloodhound",
+    "linpeas",
+    "winpeas",
+    "wireshark",
+    "tcpdump",
+    "aircrack-ng-suite",
+    "bettercap",
+    "enum4linux-ng"
+  ],
+  "progress": {
+    "nmap": {
+      "updatedAt": "2026-04-07T09:28:51.048Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/nmap.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/nmap.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/nmap.md"
+    },
+    "amass": {
+      "updatedAt": "2026-04-07T09:30:11.733Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/amass.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/amass.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/amass.md"
+    },
+    "theharvester": {
+      "updatedAt": "2026-04-07T09:31:19.841Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/theharvester.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/theharvester.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/theharvester.md"
+    },
+    "dnsrecon": {
+      "updatedAt": "2026-04-07T09:32:18.617Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/dnsrecon.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/dnsrecon.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/dnsrecon.md"
+    },
+    "gobuster": {
+      "updatedAt": "2026-04-07T09:33:02.649Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/gobuster.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/gobuster.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/gobuster.md"
+    },
+    "burp-suite": {
+      "updatedAt": "2026-04-07T09:34:13.232Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/burp-suite.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/burp-suite.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/burp-suite.md"
+    },
+    "nikto": {
+      "updatedAt": "2026-04-07T09:35:07.334Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/nikto.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/nikto.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/nikto.md"
+    },
+    "sqlmap": {
+      "updatedAt": "2026-04-07T09:36:31.690Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/sqlmap.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/sqlmap.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/sqlmap.md"
+    },
+    "ffuf": {
+      "updatedAt": "2026-04-07T09:37:42.723Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/ffuf.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/ffuf.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/ffuf.md"
+    },
+    "wfuzz": {
+      "updatedAt": "2026-04-07T09:38:41.850Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/wfuzz.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/wfuzz.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/wfuzz.md"
+    },
+    "metasploit-framework": {
+      "updatedAt": "2026-04-07T09:39:51.626Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/metasploit-framework.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/metasploit-framework.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/metasploit-framework.md"
+    },
+    "impacket": {
+      "updatedAt": "2026-04-07T09:41:09.967Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/impacket.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/impacket.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/impacket.md"
+    },
+    "hashcat": {
+      "updatedAt": "2026-04-07T09:43:07.543Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/hashcat.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/hashcat.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/hashcat.md"
+    },
+    "john-the-ripper": {
+      "updatedAt": "2026-04-07T09:44:20.310Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/john-the-ripper.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/john-the-ripper.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/john-the-ripper.md"
+    },
+    "hydra": {
+      "updatedAt": "2026-04-07T09:45:18.507Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/hydra.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/hydra.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/hydra.md"
+    },
+    "responder": {
+      "updatedAt": "2026-04-07T09:47:28.924Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/responder.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/responder.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/responder.md"
+    },
+    "crackmapexec": {
+      "updatedAt": "2026-04-07T09:48:45.732Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/crackmapexec.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/crackmapexec.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/crackmapexec.md"
+    },
+    "bloodhound": {
+      "updatedAt": "2026-04-07T09:49:42.475Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/bloodhound.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/bloodhound.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/bloodhound.md"
+    },
+    "linpeas": {
+      "updatedAt": "2026-04-07T09:51:00.948Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/linpeas.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/linpeas.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/linpeas.md"
+    },
+    "winpeas": {
+      "updatedAt": "2026-04-07T09:52:23.063Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/winpeas.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/winpeas.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/winpeas.md"
+    },
+    "wireshark": {
+      "updatedAt": "2026-04-07T09:53:17.135Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/wireshark.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/wireshark.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/wireshark.md"
+    },
+    "tcpdump": {
+      "updatedAt": "2026-04-07T09:54:28.608Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/tcpdump.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/tcpdump.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/tcpdump.md"
+    },
+    "aircrack-ng-suite": {
+      "updatedAt": "2026-04-07T09:55:38.756Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/aircrack-ng-suite.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/aircrack-ng-suite.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/aircrack-ng-suite.md"
+    },
+    "bettercap": {
+      "updatedAt": "2026-04-07T09:56:45.724Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/bettercap.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/bettercap.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/bettercap.md"
+    },
+    "enum4linux-ng": {
+      "updatedAt": "2026-04-07T09:57:59.928Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/enum4linux-ng.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/enum4linux-ng.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/enum4linux-ng.md"
+    },
+    "mimikatz": {
+      "updatedAt": "2026-04-07T09:59:36.186Z",
+      "researchCompleted": true,
+      "researchPath": "/Users/danyel-ii/WikiCompanion/output/wiki-research/mimikatz.json",
+      "sourceCount": 12,
+      "articleCompleted": true,
+      "articleJsonPath": "/Users/danyel-ii/WikiCompanion/output/wiki-json/mimikatz.json",
+      "articleMarkdownPath": "/Users/danyel-ii/WikiCompanion/output/wiki/mimikatz.md"
+    }
+  },
+  "failures": {}
+}

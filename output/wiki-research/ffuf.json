@@ -1,0 +1,154 @@
+{
+  "canonical_name": "ffuf",
+  "aliases": [
+    "ffuf",
+    "Fuzz Faster U Fool"
+  ],
+  "classification": "Open-source web application content discovery and fuzzing tool (Go)",
+  "short_description": "ffuf is a fast, flexible web fuzzer for web content discovery and request templating. It automates path, parameter, and virtual host discovery using wordlists and response-based match/filter logic, supporting machine-readable outputs for integration into broader security workflows.",
+  "overview_notes": "ffuf (Fuzz Faster U Fool) is a command-line tool written in Go, designed for high-speed web fuzzing and content discovery. It is commonly used in web application and API security testing to enumerate unlinked or protected resources and to probe parameters or request elements in order to validate access control and other security behaviors. The project is actively maintained on GitHub, provides a feature-rich wiki, and supports multiple output formats for human and automated consumption. [Sources: ffuf GitHub README; ffuf Wiki; OWASP Forced Browsing; OWASP WSTG]",
+  "what_it_is_notes": "- A web fuzzer focused on HTTP(S) request mutation and result triage, rather than a general vulnerability scanner.\n- Targets include URLs, headers (e.g., Host for vhost discovery), and request bodies where a placeholder keyword is substituted with inputs from one or more wordlists.\n- Often used to uncover forced-browsing exposures (hidden or unlinked paths/files) and to help assess authorization consistency across endpoints. [Sources: ffuf GitHub README; OWASP Forced Browsing; OWASP WSTG]",
+  "how_it_works_notes": "- Test case definition uses a special placeholder keyword (default: FUZZ) embedded anywhere in the request (URL, headers, body). Inputs are provided via wordlists or an input command.\n- When multiple wordlists are used, ffuf supports modes such as clusterbomb and pitchfork to combine inputs across placeholders.\n- Response triage uses matchers and filters (status code, size, words, lines, regex, and time) to include or exclude results, with optional auto-calibration to reduce noise.\n- Supports recursion for deeper discovery, virtual host discovery via Host header fuzzing (no DNS required), and replay-proxy to forward only matched traffic to an intercepting proxy.\n- Outputs can be written in JSON, HTML, CSV, Markdown, and other formats; JSONLines is available for stream processing. [Sources: ffuf Wiki; ffuf GitHub README]",
+  "inputs": [
+    "Target HTTP(S) request with a FUZZ placeholder (URL, headers, or body)",
+    "One or more wordlists (community sets like SecLists or custom lists)",
+    "Optional request template (raw HTTP) and headers",
+    "Operational modes for multiple wordlists (clusterbomb, pitchfork)",
+    "Matchers/filters configuration (status codes, size, words, lines, regex, time)",
+    "Concurrency/timeouts/recursion settings",
+    "Optional external input command/generator"
+  ],
+  "outputs": [
+    "Discovered resources/endpoints and associated metadata (status, size, words/lines, URL)",
+    "Machine-readable result files (json, ejson, csv, ecsv) and human-readable formats (html, md)",
+    "JSONLines stdout for real-time pipeline integration",
+    "Optional replayed requests to an intercepting proxy for manual analysis"
+  ],
+  "core_concepts": [
+    "Content discovery and forced browsing",
+    "Directory and file enumeration",
+    "Parameter name/value fuzzing",
+    "Virtual host discovery via Host header",
+    "Wordlist-driven testing (e.g., SecLists)",
+    "Response-based match and filter logic",
+    "Auto-calibration to reduce false positives",
+    "Recursive discovery",
+    "Machine-readable outputs for automation",
+    "Access control validation support (e.g., BAC/BFLA indicators)"
+  ],
+  "typical_workflow": [
+    "Define in-scope targets and obtain authorization for testing.",
+    "Select or prepare wordlists relevant to the application context (paths, parameters, tech stack).",
+    "Embed the FUZZ placeholder in the appropriate part of the request (URL, header, or body) and configure HTTP method and headers.",
+    "Configure matchers/filters (e.g., by status code, response size/words) and, if needed, auto-calibration to manage noise.",
+    "Run discovery and, where appropriate, enable recursion and vhost probing to expand coverage.",
+    "Export results to structured formats and forward matched traffic to a proxy for deeper manual validation.",
+    "Correlate discovered resources with business logic and access control tests guided by OWASP WSTG or API Top 10 risks."
+  ],
+  "use_cases": [
+    "Enumerating hidden or unlinked directories/files to detect forced-browsing exposures.",
+    "Mapping attack surface of web apps and APIs for subsequent manual testing.",
+    "Probing parameter names and values to reveal undocumented functionality or inconsistent input handling.",
+    "Validating authorization enforcement by checking whether protected endpoints are reachable by direct URL access.",
+    "Virtual host discovery in shared hosting scenarios by fuzzing the Host header (no DNS records required).",
+    "Feeding CI/CD or security pipelines with machine-readable outputs to flag newly exposed content."
+  ],
+  "limitations": [
+    "Scope- and ethics-dependent: sending large volumes of requests can violate policy or laws if not explicitly authorized.",
+    "Coverage is wordlist- and strategy-dependent; undiscoverable names or dynamic, JavaScript-driven routes may be missed.",
+    "Web application firewalls, rate limits, and bot mitigations can throttle or alter responses, causing false negatives/positives.",
+    "Heuristic filtering (status/size/words/lines/regex/time) reduces noise but can hide edge-case findings if misconfigured.",
+    "Does not perform business-logic reasoning; findings require human review against application context and authorization models.",
+    "Vhost discovery uses Host header fuzzing and may not equate to real DNS-resolvable subdomains; separate DNS enumeration may be needed."
+  ],
+  "related_tools": [
+    {
+      "name": "Gobuster",
+      "relationship": "Alternative Go-based content discovery and vhost/DNS brute-forcing tool with similar directory and vhost modes."
+    },
+    {
+      "name": "Feroxbuster",
+      "relationship": "Rust-based recursive content discovery tool focused on speed and automation for forced browsing."
+    },
+    {
+      "name": "OWASP ZAP (Forced Browse add-on)",
+      "relationship": "GUI-driven proxy with a forced-browse module; complementary for manual inspection and automation in DAST workflows."
+    },
+    {
+      "name": "Burp Suite (Content Discovery/Intruder)",
+      "relationship": "Commercial/proxy suite with content discovery and request fuzzing; often used alongside ffuf for manual validation."
+    },
+    {
+      "name": "SecLists",
+      "relationship": "Community-maintained wordlists widely used as ffuf input for paths, parameters, and vhosts."
+    }
+  ],
+  "evidence_gaps": [
+    "Performance benchmarks and comparative speed claims vary across blog posts; authoritative, reproducible metrics are not centralized in official docs.",
+    "Some third-party articles imply DNS subdomain enumeration; official ffuf docs emphasize vhost discovery via Host header rather than native DNS bruteforcing.",
+    "Historical release dates and detailed roadmap are not consolidated beyond GitHub releases/changelog."
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "ffuf - Fuzz Faster U Fool (GitHub README)",
+      "url": "https://github.com/ffuf/ffuf",
+      "publisher": "GitHub / ffuf project"
+    },
+    {
+      "title": "ffuf Wiki: Documentation, wordlists, matching/filtering, output formats",
+      "url": "https://github.com/ffuf/ffuf/wiki",
+      "publisher": "GitHub / ffuf project"
+    },
+    {
+      "title": "OWASP: Forced browsing (definition and context)",
+      "url": "https://owasp.org/www-community/attacks/Forced_browsing",
+      "publisher": "OWASP Foundation"
+    },
+    {
+      "title": "OWASP WSTG (Latest): Testing for Bypassing Authorization Schema",
+      "url": "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/05-Authorization_Testing/02-Testing_for_Bypassing_Authorization_Schema",
+      "publisher": "OWASP Foundation"
+    },
+    {
+      "title": "SecLists (official repository)",
+      "url": "https://github.com/danielmiessler/SecLists",
+      "publisher": "GitHub / Daniel Miessler"
+    },
+    {
+      "title": "Gobuster (official repository)",
+      "url": "https://github.com/OJ/gobuster",
+      "publisher": "GitHub / OJ Reeves"
+    },
+    {
+      "title": "Feroxbuster (official site)",
+      "url": "https://feroxbuster.com/",
+      "publisher": "feroxbuster.com"
+    },
+    {
+      "title": "ZAP Forced Browse add-on documentation",
+      "url": "https://www.zaproxy.org/docs/desktop/addons/forced-browse/",
+      "publisher": "OWASP ZAP Team"
+    },
+    {
+      "title": "https://github.com/danielmiessler/SecLists/releases",
+      "url": "https://github.com/danielmiessler/SecLists/releases",
+      "publisher": "github.com"
+    },
+    {
+      "title": "https://www.reddit.com/r/cybersecurity_help/comments/1h21q3q",
+      "url": "https://www.reddit.com/r/cybersecurity_help/comments/1h21q3q",
+      "publisher": "reddit.com"
+    },
+    {
+      "title": "https://www.reddit.com/r/HowToHack/comments/sv2ird",
+      "url": "https://www.reddit.com/r/HowToHack/comments/sv2ird",
+      "publisher": "reddit.com"
+    },
+    {
+      "title": "https://blog.geekinstitute.org/2025/05/ffuf-fuzz-faster-u-fool.html",
+      "url": "https://blog.geekinstitute.org/2025/05/ffuf-fuzz-faster-u-fool.html",
+      "publisher": "blog.geekinstitute.org"
+    }
+  ]
+}

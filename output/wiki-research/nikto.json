@@ -1,0 +1,157 @@
+{
+  "canonical_name": "Nikto",
+  "aliases": [
+    "Nikto",
+    "Nikto2"
+  ],
+  "classification": "Open-source web server vulnerability scanner (signature- and check-database–driven)",
+  "short_description": "Nikto is a Perl-based web server scanner that performs tests for dangerous files/CGIs, outdated server software, and common misconfigurations, producing machine- and human-readable reports.",
+  "overview_notes": "Nikto focuses on identifying known, patternable web server issues rather than deep business-logic or framework-specific flaws. It is maintained on GitHub, offers a plugin-based architecture backed by a checks database, and supports JSON/XML/HTML/CSV reporting. As of February 2026, the project documentation targets version 2.6.0.",
+  "what_it_is_notes": "- A command-line scanner for HTTP/HTTPS services, oriented to rapid detection of misconfigurations, default content, known risky resources, and server/software versions that may map to public vulnerabilities.\n- Built in Perl and historically built on the LibWhisker HTTP library.\n- Commonly used in reconnaissance and baseline assessments; often integrated into automated pipelines or orchestrators to quickly surface low-hanging web server issues.",
+  "how_it_works_notes": "- Uses a database of tests executed via plugins to probe HTTP(S) endpoints. Tests include file/directory presence, server option checks, banner and header analysis, default/administrative paths, and version identification.\n- The engine performs HTTP(S) requests (optionally through proxies), follows redirects if configured, and can reuse received cookies to continue scanning authenticated or stateful paths.\n- Output is generated in several formats to support human review and tooling integration. Updates to code and test data are delivered through the GitHub repository and can be pulled regularly.",
+  "inputs": [
+    "Target hostnames, IPs, or base URLs (HTTP/HTTPS)",
+    "Port(s) to scan for HTTP services",
+    "Scan scope/tuning and plugin selection",
+    "HTTP options (headers, cookies, follow redirects)",
+    "Authentication parameters (e.g., basic auth)",
+    "Proxy settings (HTTP/SOCKS)",
+    "Timeouts and performance-related settings",
+    "Output/reporting format selection",
+    "Optional custom/override test definitions"
+  ],
+  "outputs": [
+    "Findings per target with issue type/description",
+    "Context such as URL/path, headers, and server banners",
+    "Categorization by plugin/test ID and references (where available)",
+    "Severity/priority indicators (tool-defined)",
+    "Machine-readable reports (JSON, XML, CSV) and human-readable (TXT/HTML)",
+    "Execution metadata (scan date, version, timing)"
+  ],
+  "core_concepts": [
+    "Signature/check-database–driven web scanning",
+    "Plugin-based architecture governing phases of scanning and reporting",
+    "HTTP transaction layer via LibWhisker heritage",
+    "Web server and software fingerprinting",
+    "Configuration and default-content discovery",
+    "Multiple report formats for integration",
+    "Update cadence via GitHub (code and checks)",
+    "Containerized distribution options (e.g., Docker images)"
+  ],
+  "typical_workflow": [
+    "Discover live web services and candidate ports, then select in-scope hosts/URLs for baseline scanning.",
+    "Run Nikto with appropriate tuning/plugins and safe request options aligned to rules of engagement (rate, redirect handling, cookies, proxies).",
+    "Aggregate results in JSON/XML/CSV for ingestion by ticketing, SIEM, or vulnerability management platforms; generate HTML/TXT for human review.",
+    "Triage findings by risk and relevance; validate high-signal issues (exposed admin panels, dangerous HTTP methods, outdated server versions).",
+    "Correlate version/banner findings with authoritative advisories and CVEs; confirm exploitability through manual or separate tools as appropriate.",
+    "Iterate: adjust scope/tuning, retest after remediation, and schedule periodic baseline scans or CI/CD jobs."
+  ],
+  "use_cases": [
+    "Baseline reconnaissance of HTTP(S) services to quickly surface misconfigurations and default content.",
+    "Periodic hygiene scans of internet-facing web servers for exposed administrative paths, directory indexing, or outdated server components.",
+    "Pipeline/automation integration (e.g., in Kubernetes or CI) to produce machine-readable reports for gating and alerting.",
+    "Supplementing more comprehensive DAST/proxy-based testing by providing quick server-centric checks and fingerprints.",
+    "Validation of control hardening (e.g., disabled TRACE/PUT, header hygiene) and regression checks after patching."
+  ],
+  "limitations": [
+    "Coverage is primarily server- and file/endpoint-oriented; it is not designed for deep business-logic testing or full active exploitation.",
+    "Findings can include false positives and require analyst validation; some checks are heuristic or banner-based.",
+    "Scanning is intentionally noisy and easily detected by defenses; rate-limiting and WAFs may throttle or block requests.",
+    "Effectiveness depends on the freshness and breadth of the checks database; it may lag behind commercial scanners in some areas.",
+    "Does not replace broader application security testing (e.g., proxy-assisted exploration, authenticated workflow testing, fuzzing)."
+  ],
+  "related_tools": [
+    {
+      "name": "OWASP ZAP",
+      "relationship": "Complementary; a full-featured intercepting proxy and active scanner for application-layer testing beyond server checks."
+    },
+    {
+      "name": "Nmap",
+      "relationship": "Precursor/adjacent; service discovery and version detection to identify HTTP(S) endpoints prior to Nikto scans."
+    },
+    {
+      "name": "Nuclei",
+      "relationship": "Complementary; template-driven scanning for specific vulnerabilities/CVEs across HTTP targets."
+    },
+    {
+      "name": "Wapiti",
+      "relationship": "Alternative; open-source web vulnerability scanner with a different test corpus and approach."
+    },
+    {
+      "name": "Skipfish",
+      "relationship": "Alternative; high-performance web application security reconnaissance tool."
+    },
+    {
+      "name": "Burp Suite",
+      "relationship": "Complementary; manual and automated web testing platform with active scanning and extensibility."
+    }
+  ],
+  "evidence_gaps": [
+    "Exact, current counts of tests/checks vary by source and version; authoritative counts for 2.6.0 are not consolidated outside the repository and may change with updates.",
+    "Historical references sometimes imply OWASP affiliation; Nikto is not an OWASP project, though it is referenced by the OWASP Web Security Testing Guide.",
+    "Detailed mapping of each plugin/test to CVE/NVD entries is partial and may require consulting specific test definitions in the repository."
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "sullo/nikto – Project README",
+      "url": "https://github.com/sullo/nikto",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "Nikto Wiki – Documentation for version 2.6.0 (last edited Feb 11, 2026)",
+      "url": "https://github.com/sullo/nikto/wiki",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "Releases – Nikto 2.6.0 announcement and notes",
+      "url": "https://github.com/sullo/nikto/releases",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "Nikto: Installing and Updating",
+      "url": "https://cirt.net/Nikto-Installing_and_Updating",
+      "publisher": "CIRT.net"
+    },
+    {
+      "title": "Debian package description for nikto (notes LibWhisker and scanner capabilities)",
+      "url": "https://packages.debian.org/bookworm/nikto",
+      "publisher": "Debian Project"
+    },
+    {
+      "title": "secureCodeBox – Nikto scanner integration overview",
+      "url": "https://www.securecodebox.io/docs/scanners/nikto/",
+      "publisher": "OWASP secureCodeBox Project"
+    },
+    {
+      "title": "OWASP Web Security Testing Guide – Attack Surface Identification (references Nikto)",
+      "url": "https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/01-Information_Gathering/04-Attack_Surface_Identification",
+      "publisher": "OWASP Foundation"
+    },
+    {
+      "title": "Fossies Doxygen for Nikto 2.6.0 (generated API docs incl. licensing pointers)",
+      "url": "https://fossies.org/dox/nikto-2.6.0/",
+      "publisher": "Fossies.org"
+    },
+    {
+      "title": "https://en.wikipedia.org/wiki/Nikto_%28vulnerability_scanner%29",
+      "url": "https://en.wikipedia.org/wiki/Nikto_%28vulnerability_scanner%29",
+      "publisher": "en.wikipedia.org"
+    },
+    {
+      "title": "https://github.com/morpheuslord/nikto",
+      "url": "https://github.com/morpheuslord/nikto",
+      "publisher": "github.com"
+    },
+    {
+      "title": "https://github.com/ellerbrock/nikto-docker",
+      "url": "https://github.com/ellerbrock/nikto-docker",
+      "publisher": "github.com"
+    },
+    {
+      "title": "https://cirt.net/Nikto2_Dev",
+      "url": "https://cirt.net/Nikto2_Dev",
+      "publisher": "cirt.net"
+    }
+  ]
+}

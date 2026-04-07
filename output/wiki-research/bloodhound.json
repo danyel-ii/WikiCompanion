@@ -1,0 +1,152 @@
+{
+  "canonical_name": "BloodHound (Community Edition)",
+  "aliases": [
+    "BloodHound",
+    "BloodHound CE",
+    "SharpHound (collector)",
+    "AzureHound (collector)"
+  ],
+  "classification": "Identity attack path analysis and graph-based security analytics for Active Directory, Azure AD, and extensible identity systems",
+  "short_description": "BloodHound is an open‑source tool from SpecterOps that applies graph theory to identity and access relationships to uncover attack paths (privilege escalation and lateral movement) across Microsoft Active Directory, Azure AD, and other platforms via an extension model.",
+  "overview_notes": "Contrary to the local evidence, BloodHound is not a network isolation or containment tool. It is primarily an identity attack path discovery and analysis platform used by red/blue teams for assessment, threat hunting, and remediation planning. Modern Community Edition (CE) uses a web UI backed by a Go REST API, a PostgreSQL application database, and a Neo4j graph database; data is collected with SharpHound (AD) and AzureHound (Azure) and ingested for graph analysis. CE shares code and documentation lineage with the commercial BloodHound Enterprise (BHE). ([github.com](https://github.com/SpecterOps/BloodHound?utm_source=openai))",
+  "what_it_is_notes": "- An open‑source identity graph analytics tool revealing “shortest paths” and abusable relationships from ordinary users to high‑value targets (e.g., Domain Admin). It models objects (users, computers, groups, GPOs, service principals, etc.) and their permissions/sessions as a graph to support queries and pathfinding used in offensive testing and defensive hardening. ([specterops.io](https://specterops.io/bloodhound-community-edition/))",
+  "how_it_works_notes": "- Data collection: • SharpHound enumerates on‑prem AD via LDAP, SMB, Win32 APIs to capture objects, ACLs, sessions, group nesting, trusts, etc. • AzureHound enumerates Azure AD/Entra ID via APIs. Collected JSON/ZIP is uploaded to CE. ([github.com](https://github.com/SpecterOps/BloodHound?utm_source=openai))\n- Storage/processing: CE runs as a containerized web app with a Go REST API, PostgreSQL app DB, and Neo4j as the graph store. ([github.com](https://github.com/SpecterOps/BloodHound?utm_source=openai))\n- Analysis: CE exposes a browser UI and API to explore nodes/edges, run pathfinding and saved queries, and view attack paths and risky configurations; OpenGraph extensions broaden supported platforms. ([bloodhound.specterops.io](https://bloodhound.specterops.io/get-started/quickstart/community-edition-quickstart))",
+  "inputs": [
+    "Collector outputs from SharpHound (Active Directory) as JSON/ZIP",
+    "Collector outputs from AzureHound (Azure/Entra ID) as JSON/ZIP",
+    "OpenGraph extension datasets for third‑party identity platforms (e.g., Okta, GitHub, Jamf)",
+    "Configuration and metadata (e.g., tagging critical assets) via CE UI/API"
+  ],
+  "outputs": [
+    "Identity graph (nodes/edges) persisted in Neo4j with accompanying app metadata in PostgreSQL",
+    "Computed attack paths and pathfinding results between principals and targets",
+    "Query results (e.g., Cypher‑backed or built‑in analytics) highlighting abusable rights, misconfigurations, and risky relationships",
+    "Dashboards and visualizations of relationships, sessions, ACLs, and potential escalation routes"
+  ],
+  "core_concepts": [
+    "Identity attack paths and graph theory (shortest/quietest paths to privilege)",
+    "Active Directory object/ACL modeling (e.g., DCSync rights, Kerberoastable SPNs, local admin edges)",
+    "Session- and membership‑derived lateral movement",
+    "Collector–backend compatibility (collector versions aligned with CE)",
+    "Extensibility via OpenGraph and integrations",
+    "Use for both offensive assessment and defensive risk reduction"
+  ],
+  "typical_workflow": [
+    "Scope and collect: run SharpHound in AD and/or AzureHound in Azure to gather objects, ACLs, sessions, trusts, and other relationships; export to JSON/ZIP. ([github.com](https://github.com/SpecterOps/AzureHound?utm_source=openai))",
+    "Ingest: upload collector output via CE UI or API to populate the graph. ([bloodhound.specterops.io](https://bloodhound.specterops.io/get-started/quickstart/community-edition-quickstart))",
+    "Explore and query: use built‑in searches and pathfinding to trace routes from standard users to tier‑0 assets (e.g., Domain Admin, KRBTGT owners). ([bloodhound.specterops.io](https://bloodhound.specterops.io/get-started/quickstart/community-edition-quickstart))",
+    "Prioritize findings: identify abusable permissions/misconfigurations (e.g., GenericAll/WriteDacl edges, unconstrained delegation) and sessions enabling lateral movement. ([specterops.io](https://specterops.io/bloodhound-community-edition/))",
+    "Plan remediation or validation: coordinate defensive changes (e.g., ACL hardening, group cleanup, tiering enforcement) and re‑collect to validate risk reduction over time. ([specterops.io](https://specterops.io/bloodhound-community-edition/))"
+  ],
+  "use_cases": [
+    "Threat hunting and incident investigation to understand feasible lateral movement from compromised principals",
+    "Red team/penetration testing to map escalation routes and validate attack feasibility",
+    "Blue team hardening: prioritize and track remediation of identity attack paths (used tactically with CE or programmatically with BHE)",
+    "Exposure reviews before major changes (e.g., mergers, domain consolidations)",
+    "Cross‑platform identity risk analysis via OpenGraph extensions beyond AD/Azure"
+  ],
+  "limitations": [
+    "Not a containment, EDR, or network isolation tool; it does not directly block or revoke access. ([specterops.io](https://specterops.io/bloodhound-community-edition/))",
+    "Quality of results depends on completeness and recency of data collection; stale or partial collections reduce accuracy. ([bloodhound.specterops.io](https://bloodhound.specterops.io/get-started/quickstart/community-edition-quickstart))",
+    "Large environments can produce very dense graphs and heavy resource usage; visualization at scale can be challenging. ([specterops.io](https://specterops.io/bloodhound-community-edition/))",
+    "Collector–backend version mismatches can cause ingestion or schema issues; align CE and collector versions. ([bloodhound.specterops.io](https://bloodhound.specterops.io/resources/release-notes/v7-2-0?utm_source=openai))",
+    "Focuses on identity relationships; does not replace log‑based detection, endpoint telemetry, or forensics tooling."
+  ],
+  "related_tools": [
+    {
+      "name": "SharpHound",
+      "relationship": "Official AD data collector feeding BloodHound CE."
+    },
+    {
+      "name": "AzureHound",
+      "relationship": "Official Azure/Entra ID data collector feeding BloodHound CE."
+    },
+    {
+      "name": "BloodHound Enterprise (BHE)",
+      "relationship": "Commercial product for continuous attack path management using similar models and shared codebase with CE."
+    },
+    {
+      "name": "Microsoft Defender for Identity",
+      "relationship": "Defensive sensor detecting identity threats in AD; complementary to graph‑based path analysis."
+    },
+    {
+      "name": "PingCastle",
+      "relationship": "AD risk assessment tool; complementary for hygiene scoring vs. path‑centric analysis."
+    },
+    {
+      "name": "Neo4j",
+      "relationship": "Graph database used by BloodHound to store and query identity graphs."
+    },
+    {
+      "name": "Splunk / SIEM",
+      "relationship": "Log analytics platforms that complement BloodHound’s structural analysis with activity telemetry."
+    }
+  ],
+  "evidence_gaps": [
+    "Exact current CE major/minor version changes occur frequently; this dossier references SpecterOps release notes noting v7.2.0 on March 25, 2025. Verify latest version at time of deployment. ([bloodhound.specterops.io](https://bloodhound.specterops.io/resources/release-notes/v7-2-0?utm_source=openai))",
+    "Details of new non‑Microsoft platform coverage in CE vs. BHE are evolving via OpenGraph and product updates; confirm specific platform support and data models before relying on them for enterprise workflows. ([specterops.io](https://specterops.io/bloodhound-community-edition/))"
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "BloodHound Community Edition documentation (Quickstart, API/ingest)",
+      "url": "https://bloodhound.specterops.io/get-started/quickstart/community-edition-quickstart",
+      "publisher": "SpecterOps"
+    },
+    {
+      "title": "BloodHound CE custom installation (architecture, Neo4j/PostgreSQL, env)",
+      "url": "https://bloodhound.specterops.io/get-started/custom-installation",
+      "publisher": "SpecterOps"
+    },
+    {
+      "title": "BloodHound Community Edition product page (purpose, positioning, OpenGraph)",
+      "url": "https://specterops.io/bloodhound-community-edition/",
+      "publisher": "SpecterOps"
+    },
+    {
+      "title": "BloodHound CE: A New Era (architecture shift, containers, shared code/docs)",
+      "url": "https://specterops.io/blog/2023/08/08/bloodhound-community-edition-a-new-era/",
+      "publisher": "SpecterOps"
+    },
+    {
+      "title": "BloodHound monorepo README (CE architecture, collectors, databases)",
+      "url": "https://github.com/SpecterOps/BloodHound",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "AzureHound (official Azure collector)",
+      "url": "https://github.com/SpecterOps/AzureHound",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "BloodHound release notes v7.2.0 (docs portal, versions)",
+      "url": "https://bloodhound.specterops.io/resources/release-notes/v7-2-0",
+      "publisher": "SpecterOps"
+    },
+    {
+      "title": "BloodHound CLI (management utility)",
+      "url": "https://github.com/SpecterOps/bloodhound-cli",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "https://www.reddit.com/r/oscp/comments/1kfz3j8",
+      "url": "https://www.reddit.com/r/oscp/comments/1kfz3j8",
+      "publisher": "reddit.com"
+    },
+    {
+      "title": "https://www.reddit.com/r/oscp/comments/1mk05ky/blood_hound_issue/",
+      "url": "https://www.reddit.com/r/oscp/comments/1mk05ky/blood_hound_issue/",
+      "publisher": "reddit.com"
+    },
+    {
+      "title": "https://pypi.org/project/bloodhound-cli/1.1.0/",
+      "url": "https://pypi.org/project/bloodhound-cli/1.1.0/",
+      "publisher": "pypi.org"
+    },
+    {
+      "title": "https://www.reddit.com/r/SecOpsDaily/comments/1rx1z1z/bloodhound_enterprise_expands_beyond_microsoft/",
+      "url": "https://www.reddit.com/r/SecOpsDaily/comments/1rx1z1z/bloodhound_enterprise_expands_beyond_microsoft/",
+      "publisher": "reddit.com"
+    }
+  ]
+}

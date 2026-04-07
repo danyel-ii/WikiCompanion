@@ -1,0 +1,158 @@
+{
+  "canonical_name": "theHarvester",
+  "aliases": [
+    "theharvester",
+    "theHarvester"
+  ],
+  "classification": "Open-source OSINT reconnaissance tool (information gathering)",
+  "short_description": "theHarvester is an open‑source reconnaissance tool used to passively and selectively actively enumerate emails, subdomains/hosts, IPs and related URLs for a target domain using multiple public data sources.",
+  "overview_notes": "theHarvester is positioned for the early recon/footprinting phase of penetration testing and red team assessments. It aggregates findings from numerous public sources (search engines, CT logs, breach and asset databases, DNS resources) and can optionally perform limited active checks (e.g., DNS brute force, screenshots). It is widely packaged in security distributions (e.g., Kali) and actively maintained on GitHub with modular source integrations and optional API keys for many providers. ([cocalc.com](https://cocalc.com/github/laramies/theHarvester/blob/master/README.md))",
+  "what_it_is_notes": "- An OSINT collector that queries third‑party services to discover organization‑related artifacts (emails, subdomains/hosts, URLs, sometimes banners/ports via Shodan integration) without requiring direct interaction with the target infrastructure beyond DNS resolution and optional active modules.\n- Distributed as a Python project with current documentation enumerating supported passive modules and optional API key configuration. ([cocalc.com](https://cocalc.com/github/laramies/theHarvester/blob/master/README.md))",
+  "how_it_works_notes": "- Modular “sources” implement lookups against public datasets and services (e.g., DuckDuckGo, crt.sh, SecurityTrails, Censys, HaveIBeenPwned, urlscan.io, ProjectDiscovery Chaos, FOFA, Yahoo, Zoomeye, etc.). Many modules require user‑supplied API keys and may enforce rate limits or quotas.\n- Results from sources are normalized and aggregated into a report listing discovered emails, hosts/subdomains, IPs, and related URLs. Optional integrations can enrich discovered hosts (e.g., Shodan lookup) or take screenshots, and an active DNS brute‑force module can expand findings. ([cocalc.com](https://cocalc.com/github/laramies/theHarvester/blob/master/README.md))",
+  "inputs": [
+    "Target domain or organization identifier",
+    "Optional: API keys/tokens for specific data sources (e.g., Censys, SecurityTrails, Shodan, HIBP, Hunter, WhoisXML, etc.)",
+    "Optional: configuration parameters (source selection, limits, output preferences)"
+  ],
+  "outputs": [
+    "Aggregated lists of emails associated with the target domain",
+    "Discovered subdomains/hosts and associated IP addresses",
+    "Related URLs and artifacts from public sources (e.g., code search hits)",
+    "Optional: enriched host information from third‑party services (e.g., ports/banners via Shodan)",
+    "Optional: screenshots of discovered subdomains"
+  ],
+  "core_concepts": [
+    "Open‑source intelligence (OSINT)",
+    "Passive reconnaissance",
+    "Target footprinting and attack‑surface discovery",
+    "Third‑party data source aggregation",
+    "API‑driven enrichment",
+    "Selective active checks (DNS brute force, screenshots)"
+  ],
+  "typical_workflow": [
+    "Define scope by specifying the target domain and selecting relevant data sources (often guided by available API keys/quotas).",
+    "Run passive collection to enumerate emails, subdomains/hosts, and URLs from multiple providers; aggregate and de‑duplicate findings.",
+    "Optionally perform selective active checks (e.g., DNS brute‑force expansion, host screenshots) to triage and prioritize assets.",
+    "Export or hand off results to complementary tools for mapping, validation, and risk analysis (e.g., AS/ASN mapping, port/service enumeration, vuln scanning)."
+  ],
+  "use_cases": [
+    "Initial reconnaissance in penetration tests and red team engagements to quickly map external assets.",
+    "Attack‑surface management support by identifying unknown or shadow subdomains and externally reachable hosts.",
+    "Seed collection for social‑engineering pretexting (email address discovery) subject to legal and policy constraints.",
+    "Digital footprint baselining prior to deeper active scanning or continuous monitoring.",
+    "Cross‑checking and enriching outputs from other recon tools with additional public sources."
+  ],
+  "limitations": [
+    "Dependent on third‑party services and their terms, availability, accuracy, and rate limits; many useful modules require paid or registered API keys.",
+    "Source coverage and modules change over time (e.g., the current README lists supported sources; some historic sources like Google/LinkedIn are not listed), so results vary by version and configuration.",
+    "Not a comprehensive asset inventory by itself; findings should be validated and correlated with other datasets and active scanning where authorized.",
+    "Potential gaps for organizations with minimal public exposure or with strong anti‑scraping controls on platforms.",
+    "Legal/ToS and privacy considerations apply; misuse or violating provider terms can result in blocking or incomplete data.",
+    "Active features are intentionally limited; deep service enumeration, exploitation, or intrusive testing are out of scope for this tool."
+  ],
+  "related_tools": [
+    {
+      "name": "Amass",
+      "relationship": "Alternative/adjacent OSINT and DNS enumeration tool for subdomains and attack‑surface mapping."
+    },
+    {
+      "name": "Subfinder",
+      "relationship": "Focused passive subdomain enumeration; often used in tandem to broaden coverage."
+    },
+    {
+      "name": "SpiderFoot",
+      "relationship": "Broad OSINT automation framework with 200+ modules; overlaps in data source aggregation."
+    },
+    {
+      "name": "Recon‑ng",
+      "relationship": "Modular web reconnaissance framework; similar goal of OSINT collection and reporting."
+    },
+    {
+      "name": "Maltego",
+      "relationship": "Link analysis and OSINT graphing platform; often used to visualize theHarvester outputs."
+    },
+    {
+      "name": "Shodan",
+      "relationship": "Internet‑wide service search; also a module within theHarvester for host enrichment."
+    },
+    {
+      "name": "Censys",
+      "relationship": "Certificate/host search; available as a passive module for subdomain and certificate data."
+    },
+    {
+      "name": "crt.sh",
+      "relationship": "Certificate Transparency log search; used as a passive source for subdomain discovery."
+    },
+    {
+      "name": "DNSDumpster",
+      "relationship": "Domain research/subdomain discovery site; available as a passive module."
+    }
+  ],
+  "evidence_gaps": [
+    "Public, authoritative changelogs precisely documenting removal of older sources (e.g., Google/LinkedIn) are not clearly published; current support is best inferred from the live README’s module list.",
+    "Independent, peer‑reviewed evaluations comparing recall/precision across sources and versions are limited; most references are practitioner slides and distribution package trackers rather than formal studies."
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "theHarvester README (supported modules, capabilities, API key notes)",
+      "url": "https://cocalc.com/github/laramies/theHarvester/blob/master/README.md",
+      "publisher": "GitHub (mirror via CoCalc)"
+    },
+    {
+      "title": "theHarvester Installation and API keys (Wiki)",
+      "url": "https://github.com/laramies/theHarvester/wiki/Installation",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "Kali Linux Package Tracker – theharvester (version history and packaging)",
+      "url": "https://pkg.kali.org/pkg/theharvester",
+      "publisher": "Kali Linux"
+    },
+    {
+      "title": "theHarvester Releases (active maintenance evidence)",
+      "url": "https://github.com/laramies/theHarvester/releases",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "Stony Brook CSE508 Reconnaissance slides (contextual academic reference)",
+      "url": "https://www3.cs.stonybrook.edu/~mikepo/CSE508/2024/lectures/CSE508_2024_lecture_17_reconnaissance.pdf",
+      "publisher": "Stony Brook University CS Department"
+    },
+    {
+      "title": "OWASP Dorset – Red Teaming OSINT (tool listing context)",
+      "url": "https://owasp.org/www-chapter-dorset/assets/presentations/2020-04/RT_OSINT_Phishing.pdf",
+      "publisher": "OWASP Dorset Chapter"
+    },
+    {
+      "title": "https://pkg.kali.org/theharvester",
+      "url": "https://pkg.kali.org/theharvester",
+      "publisher": "pkg.kali.org"
+    },
+    {
+      "title": "https://www.reddit.com/r/KaliLinux_Hacking/comments/fgxhok",
+      "url": "https://www.reddit.com/r/KaliLinux_Hacking/comments/fgxhok",
+      "publisher": "reddit.com"
+    },
+    {
+      "title": "https://www.reddit.com/r/Hacking_Tutorials/comments/1mudpgj/help_regarding_kali_linux_overrated_pen/",
+      "url": "https://www.reddit.com/r/Hacking_Tutorials/comments/1mudpgj/help_regarding_kali_linux_overrated_pen/",
+      "publisher": "reddit.com"
+    },
+    {
+      "title": "https://www.redsiege.com/wp-content/uploads/2021/08/20210824-SIEGECAST_THE_WAY_OF_THE_SPRAY.pdf",
+      "url": "https://www.redsiege.com/wp-content/uploads/2021/08/20210824-SIEGECAST_THE_WAY_OF_THE_SPRAY.pdf",
+      "publisher": "redsiege.com"
+    },
+    {
+      "title": "https://www.reddit.com/r/OSINT/comments/m42uzf",
+      "url": "https://www.reddit.com/r/OSINT/comments/m42uzf",
+      "publisher": "reddit.com"
+    },
+    {
+      "title": "https://www.totalsem.com/download/amzn_learning/handouts/pentest_002/Chapter%2012_Tools%20Inventory_Handout.pdf",
+      "url": "https://www.totalsem.com/download/amzn_learning/handouts/pentest_002/Chapter%2012_Tools%20Inventory_Handout.pdf",
+      "publisher": "totalsem.com"
+    }
+  ]
+}

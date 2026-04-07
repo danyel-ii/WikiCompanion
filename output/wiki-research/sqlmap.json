@@ -1,0 +1,155 @@
+{
+  "canonical_name": "sqlmap",
+  "aliases": [
+    "sqlmap"
+  ],
+  "classification": "Open-source web application security testing tool (SQL injection)",
+  "short_description": "sqlmap is an automated framework for detecting and exploiting SQL injection vulnerabilities in web applications and services, with extensive DBMS fingerprinting, data enumeration, and post-exploitation capabilities.",
+  "overview_notes": "sqlmap is a long-running open-source project maintained on GitHub (sqlmapproject/sqlmap) and distributed under GPLv2. It is implemented in Python and runs cross‑platform. The project wiki documents a broad feature set, including support for numerous relational and SQL‑compatible DBMSs, five primary SQL injection techniques, DBMS/OS fingerprinting, session handling, proxying, and optional integration with Metasploit for certain takeover features.",
+  "what_it_is_notes": "At its core, sqlmap is a specialized security testing tool for SQL injection (SQLi). It automates the end‑to‑end process of probing HTTP‑accessible inputs (e.g., query parameters, body fields, and headers) to determine whether untrusted data is interpreted as SQL by a back‑end DBMS. When injection is confirmed, it can fingerprint the DBMS, infer privileges, and enumerate or extract data. It also includes optional post‑exploitation actions where DBMS features permit. sqlmap’s scope is SQLi; it is not designed for NoSQL injection, SSRF, or other injection classes.",
+  "how_it_works_notes": "- Input discovery: Accepts a single URL, complete raw HTTP requests, proxy capture logs (e.g., from Burp), or a list of targets. It can test GET, POST, Cookie, User‑Agent, Referer, and other request components for injection.\n- Detection/exploitation engine: Implements boolean‑based blind, time‑based blind, error‑based, UNION query, and stacked‑query techniques. It adaptively selects and optimizes techniques per target behavior.\n- DBMS fingerprinting and enumeration: Identifies back‑end DBMS and version, infers current user/role, and can enumerate users, schemas, tables, columns, and data when privileges allow. Supports running custom SQL statements.\n- Post‑exploitation (DBMS‑dependent): Where supported (e.g., specific MySQL/PostgreSQL/Microsoft SQL Server features and privileges), it can interact with the file system or execute OS‑level commands. Some advanced takeover paths leverage Metasploit.\n- Evasion and reliability: Provides payload mutation via tamper scripts to work around simplistic WAF/filtering, supports authenticated sessions and proxies, and manages cookies and session renewal.\n- Direct DB connectivity (optional): Can connect directly to a DBMS with provided credentials for some operations without going through a web injection path.",
+  "inputs": [
+    "Target URL(s) or raw HTTP request(s) including method, path, body, and headers",
+    "HTTP cookies, authentication headers, or client certificates (for authenticated targets)",
+    "Scope from proxy logs (e.g., Burp/WebScarab) or curated target lists",
+    "Optional DBMS credentials for direct connection mode",
+    "Technique and detection tuning parameters (risk/level) and inference thresholds",
+    "Payload mutation selections (tamper scripts) for WAF/filter evasion",
+    "Proxy/Tor settings and request throttling/concurrency controls",
+    "Custom SQL statements to execute via an identified injection point (where permitted)"
+  ],
+  "outputs": [
+    "Assessment of SQL injection presence and technique(s) that worked",
+    "Back‑end DBMS fingerprint (type/version) and basic server context",
+    "Enumerated metadata (schemas, tables, columns) and, if authorized, selected data",
+    "Privilege information (current user/role, DBA status)",
+    "Optional artifacts from DB‑assisted file access or command execution (DBMS‑dependent)",
+    "Structured logs/session files capturing requests, timing, and decisions"
+  ],
+  "core_concepts": [
+    "SQL injection (OWASP Top 10: Injection)",
+    "Five SQLi techniques: boolean‑based blind, time‑based blind, error‑based, UNION‑based, stacked queries",
+    "DBMS fingerprinting and privilege inference",
+    "Data/schema enumeration and selective extraction",
+    "Post‑exploitation via DBMS features (file access, OS command execution)",
+    "Tamper scripts for payload mutation and basic WAF/filter evasion",
+    "Session, authentication, and proxy integration",
+    "Optional integration with Metasploit for advanced takeover paths"
+  ],
+  "typical_workflow": [
+    "Ingest one or more target requests (URL or full HTTP message) and define scope.",
+    "Probe candidate input vectors across query parameters, body fields, and headers for SQLi indicators.",
+    "Fingerprint the DBMS and determine feasible techniques based on application responses and timing.",
+    "If authorized, enumerate schema objects and retrieve constrained data for validation and impact assessment.",
+    "Optionally perform DBMS‑dependent post‑exploitation actions when privileges and rules of engagement allow.",
+    "Store findings and session artifacts for reproducibility, triage, and remediation coordination."
+  ],
+  "use_cases": [
+    "Authorized penetration testing of web applications and APIs to validate SQLi exposure and impact",
+    "Security verification during pre‑production testing or regression testing of input validation and parameterization controls",
+    "Reproducing and triaging bug bounty or vulnerability scanner reports related to SQLi",
+    "Red‑team exercises simulating database‑level compromise through an application layer (with proper approvals)",
+    "Training and demonstrations of SQLi classes and mitigations in controlled environments"
+  ],
+  "limitations": [
+    "Scope limited to SQL/relational injection; it is not intended for NoSQL, LDAP, template, command injection, or SSRF testing",
+    "Effectiveness may be reduced by strong parameterization/ORM patterns, query whitelisting, strict input validation, or read‑only DB roles",
+    "High latency, rate limits, or aggressive WAF/IPS rules can increase noise or timeouts, and some defenses may still block automated probing",
+    "Time‑based inference can be slow and susceptible to network jitter; results require careful validation",
+    "Requires legal authorization; misuse can violate policy or law",
+    "Complex stateful workflows (CSRF tokens, multi‑step transactions, heavy client‑side logic) may require additional setup or may not be fully automatable"
+  ],
+  "related_tools": [
+    {
+      "name": "Burp Suite",
+      "relationship": "Upstream proxy/log source; sqlmap can parse Burp logs and operate through proxies for testing."
+    },
+    {
+      "name": "OWASP ZAP",
+      "relationship": "Alternative intercepting proxy often used alongside sqlmap during web testing."
+    },
+    {
+      "name": "sqlninja",
+      "relationship": "Related SQLi tool with a focus on Microsoft SQL Server; complementary/alternative for certain environments."
+    },
+    {
+      "name": "jSQL Injection",
+      "relationship": "GUI‑oriented SQLi testing tool; alternative interface and workflows."
+    },
+    {
+      "name": "BBQSQL",
+      "relationship": "Focused framework for blind SQL injection attacks; complementary for niche scenarios."
+    },
+    {
+      "name": "Havij",
+      "relationship": "Legacy SQLi automation tool; historically comparable but not actively recommended."
+    }
+  ],
+  "evidence_gaps": [
+    "Local evidence mentioned NoSQL and SSRF; official sqlmap documentation confines the tool to SQL/relational injection. No authoritative sources indicate native NoSQL or SSRF testing.",
+    "The supported‑DBMS list in the project wiki is extensive and periodically updated; specific coverage may evolve. When exact DBMS support matters, verify against the current wiki revision for that date."
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "sqlmap Wiki — Features",
+      "url": "https://github.com/sqlmapproject/sqlmap/wiki/features",
+      "publisher": "sqlmapproject / GitHub"
+    },
+    {
+      "title": "sqlmap Wiki — Techniques (SQLi types supported)",
+      "url": "https://github.com/sqlmapproject/sqlmap/wiki/Techniques",
+      "publisher": "sqlmapproject / GitHub"
+    },
+    {
+      "title": "sqlmap Wiki — Usage (options, tamper scripts, sessions, proxies)",
+      "url": "https://github.com/sqlmapproject/sqlmap/wiki/Usage",
+      "publisher": "sqlmapproject / GitHub"
+    },
+    {
+      "title": "sqlmap Wiki — Dependencies (language, integrations)",
+      "url": "https://github.com/sqlmapproject/sqlmap/wiki/Dependencies",
+      "publisher": "sqlmapproject / GitHub"
+    },
+    {
+      "title": "OWASP Top 10:2021 — A03: Injection",
+      "url": "https://owasp.org/Top10/2021/A03_2021-Injection/",
+      "publisher": "OWASP Foundation"
+    },
+    {
+      "title": "sqlmap project site (redirect/legacy)",
+      "url": "https://sqlmap.sourceforge.net/",
+      "publisher": "SourceForge (redirects to official site)"
+    },
+    {
+      "title": "sqlmap (PyPI package index entry)",
+      "url": "https://pypi.org/project/sqlmap/",
+      "publisher": "Python Packaging Index (PyPI)"
+    },
+    {
+      "title": "https://owasp.org/Top10/2021/es/A03_2021-Injection/",
+      "url": "https://owasp.org/Top10/2021/es/A03_2021-Injection/",
+      "publisher": "owasp.org"
+    },
+    {
+      "title": "https://owasp.org/Top10/2021/ar/A03_2021-Injection/",
+      "url": "https://owasp.org/Top10/2021/ar/A03_2021-Injection/",
+      "publisher": "owasp.org"
+    },
+    {
+      "title": "https://blog.glen-thomas.com/security/2025/03/04/owasp-top-10-2021-03.html",
+      "url": "https://blog.glen-thomas.com/security/2025/03/04/owasp-top-10-2021-03.html",
+      "publisher": "blog.glen-thomas.com"
+    },
+    {
+      "title": "https://www.isgroup.biz/en/owasp/top-ten-2021-a3-injection.html",
+      "url": "https://www.isgroup.biz/en/owasp/top-ten-2021-a3-injection.html",
+      "publisher": "isgroup.biz"
+    },
+    {
+      "title": "https://en.wikipedia.org/wiki/Sqlmap",
+      "url": "https://en.wikipedia.org/wiki/Sqlmap",
+      "publisher": "en.wikipedia.org"
+    }
+  ]
+}

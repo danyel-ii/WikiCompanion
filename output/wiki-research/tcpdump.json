@@ -1,0 +1,159 @@
+{
+  "canonical_name": "tcpdump",
+  "aliases": [],
+  "classification": "network security / packet capture and analysis tool (CLI)",
+  "short_description": "A command-line packet capture and analyzer that uses libpcap to sniff, filter, display, and save network traffic in pcap/pcapng formats for security investigation and troubleshooting.",
+  "overview_notes": "tcpdump is a long-standing, cross-platform packet analyzer primarily for Unix-like systems. It captures packets via the libpcap API, applies Berkeley Packet Filter (BPF) expressions in kernel or user space, decodes many protocols, and outputs human-readable summaries or writes capture files. It is widely used in network security workflows for incident response, intrusion analysis, policy validation, and performance diagnostics. It is free software under a BSD-style license and is commonly bundled in operating systems and security distributions. ([github.com](https://github.com/the-tcpdump-group/libpcap?utm_source=openai))",
+  "what_it_is_notes": "- A CLI packet capture tool that reads from network interfaces or existing capture files and can write packet data to disk. ([man7.org](https://man7.org/linux/man-pages/man8/tcpdump.8.html?utm_source=openai))\n- Built atop libpcap (or Npcap on Windows), which provides a portable capture API and BPF-based filtering. ([github.com](https://github.com/the-tcpdump-group/libpcap?utm_source=openai))\n- Uses the pcap (and, via modern libpcap, pcapng) capture file formats, interoperable with Wireshark and other tools. ([man7.org](https://man7.org/linux/man-pages/man5/pcap-savefile.5.html?utm_source=openai))",
+  "how_it_works_notes": "- Packet capture: tcpdump opens a network interface via libpcap, optionally enabling promiscuous mode, and receives frames from the OS capture mechanism (e.g., PF_PACKET on Linux). ([github.com](https://github.com/the-tcpdump-group/libpcap?utm_source=openai))\n- Filtering: User-provided expressions are compiled to BPF bytecode and executed (typically in kernel space) to limit traffic before user-space processing. ([man7.org](https://man7.org/linux/man-pages/man7/pcap-filter.7.html?utm_source=openai))\n- Parsing/decoding: tcpdump dissects many link-layer and upper-layer protocols and prints concise summaries; it can also save raw packets to files without decoding. ([man7.org](https://man7.org/linux/man-pages/man8/tcpdump.8.html?utm_source=openai))\n- File formats: Reads/writes pcap and, when supported by linked libpcap, pcapng; these formats are widely supported across analyzers. ([man7.org](https://man7.org/linux/man-pages/man5/pcap-savefile.5.html?utm_source=openai))\n- Privilege handling: On many OSes, capture requires elevated privileges; tcpdump can drop privileges after initializing capture (e.g., -Z). ([man7.org](https://man7.org/linux/man-pages/man8/tcpdump.8.html?utm_source=openai))",
+  "inputs": [
+    "Live network interfaces (e.g., Ethernet, loopback, wireless) accessible via libpcap/Npcap.",
+    "Capture filters expressed in BPF syntax (e.g., host, net, port, protocol).",
+    "Configuration parameters such as snapshot length, buffer size, link-layer type selection, timestamp precision, and privilege drop user.",
+    "Existing capture files in pcap/pcapng formats to read and analyze."
+  ],
+  "outputs": [
+    "Human-readable packet summaries on standard output for quick inspection.",
+    "Capture files in pcap or pcapng for archival and offline analysis.",
+    "Capture statistics (received/filtered/dropped counts) on termination.",
+    "Optional post-rotation actions and multi-file rolling capture sets for long-running jobs."
+  ],
+  "core_concepts": [
+    "libpcap/Npcap as the capture API and portability layer. ([github.com](https://github.com/the-tcpdump-group/libpcap?utm_source=openai))",
+    "Berkeley Packet Filter (BPF) expression syntax and kernel/user-space execution. ([man7.org](https://man7.org/linux/man-pages/man7/pcap-filter.7.html?utm_source=openai))",
+    "pcap and pcapng capture file formats and interoperability with Wireshark. ([wireshark.org](https://www.wireshark.org/docs/wsdg_html_chunked/ChWorksCaptureFiles.html?utm_source=openai))",
+    "Promiscuous mode and its effect on visibility on switched networks.",
+    "Snapshot length (snaplen) and buffering impacting loss and performance. ([stackoverflow.com](https://stackoverflow.com/questions/39866757/how-to-resolve-tcpdump-dropped-packets?utm_source=openai))",
+    "Timestamp types/precision recorded in captures. ([man7.org](https://man7.org/linux/man-pages/man5/pcap-savefile.5.html?utm_source=openai))",
+    "Privilege management and post-initialization privilege drop. ([manpages.debian.org](https://manpages.debian.org/unstable/tcpdump/tcpdump.8.en.html?utm_source=openai))"
+  ],
+  "typical_workflow": [
+    "Define a focused BPF capture filter to constrain traffic volume at the source (e.g., hosts, ports, protocols). ([man7.org](https://man7.org/linux/man-pages/man7/pcap-filter.7.html?utm_source=openai))",
+    "Start a live capture on the relevant interface(s), choosing appropriate snapshot length and buffers to balance fidelity and performance. ([stackoverflow.com](https://stackoverflow.com/questions/39866757/how-to-resolve-tcpdump-dropped-packets?utm_source=openai))",
+    "Optionally enable rolling capture files/rotation for long-running monitoring and to bound disk usage. ([man7.org](https://man7.org/linux/man-pages/man8/tcpdump.8.html?utm_source=openai))",
+    "Write packets to pcap/pcapng for later deep analysis in Wireshark, Zeek, or other tools. ([wireshark.org](https://www.wireshark.org/docs/wsdg_html_chunked/ChWorksCaptureFiles.html?utm_source=openai))",
+    "Review capture statistics (received/filtered/dropped) to assess capture quality and adjust filters/buffers. ([stackoverflow.com](https://stackoverflow.com/questions/39866757/how-to-resolve-tcpdump-dropped-packets?utm_source=openai))",
+    "Drop privileges after device open for safer long-running operation, if supported in the environment. ([manpages.debian.org](https://manpages.debian.org/unstable/tcpdump/tcpdump.8.en.html?utm_source=openai))"
+  ],
+  "use_cases": [
+    "Incident response and threat hunting by capturing indicators of compromise or command-and-control traffic at chokepoints.",
+    "Validation of firewall/IDS/IPS policies by confirming permitted/blocked traffic on specific interfaces or spans.",
+    "Malware/sandbox analysis to observe network behaviors and protocol usage.",
+    "Network troubleshooting for latency, retransmissions, DNS issues, and MTU/fragmentation anomalies.",
+    "Baseline creation and anomaly detection support by exporting curated captures to SIEM/NDR pipelines."
+  ],
+  "limitations": [
+    "Encrypted traffic (TLS, SSH, IPsec, DoH/DoT) limits payload visibility; metadata may still be useful.",
+    "High-throughput links can incur packet loss without careful filtering, buffering, and storage planning. ([stackoverflow.com](https://stackoverflow.com/questions/39866757/how-to-resolve-tcpdump-dropped-packets?utm_source=openai))",
+    "NIC/OS offloading features (GRO/LRO/TSO) can alter capture semantics, showing coalesced segments or checksum anomalies; disabling offloads may be required for wire-accurate analysis. ([meet-unix.org](https://meet-unix.org/2017-02-19-tcp-lso.html?utm_source=openai))",
+    "Captures typically require elevated privileges; misconfigured privilege drop can prevent writing output files or rotating logs. ([manpages.debian.org](https://manpages.debian.org/unstable/tcpdump/tcpdump.8.en.html?utm_source=openai))",
+    "Capture visibility depends on topology (e.g., switched networks, SPAN/TAP availability) and may miss traffic not seen on the chosen interface.",
+    "Time synchronization and timestamp precision affect correlation across sensors and logs. ([man7.org](https://man7.org/linux/man-pages/man5/pcap-savefile.5.html?utm_source=openai))",
+    "Legal and privacy considerations may restrict packet capture and retention in some jurisdictions or environments."
+  ],
+  "related_tools": [
+    {
+      "name": "Wireshark",
+      "relationship": "GUI analyzer using libpcap/Npcap; reads/writes pcap/pcapng and complements tcpdump for deep inspection."
+    },
+    {
+      "name": "TShark",
+      "relationship": "Wireshark’s CLI analyzer; often used alongside tcpdump for automated or headless decoding."
+    },
+    {
+      "name": "dumpcap",
+      "relationship": "Wireshark’s capture engine optimized for high-performance capturing into files."
+    },
+    {
+      "name": "tcptrace",
+      "relationship": "Post-processing of tcpdump/Wireshark capture files to summarize TCP connections and performance metrics. ([tcptrace.org](https://www.tcptrace.org/?utm_source=openai))"
+    },
+    {
+      "name": "editcap/mergecap",
+      "relationship": "Utilities for trimming, filtering, and merging pcap/pcapng files used in analysis pipelines."
+    },
+    {
+      "name": "ngrep",
+      "relationship": "Payload pattern matching against packets; complements BPF’s header-oriented filtering."
+    },
+    {
+      "name": "WinDump",
+      "relationship": "Windows port of tcpdump that uses WinPcap/Npcap for capture. ([winpcap.org](https://www.winpcap.org/windump/?utm_source=openai))"
+    },
+    {
+      "name": "libpcap/Npcap",
+      "relationship": "Underlying capture libraries providing the pcap API that tcpdump relies on. ([github.com](https://github.com/the-tcpdump-group/libpcap?utm_source=openai))"
+    },
+    {
+      "name": "netsniff-ng",
+      "relationship": "Alternative Linux toolkit for capture/replay/analysis with different performance trade-offs."
+    }
+  ],
+  "evidence_gaps": [
+    "Direct access to tcpdump.org manpages and official release notes was blocked by robots via this interface, so option semantics and examples were corroborated using reputable mirrors (Debian/man7/FreeBSD) rather than the primary site. Feature availability may vary slightly by OS or tcpdump/libpcap version.",
+    "Exact current stable version as of April 7, 2026 is derived from secondary sources (e.g., Wikipedia) rather than the official site; confirm against tcpdump.org for authoritative release information."
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "tcpdump(8) — Linux manual page",
+      "url": "https://man7.org/linux/man-pages/man8/tcpdump.8.html",
+      "publisher": "man7.org"
+    },
+    {
+      "title": "pcap-filter(7) — Packet filter syntax",
+      "url": "https://man7.org/linux/man-pages/man7/pcap-filter.7.html",
+      "publisher": "man7.org"
+    },
+    {
+      "title": "pcap-savefile(5) — pcap file format",
+      "url": "https://man7.org/linux/man-pages/man5/pcap-savefile.5.html",
+      "publisher": "man7.org"
+    },
+    {
+      "title": "Debian tcpdump(8) man page (privilege drop behavior)",
+      "url": "https://manpages.debian.org/unstable/tcpdump/tcpdump.8.en.html",
+      "publisher": "Debian Project"
+    },
+    {
+      "title": "Wireshark Developer/User Docs: Capture files (pcap/pcapng)",
+      "url": "https://www.wireshark.org/docs/wsdg_html_chunked/ChWorksCaptureFiles.html",
+      "publisher": "Wireshark Foundation"
+    },
+    {
+      "title": "PcapNG File Format overview",
+      "url": "https://pcapng.com/",
+      "publisher": "PcapNG (IETF draft community site)"
+    },
+    {
+      "title": "libpcap — the tcpdump group (project repository)",
+      "url": "https://github.com/the-tcpdump-group/libpcap",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "Npcap: Windows Packet Capture Library & Driver",
+      "url": "https://npcap.com/",
+      "publisher": "Nmap Project"
+    },
+    {
+      "title": "Pcap (overview of formats and interoperability)",
+      "url": "https://en.wikipedia.org/wiki/Pcap",
+      "publisher": "Wikipedia"
+    },
+    {
+      "title": "tcpdump (overview, history)",
+      "url": "https://en.wikipedia.org/wiki/Tcpdump",
+      "publisher": "Wikipedia"
+    },
+    {
+      "title": "FreeBSD tcpdump(1) manual (mirror)",
+      "url": "https://man.freebsd.org/tcpdump",
+      "publisher": "FreeBSD Project"
+    },
+    {
+      "title": "tcptrace — Official Homepage",
+      "url": "https://www.tcptrace.org/",
+      "publisher": "tcptrace.org"
+    }
+  ]
+}

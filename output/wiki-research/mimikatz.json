@@ -1,0 +1,140 @@
+{
+  "canonical_name": "mimikatz",
+  "aliases": [
+    "mimikatz"
+  ],
+  "classification": "credential access and post-exploitation tool (Windows)",
+  "short_description": "Open‑source Windows security research tool by Benjamin Delpy (gentilkiwi) best known for extracting credentials from memory and manipulating authentication artifacts (e.g., LSASS contents, Kerberos tickets) and performing directory replication–based credential access (DCSync).",
+  "overview_notes": "Mimikatz is a dual‑use security tool widely referenced in incident response, penetration testing, and adversary tradecraft. Its modules target Windows authentication subsystems (LSA/LSASS, Kerberos, Crypto, Vault) to read or forge credential material or tokens and to simulate domain controller replication requests (DCSync). It remains prevalent in threat reporting and blue team detections, and is mapped by MITRE ATT&CK as Software S0002 across multiple credential access techniques, including OS Credential Dumping: DCSync (T1003.006). Recent Windows platform hardening (e.g., LSASS Protected Process Light and Credential Guard) constrains some behaviors on modern systems.",
+  "what_it_is_notes": "- An open‑source tool and codebase maintained on GitHub by Benjamin Delpy (aka gentilkiwi).\n- Provides modules for credential extraction and authentication artifact manipulation: sekurlsa (LSASS memory), kerberos (tickets), lsadump (e.g., SAM/Secrets, DCSync), crypto (keys/certs), vault, token, etc.\n- Commonly used to test and validate defenses against credential theft, simulate AD attack techniques, and analyze authentication internals.",
+  "how_it_works_notes": "- LSASS/LSA interaction: Mimikatz uses privileged process memory access to enumerate credentials and secrets handled by Windows LSA/LSASS (e.g., NTLM hashes, WDigest if present, DPAPI material). Windows mitigations like LSA Protection (PPL) and Credential Guard restrict or virtualize access, impeding direct dumping on protected hosts.\n- Kerberos manipulation: Modules can list/export/insert tickets (pass‑the‑ticket), and craft Golden Tickets by forging TGTs with KRBTGT material.\n- DCSync: The lsadump DCSync capability invokes Active Directory’s Directory Replication Service Remote Protocol (MS‑DRSR), notably IDL_DRSGetNCChanges, to request replication data as if it were a domain controller. This succeeds only when the caller has specific replication control access rights on the domain object (DS‑Replication‑Get‑Changes, DS‑Replication‑Get‑Changes‑All, and often DS‑Replication‑Get‑Changes‑In‑Filtered‑Set).",
+  "inputs": [
+    "Administrative or SYSTEM privileges for local LSASS interactions (or a means to bypass/disable protections)",
+    "Appropriate AD permissions/credentials for domain replication (e.g., accounts granted replication control access rights) to perform DCSync",
+    "Optional driver (mimidrv) for kernel‑mode operations on some systems",
+    "Process or minidump files (offline parsing of LSASS dumps)"
+  ],
+  "outputs": [
+    "Credential artifacts from memory (e.g., plaintexts where available, NTLM hashes, Kerberos tickets)",
+    "Exported keys/certificates and DPAPI‑protected data (where accessible)",
+    "Replicated credential material from AD via DCSync (e.g., password hashes, KRBTGT hash)",
+    "Token and ticket manipulations reflected in security logs and memory artifacts useful for DFIR"
+  ],
+  "core_concepts": [
+    "Windows LSA/LSASS credential management and memory inspection",
+    "Kerberos tickets (TGT/TGS), Golden/Silver ticket concepts",
+    "Active Directory replication (MS‑DRSR/DRSUAPI) and required control access rights",
+    "Pass‑the‑Hash and Pass‑the‑Ticket authentication semantics",
+    "DPAPI, CryptoAPI/CNG key storage visibility",
+    "Platform hardening: LSA Protection (PPL), Credential Guard, ASR rules"
+  ],
+  "typical_workflow": [
+    "Establish sufficient privileges/context on a Windows host (e.g., administrative or SYSTEM) to query LSASS or consume dumps, subject to LSA Protection/Credential Guard.",
+    "Select module(s) aligned to objectives: sekurlsa for in‑memory credentials and tickets; kerberos for ticket operations; lsadump for SAM/Secrets/DCSync; crypto for keys/certificates; vault for stored secrets; token for access token operations.",
+    "For directory‑level credential access, ensure the calling principal possesses AD replication control access rights, then request replication data via DCSync to retrieve credential material from the domain database.",
+    "Collect and analyze outputs in DFIR tooling, correlate with security telemetry (e.g., Event ID 4662 on DCs, RPC/DRSR network traces) for detection/validation."
+  ],
+  "use_cases": [
+    "Red/purple‑team validation of credential theft detections and controls (e.g., LSASS protection, ASR rules, EDR)",
+    "DFIR artifact triage to understand what credential material may have been exposed by a given host compromise",
+    "Threat‑hunting and control auditing around AD replication rights misuse (DCSync)",
+    "Security research into Windows authentication internals and key/certificate handling",
+    "Purple‑team exercises covering Kerberos abuse pathways (pass‑the‑ticket, Golden Ticket) and downstream impact assessment"
+  ],
+  "limitations": [
+    "Modern Windows protections degrade or block several behaviors: LSASS Protected Process Light (PPL) and Credential Guard restrict memory read access and virtualize secrets, reducing or eliminating material available to dump.",
+    "Execution typically requires elevated privileges; lack of admin/SYSTEM context, code‑integrity policies, or EDR controls will limit effectiveness.",
+    "DCSync requires specific AD replication rights; without these control access rights, replication requests are denied by the DC.",
+    "Highly detectable: well‑known signatures, behavioral analytics (e.g., RPC DRSUAPI from non‑DC hosts), and Windows Security auditing (Event ID 4662 with replication GUIDs) frequently flag activity.",
+    "Environmental variability: version mismatches and platform updates can affect module reliability; some capabilities depend on legacy configurations (e.g., WDigest, unprotected LSASS)."
+  ],
+  "related_tools": [
+    {
+      "name": "Impacket (secretsdump.py)",
+      "relationship": "Performs DCSync and other credential extraction over SMB/RPC without deploying binaries to the DC; a common alternative for replication‑based dumping."
+    },
+    {
+      "name": "CrackMapExec / NetExec",
+      "relationship": "Post‑exploitation frameworks that can orchestrate credential dumping (including DCSync via Impacket) and lateral movement at scale."
+    },
+    {
+      "name": "BloodHound",
+      "relationship": "Graph‑based AD analysis that identifies principals with replication rights, informing possible DCSync paths."
+    },
+    {
+      "name": "Rubeus",
+      "relationship": "Kerberos‑focused tool for ticket operations complementing Mimikatz’s kerberos module."
+    },
+    {
+      "name": "DSInternals",
+      "relationship": "PowerShell module for interacting with AD database and secrets; used in replication/credential extraction scenarios."
+    }
+  ],
+  "evidence_gaps": [
+    "Up‑to‑the‑minute release/version history for Mimikatz is fluid; consult the official repository for current tags and module status.",
+    "Exact behavior on latest Windows builds (e.g., Windows 11 24H2/Server 2025) varies with default LSASS PPL/Credential Guard posture and EDR policies; field reports are mixed and environment‑specific."
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "GitHub - gentilkiwi/mimikatz (README)",
+      "url": "https://github.com/gentilkiwi/mimikatz",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "mimikatz Wiki (modules and history)",
+      "url": "https://github.com/gentilkiwi/mimikatz/wiki",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "MITRE ATT&CK Software S0002: Mimikatz",
+      "url": "https://attack.mitre.org/software/S0002",
+      "publisher": "MITRE"
+    },
+    {
+      "title": "OS Credential Dumping: DCSync (T1003.006)",
+      "url": "https://attack.mitre.org/techniques/T1003/006/",
+      "publisher": "MITRE"
+    },
+    {
+      "title": "[MS‑DRSR] Methods Categorized by Function (IDL_DRSGetNCChanges)",
+      "url": "https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-drsr/beebc62b-cceb-4705-aafe-14fa53fa19f4",
+      "publisher": "Microsoft Learn"
+    },
+    {
+      "title": "[MS‑ADTS] DS‑Replication‑Get‑Changes (rightsGuid 1131f6aa‑...)",
+      "url": "https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/1878718d-ca72-472e-a612-ebbf22514236",
+      "publisher": "Microsoft Learn"
+    },
+    {
+      "title": "[MS‑ADTS] DS‑Replication‑Get‑Changes‑In‑Filtered‑Set (rightsGuid 89e95b76‑...)",
+      "url": "https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/a8b179de-bb7f-45e5-8524-3b8ccf5f8758",
+      "publisher": "Microsoft Learn"
+    },
+    {
+      "title": "[MS‑ADTS] Control Access Rights concordance (includes replication‑related rights)",
+      "url": "https://learn.microsoft.com/sr-latn-rs/openspecs/windows_protocols/ms-adts/1522b774-6464-41a3-87a5-1e5633c3fbbb",
+      "publisher": "Microsoft Learn"
+    },
+    {
+      "title": "Configure additional LSA protection (LSASS PPL)",
+      "url": "https://learn.microsoft.com/en-us/windows-server/security/credentials-protection-and-management/configuring-additional-lsa-protection",
+      "publisher": "Microsoft Learn"
+    },
+    {
+      "title": "Advanced credential protection (Credential Guard overview)",
+      "url": "https://learn.microsoft.com/en-us/windows/security/book/identity-protection-advanced-credential-protection",
+      "publisher": "Microsoft Learn"
+    },
+    {
+      "title": "Detecting and preventing LSASS credential dumping attacks (Windows 11 hardening, PPL by default)",
+      "url": "https://www.microsoft.com/en-us/security/blog/2022/10/05/detecting-and-preventing-lsass-credential-dumping-attacks/",
+      "publisher": "Microsoft Security Blog"
+    },
+    {
+      "title": "Threat Hunter Playbook: AD Object Access via Replication Services (Event 4662 and GUIDs)",
+      "url": "https://threathunterplaybook.com/hunts/windows/180815-ADObjectAccessReplication/notebook.html",
+      "publisher": "Threat Hunter Playbook"
+    }
+  ]
+}

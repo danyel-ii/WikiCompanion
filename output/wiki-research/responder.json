@@ -1,0 +1,156 @@
+{
+  "canonical_name": "Responder",
+  "aliases": [
+    "Responder",
+    "Responder.py"
+  ],
+  "classification": "network-security",
+  "short_description": "Open-source LLMNR/NBT-NS/mDNS poisoner and rogue authentication servers used to coerce and capture Windows network credentials and facilitate NTLM relay in Active Directory environments.",
+  "overview_notes": "Responder is a widely used assessment tool that listens for broadcast/multicast name-resolution traffic (LLMNR, NetBIOS Name Service, and often mDNS) on local subnets, forges responses to misdirect clients to the attacker's host, and then presents rogue services (for example SMB/HTTP/MSSQL/LDAP/FTP) to trigger NTLM challenge–response authentication. The captured Net-NTLM credentials can be cracked offline or relayed to other services (commonly via impacket's ntlmrelayx) when signing protections are not enforced. Mitigations documented by vendors include disabling LLMNR/NBT-NS, enforcing SMB/LDAP signing, and enabling protections like Extended Protection for Authentication (EPA).",
+  "what_it_is_notes": "- A poisoner for Windows name-resolution fallbacks (LLMNR, NBT-NS; commonly also mDNS) that replies to queries for non-existent or mis-typed hosts.\n- A suite of lightweight rogue servers that solicit NTLM authentication from victims and log captured challenge–response material.\n- A red-team and penetration-testing utility referenced in MITRE ATT&CK T1557.001 (LLMNR/NBT-NS Poisoning and SMB Relay) and in defensive advisories as a representative tool for this attack class.",
+  "how_it_works_notes": "- Name-resolution poisoning: When a client cannot resolve a hostname via DNS, it may broadcast/multicast LLMNR/NBT-NS (and sometimes mDNS). Responder forges authoritative replies, mapping the sought name to the attacker's address.\n- Rogue service interaction: The tool exposes emulated services (for example SMB/HTTP/MSSQL/LDAP/FTP/POP3/IMAP/SMTP, WPAD) so that the coerced client initiates NTLM authentication to the attacker-controlled host.\n- Credential capture/relay: The tool records Net-NTLMv1/v2 challenge–response exchanges. These can be used for offline password cracking or relayed to other protocols lacking enforced signing or channel binding, typically using a separate relay tool (for example ntlmrelayx).",
+  "inputs": [
+    "Broadcast/multicast name-resolution queries (LLMNR, NBT-NS; sometimes mDNS) from Windows or other hosts",
+    "Victim-initiated connections to attacker-hosted rogue services (SMB, HTTP, MSSQL, LDAP, etc.)",
+    "Environmental misconfigurations (LLMNR/NBT-NS enabled; NTLM allowed; signing/channel binding not enforced)",
+    "Optional coercion traffic from separate techniques (for example PrinterBug, PetitPotam, DFSCoerce) that force authentication attempts"
+  ],
+  "outputs": [
+    "Captured Net-NTLMv1/Net-NTLMv2 challenge–response hashes and related metadata (source IP/hostname, timestamp, queried name)",
+    "Authentication transcripts to rogue services (for example SMB/HTTP)",
+    "Potential downstream authentication on relayed targets (when paired with relay tooling)",
+    "Network/host telemetry side-effects (for example unusual name-resolution responses; IDS/EDR alerts; Windows logon events on relayed targets)"
+  ],
+  "core_concepts": [
+    "Adversary-in-the-Middle via local name-resolution poisoning",
+    "NTLM challenge–response capture and relay",
+    "Broadcast/multicast name-resolution protocols (LLMNR, NBT-NS, mDNS)",
+    "Rogue service emulation (SMB/HTTP/etc.)",
+    "Mitigations: disable LLMNR/NBT-NS, enforce SMB/LDAP signing, EPA/channel binding, limit or disable NTLM",
+    "ATT&CK T1557.001 mapping"
+  ],
+  "typical_workflow": [
+    "Phase 1 – Coercion/Poisoning: Wait for or trigger LLMNR/NBT-NS/mDNS queries; forge replies that point victims to the attacker.",
+    "Phase 2 – Interception: Host rogue services so the victim initiates NTLM authentication to the attacker; record challenge–response material.",
+    "Phase 3 – Relay/Use: Optionally relay captured NTLM to other services lacking enforced signing/channel binding, or crack offline; validate exposure and detections in a controlled assessment."
+  ],
+  "use_cases": [
+    "Security assessments of Active Directory environments to identify exposure to LLMNR/NBT-NS poisoning and NTLM relay (ATT&CK T1557.001)",
+    "Purple-team exercises to validate controls such as disabling LLMNR/NBT-NS, enforcing SMB/LDAP signing, and enabling EPA/channel binding",
+    "Threat hunting and detection engineering for broadcast name-resolution poisoning and rogue WPAD/SMB/HTTP servers",
+    "Investigation of authentication anomalies where credentials are used from unexpected hosts due to relay",
+    "Exposure reviews tied to coercion techniques (for example PrinterBug, PetitPotam, DFSCoerce) that precede NTLM relay"
+  ],
+  "limitations": [
+    "Effectiveness drops when organizations disable LLMNR/NBT-NS and mDNS or implement AD DNS hygiene.",
+    "NTLM relay is blocked where SMB/LDAP signing, TLS channel binding, or EPA are enforced; NTLMv1 disabled reduces cracking value.",
+    "Rogue DHCP/WPAD or aggressive modes can disrupt user experience or network services and are often flagged by IDS/EDR/NDR.",
+    "Modern defensive content specifically detects Responder-like traffic patterns and rogue service fingerprints.",
+    "Does not bypass protocol-level protections such as Kerberos with mutual auth, SMB encryption, or strict HTTPS with valid cert pinning."
+  ],
+  "related_tools": [
+    {
+      "name": "impacket ntlmrelayx",
+      "relationship": "Commonly paired to forward captured NTLM auth to SMB/LDAP/HTTP/MSSQL when signing/channel binding are not enforced."
+    },
+    {
+      "name": "Inveigh",
+      "relationship": "PowerShell/.NET alternative for LLMNR/NBT-NS/mDNS spoofing and credential capture on Windows."
+    },
+    {
+      "name": "Pretender",
+      "relationship": "Modern LLMNR/NBNS/mDNS spoofing tool; functionally adjacent to Responder."
+    },
+    {
+      "name": "mitm6",
+      "relationship": "Abuses IPv6/DHCPv6 to become DNS server and coerce authentication; complementary coercion vector when LLMNR/NBT-NS are disabled."
+    },
+    {
+      "name": "PetitPotam (EFSRPC)",
+      "relationship": "Coercion technique that can force NTLM authentication; often used before relay; not a poisoner itself."
+    },
+    {
+      "name": "PrinterBug/SpoolSample",
+      "relationship": "Coercion of authentication via Spooler service; often used to feed relay workflows."
+    },
+    {
+      "name": "CrackMapExec",
+      "relationship": "Operational framework that integrates credential capture/relay workflows in AD testing."
+    },
+    {
+      "name": "Detect-Responder (osquery extension)",
+      "relationship": "Defensive detector for active Responder or spoofers on the network."
+    },
+    {
+      "name": "VindicateTool",
+      "relationship": "Defensive sensor for detecting LLMNR/NBNS/mDNS spoofing including Responder."
+    }
+  ],
+  "evidence_gaps": [
+    "The primary GitHub repository (lgandx/Responder) was referenced widely, but the main landing page could not be retrieved during this collection; exact current version history and maintainership status as of April 7, 2026 are not confirmed here.",
+    "The precise list of built-in rogue servers and optional modules can vary by release; sources consistently mention SMB/HTTP/MSSQL/LDAP and others, but an authoritative, up-to-date module matrix was not accessible in this crawl."
+  ],
+  "confidence": "medium",
+  "sources": [
+    {
+      "title": "MITRE ATT&CK T1557.001: LLMNR/NBT-NS Poisoning and SMB Relay",
+      "url": "https://attack.mitre.org/techniques/T1557/001",
+      "publisher": "MITRE ATT&CK"
+    },
+    {
+      "title": "Introducing Responder 1.0 (original project announcement)",
+      "url": "https://www.levelblue.com/blogs/spiderlabs-blog/introducing-responder-1.0",
+      "publisher": "LevelBlue (formerly Trustwave SpiderLabs)"
+    },
+    {
+      "title": "KB5005413: Mitigating NTLM Relay Attacks on AD CS (includes PetitPotam context and mitigations)",
+      "url": "https://support.microsoft.com/en-us/topic/kb5005413-mitigating-ntlm-relay-attacks-on-active-directory-certificate-services-ad-cs-3612b773-4043-4aa9-b23d-b87910cd3429",
+      "publisher": "Microsoft"
+    },
+    {
+      "title": "PREVENT-12: Notes on SMB signing and relay limitations",
+      "url": "https://docs.specterops.io/misconfiguration-manager-docs/defense-techniques/PREVENT/PREVENT-12/prevent-12_description",
+      "publisher": "SpecterOps"
+    },
+    {
+      "title": "Responder-Windows (author’s Windows port repository)",
+      "url": "https://github.com/lgandx/Responder-Windows",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "Detect Responder (osquery extension)",
+      "url": "https://github.com/clong/detect-responder",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "CISA RVA Advisory (references LLMNR/NBT-NS/mDNS poisoning and tooling)",
+      "url": "https://www.cisa.gov/sites/default/files/2023-12/aa23-349a-risk-vulnerability-assessment-healthcare-public-health-sector.pdf",
+      "publisher": "CISA"
+    },
+    {
+      "title": "LLMNR/NBT-NS Poisoning and SMB Relay (context and mentions of Responder)",
+      "url": "https://mitre.garnet.ai/mitre/mitre/ta0009/t1557/t1557.001",
+      "publisher": "Garnet (MITRE mirror)"
+    },
+    {
+      "title": "https://notes.cavementech.com/pentesting-quick-reference/active-directory/llmnr-poisoning",
+      "url": "https://notes.cavementech.com/pentesting-quick-reference/active-directory/llmnr-poisoning",
+      "publisher": "notes.cavementech.com"
+    },
+    {
+      "title": "https://www.aha.org/system/files/media/file/2023/12/cybersecurity-advisory-enhancing-cyber-resilience-insights-from-the-cisa-healthcare-and-public-health-sector-risk-and-vulnerability-assessment-12-15-2023.pdf",
+      "url": "https://www.aha.org/system/files/media/file/2023/12/cybersecurity-advisory-enhancing-cyber-resilience-insights-from-the-cisa-healthcare-and-public-health-sector-risk-and-vulnerability-assessment-12-15-2023.pdf",
+      "publisher": "aha.org"
+    },
+    {
+      "title": "https://www.securityscientist.net/blog/llmnr-nbt-ns-poisoning-network-attack/",
+      "url": "https://www.securityscientist.net/blog/llmnr-nbt-ns-poisoning-network-attack/",
+      "publisher": "securityscientist.net"
+    },
+    {
+      "title": "https://github.com/Rushyo/VindicateTool",
+      "url": "https://github.com/Rushyo/VindicateTool",
+      "publisher": "github.com"
+    }
+  ]
+}

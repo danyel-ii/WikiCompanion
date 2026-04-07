@@ -1,0 +1,130 @@
+{
+  "canonical_name": "Impacket",
+  "aliases": [
+    "impacket"
+  ],
+  "classification": "penetration-testing",
+  "short_description": "Open-source Python library and example tools that implement and manipulate network protocols (notably SMB, MSRPC, Kerberos, NTLM, LDAP, MSSQL) to enable low-level packet crafting, protocol clients, and security testing workflows across Windows-centric enterprise networks. ([github.com](https://github.com/fortra/impacket))",
+  "overview_notes": "Impacket provides object-oriented access to build, parse, and sequence protocol messages and includes a suite of example tools demonstrating remote service execution, credential access, Kerberos ticket operations, network sniffing, and relay attacks. Originally created by SecureAuth, it is now maintained by Fortra’s Core Security; current stable release line is v0.13.0 (released October 22, 2025). ([github.com](https://github.com/fortra/impacket))",
+  "what_it_is_notes": "A collection of Python classes plus reference tools that implement portions or full clients for protocols such as SMB1–3, MSRPC over multiple transports, NTLM and Kerberos authentication flows, LDAP, and TDS (MSSQL). Its design goal is research and education on network stacks and security behavior rather than production deployment. ([github.com](https://github.com/fortra/impacket))",
+  "how_it_works_notes": "- Library layer: exposes packet structures and client logic for protocols (e.g., SMB dialects, DCE/RPC interfaces, Kerberos/NTLM). Packets can be constructed from scratch or parsed from raw data, enabling programmatic sequencing of authentication and RPC operations. \n- Example tools: demonstrate common operations built on the library, including remote execution via WMI/SMB service control, credential dumping via RPC/registry/NTDS access, Kerberos ticket requests/forgery, and relay of NTLM authentication. \n- Platform scope: runs on Linux, macOS, and Windows with Python 3.x. ([github.com](https://github.com/fortra/impacket))",
+  "inputs": [
+    "Network endpoints/addresses and protocol targets (e.g., SMB shares, RPC endpoints, LDAP servers). ([github.com](https://github.com/fortra/impacket))",
+    "Authentication material: passwords, NTLM hashes, Kerberos tickets/keys (e.g., ccache), or tokens as supported by the protocol flows. ([github.com](https://github.com/fortra/impacket))",
+    "Protocol parameters and options (dialects, transports, interface UUIDs, SPNs). ([github.com](https://github.com/fortra/impacket))",
+    "Operator intent for example tools (e.g., remote service execution target, relay target, or directory query). ([attack.mitre.org](https://attack.mitre.org/software/S0357/))"
+  ],
+  "outputs": [
+    "Constructed and parsed protocol messages and sessions (SMB/MSRPC/Kerberos/LDAP/TDS). ([github.com](https://github.com/fortra/impacket))",
+    "Execution results and system responses from remote management channels (e.g., service control, WMI). ([attack.mitre.org](https://attack.mitre.org/software/S0357/))",
+    "Collected credentials and authentication artifacts when used for credential access workflows (e.g., SAM/LSA/NTDS data). ([attack.mitre.org](https://attack.mitre.org/software/S0357/))",
+    "Telemetry suitable for detection/analysis (e.g., network flows, authentication attempts, RPC/service creation events). ([attack.mitre.org](https://attack.mitre.org/software/S0357/))"
+  ],
+  "core_concepts": [
+    "Low-level protocol manipulation and client implementations for SMB, MSRPC, Kerberos, NTLM, LDAP, and TDS. ([github.com](https://github.com/fortra/impacket))",
+    "Authentication relay and adversary-in-the-middle against NTLM/LLMNR/NBT-NS ecosystems. ([attack.mitre.org](https://attack.mitre.org/software/S0357/))",
+    "Remote management execution via WMI/SMB service mechanisms analogous to PsExec. ([attack.mitre.org](https://attack.mitre.org/software/S0357/))",
+    "Credential access via RPC/registry/domain database interfaces (e.g., SAM, LSA, NTDS). ([attack.mitre.org](https://attack.mitre.org/software/S0357/))",
+    "Research/education focus—not intended as a production component. ([github.com](https://github.com/fortra/impacket))"
+  ],
+  "typical_workflow": [
+    "Plan: Define assessment goals, targets, and legal authorization; determine which protocol surfaces (SMB, RPC, AD/LDAP, Kerberos) are in scope for validation. ([github.com](https://github.com/fortra/impacket))",
+    "Model interactions: Use Impacket’s protocol clients to emulate legitimate authentication/management sequences (e.g., Kerberos or NTLM auth followed by MSRPC operations) to validate controls and logging. ([github.com](https://github.com/fortra/impacket))",
+    "Exercise attack paths (authorized testing): Demonstrate risks such as NTLM relay, remote service execution, or credential exposure to inform mitigations and detections mapped to MITRE ATT&CK. ([attack.mitre.org](https://attack.mitre.org/software/S0357/))",
+    "Analyze and report: Correlate host/network telemetry (auth logs, service creation, RPC calls) with expected ATT&CK techniques to assess monitoring efficacy and control gaps. ([attack.mitre.org](https://attack.mitre.org/software/S0357/))"
+  ],
+  "use_cases": [
+    "Red team and penetration testing of Windows enterprise networks, including remote execution over WMI/SMB and AD-related protocol testing. ([attack.mitre.org](https://attack.mitre.org/software/S0357/))",
+    "Identity and authentication control validation (NTLM/Kerberos), including testing for relay exposure and service hardening. ([attack.mitre.org](https://attack.mitre.org/software/S0357/))",
+    "Credential access risk assessment by exercising domain database and local secrets retrieval paths for defensive tuning. ([attack.mitre.org](https://attack.mitre.org/software/S0357/))",
+    "Threat emulation and purple teaming mapped to ATT&CK techniques like Adversary-in-the-Middle (T1557.001), Windows Management Instrumentation (T1047), OS Credential Dumping (T1003.*). ([attack.mitre.org](https://attack.mitre.org/software/S0357/))",
+    "Incident response threat hunting and detections development informed by prior advisories noting threat-actor use of Impacket (e.g., AA22-277A). ([cisa.gov](https://www.cisa.gov/news-events/cybersecurity-advisories/aa22-277a?utm_source=openai))"
+  ],
+  "limitations": [
+    "Intended for research and educational purposes; repository explicitly discourages production use without secure SDLC hardening. ([github.com](https://github.com/fortra/impacket))",
+    "Ethical/legal constraints: capabilities mirror adversary techniques (e.g., relay, credential access) and must only be used with explicit authorization. ([github.com](https://github.com/fortra/impacket))",
+    "Python-only implementation may introduce performance and platform dependency considerations compared to native tooling. ([github.com](https://github.com/fortra/impacket))",
+    "Coverage depth varies by protocol/interface; many MSRPC interfaces are partial implementations. ([github.com](https://github.com/fortra/impacket))"
+  ],
+  "related_tools": [
+    {
+      "name": "PsExec (and analogs)",
+      "relationship": "Impacket includes modules that emulate PsExec-style remote service execution workflows. ([attack.mitre.org](https://attack.mitre.org/software/S0357/))"
+    },
+    {
+      "name": "Mimikatz",
+      "relationship": "Frequently paired in credential access narratives; ATT&CK notes credential dumping capabilities overlapping with Impacket workflows. ([attack.mitre.org](https://attack.mitre.org/software/S0357/))"
+    },
+    {
+      "name": "NTLM relay tooling (e.g., ntlmrelayx)",
+      "relationship": "Impacket provides its own relay modules used in Adversary-in-the-Middle scenarios. ([attack.mitre.org](https://attack.mitre.org/software/S0357/))"
+    }
+  ],
+  "evidence_gaps": [
+    "Public documentation lists example capabilities but does not centrally catalog every example tool’s current behavior and options; behavior may change across releases.",
+    "Some widely referenced community practices (e.g., pairing with specific third-party tools like BloodHound or Responder) are common in practitioner workflows but are not formally documented by project maintainers—caution in asserting tight integrations without source verification."
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "fortra/impacket – GitHub repository and README",
+      "url": "https://github.com/fortra/impacket",
+      "publisher": "Fortra Core Security"
+    },
+    {
+      "title": "MITRE ATT&CK Software S0357 – Impacket",
+      "url": "https://attack.mitre.org/software/S0357/",
+      "publisher": "MITRE"
+    },
+    {
+      "title": "CISA AA22-277A – Impacket and Exfiltration Tool Used to Steal Sensitive Information from Defense Industrial Base Organization (PDF mirror)",
+      "url": "https://media.defense.gov/2022/Oct/04/2003090705/-1/-1/0/CSA_IMPACKET_AND_EXFIL_TOOL_STEAL_SENSITIVE_INFO_FROM_DEFENSE_INDUSTRIAL_BASE.PDF",
+      "publisher": "CISA/NSA/FBI"
+    },
+    {
+      "title": "https://www.cisa.gov/news-events/alerts/2023/12/07/cisa-and-international-partners-release-advisory-russia-based-threat-actor-group-star-blizzard",
+      "url": "https://www.cisa.gov/news-events/alerts/2023/12/07/cisa-and-international-partners-release-advisory-russia-based-threat-actor-group-star-blizzard",
+      "publisher": "cisa.gov"
+    },
+    {
+      "title": "https://en.wikipedia.org/wiki/ATT%26CK",
+      "url": "https://en.wikipedia.org/wiki/ATT%26CK",
+      "publisher": "en.wikipedia.org"
+    },
+    {
+      "title": "https://www.reddit.com/r/blueteamsec/comments/1im2585",
+      "url": "https://www.reddit.com/r/blueteamsec/comments/1im2585",
+      "publisher": "reddit.com"
+    },
+    {
+      "title": "https://www.cisa.gov/news-events/cybersecurity-advisories/aa22-277a",
+      "url": "https://www.cisa.gov/news-events/cybersecurity-advisories/aa22-277a",
+      "publisher": "cisa.gov"
+    },
+    {
+      "title": "https://deepwiki.com/fortra/impacket/3.1-smb-protocol-implementation",
+      "url": "https://deepwiki.com/fortra/impacket/3.1-smb-protocol-implementation",
+      "publisher": "deepwiki.com"
+    },
+    {
+      "title": "https://de.wikipedia.org/wiki/ATT%26CK",
+      "url": "https://de.wikipedia.org/wiki/ATT%26CK",
+      "publisher": "de.wikipedia.org"
+    },
+    {
+      "title": "https://fr.wikipedia.org/wiki/ATT%26CK",
+      "url": "https://fr.wikipedia.org/wiki/ATT%26CK",
+      "publisher": "fr.wikipedia.org"
+    },
+    {
+      "title": "https://readmex.com/en-US/fortra/impacket/page-46e076549-5f41-4b4e-9516-21fca55be908",
+      "url": "https://readmex.com/en-US/fortra/impacket/page-46e076549-5f41-4b4e-9516-21fca55be908",
+      "publisher": "readmex.com"
+    },
+    {
+      "title": "https://pt.wikipedia.org/wiki/ATT%26CK",
+      "url": "https://pt.wikipedia.org/wiki/ATT%26CK",
+      "publisher": "pt.wikipedia.org"
+    }
+  ]
+}

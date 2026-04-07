@@ -1,0 +1,43 @@
+# Hipaa
+
+## Overview
+Hipaa is a cloud security tool that appears across cloud security workflows in this knowledge base. It is referenced as part of higher-level security analysis, investigation, monitoring, or validation activity rather than as an end in itself.
+
+## What It Is
+Hipaa is best understood as a cloud-security tool in this knowledge base. Its role is conceptual and system-facing rather than procedural: it gives analysts or defenders a structured way to examine evidence, model system behavior, or reason about security state.
+
+## How It Works
+Hipaa works by turning technical inputs into more interpretable outputs at the system level. Across the source skills, it appears as part of larger analysis, investigation, monitoring, or validation loops rather than as a standalone end state.
+
+## Core Concepts
+- cloud security
+- cspm
+- multi cloud
+- compliance
+- prowler
+- scoutsuite
+
+## Typical Workflow
+- Enable the built-in CSPM capabilities in each cloud provider for baseline posture assessment.
+- aws securityhub enable-security-hub --enable-default-standards
+- az security pricing create --name CloudPosture --tier standard
+- az security auto-provisioning-setting update --name default --auto-provision on
+- gcloud services enable securitycenter.googleapis.com
+
+## Use Cases
+- When establishing continuous security monitoring across AWS, Azure, and GCP environments
+- When compliance requirements demand automated posture assessment against CIS, SOC 2, or PCI DSS
+- When security teams need visibility into cloud misconfigurations across multiple accounts and subscriptions
+- When building a security operations workflow that detects and remediates drift from security baselines
+- When migrating workloads to the cloud and need to enforce security guardrails
+
+## Limitations
+- Output still depends on context, data quality, and surrounding analysis.
+- The tool should be interpreted as part of a broader workflow, not as a complete answer by itself.
+- Capabilities and visibility vary depending on environment, integrations, and available inputs.
+
+## Related Tools
+- And Compliance Monitoring, And NIST, And Workload Protection, AWS Security Hub, GCP Security Command Center, Microsoft Defender For Cloud, PCI DSS, Prowler
+
+## Sources
+- implementing-cloud-security-posture-management

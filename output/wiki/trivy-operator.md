@@ -1,0 +1,41 @@
+# Trivy Operator
+
+## Overview
+Trivy Operator is a devsecops tool that appears across devsecops workflows in this knowledge base. It is referenced as part of higher-level security analysis, investigation, monitoring, or validation activity rather than as an end in itself.
+
+## What It Is
+Trivy Operator is best understood as a devsecops tool in this knowledge base. Its role is conceptual and system-facing rather than procedural: it gives analysts or defenders a structured way to examine evidence, model system behavior, or reason about security state.
+
+## How It Works
+Trivy Operator works by turning technical inputs into more interpretable outputs at the system level. Across the source skills, it appears as part of larger analysis, investigation, monitoring, or validation loops rather than as a standalone end state.
+
+## Core Concepts
+- devsecops
+- cicd
+- trivy
+- container security
+- vulnerability scanning
+- secure sdlc
+
+## Typical Workflow
+- Set up a GitHub Actions workflow that builds a Docker image and scans it with Trivy before pushing to a container registry.
+- name: Container Security Scan
+- 'docker-compose*.yml'
+
+## Use Cases
+- When building Docker container images in CI/CD and needing automated vulnerability scanning before registry push
+- When establishing quality gates that prevent images with critical or high CVEs from reaching production
+- When compliance requirements mandate vulnerability scanning of all container images before deployment
+- When scanning IaC files (Dockerfiles, Kubernetes manifests) alongside container image scanning
+- When needing a single tool to scan OS packages, language-specific dependencies, and misconfigurations
+
+## Limitations
+- Output still depends on context, data quality, and surrounding analysis.
+- The tool should be interpreted as part of a broader workflow, not as a complete answer by itself.
+- Capabilities and visibility vary depending on environment, integrations, and available inputs.
+
+## Related Tools
+- And IaC, Filesystems, Grype, Harbor, Repos, Trivy, Trivy Action
+
+## Sources
+- scanning-containers-with-trivy-in-cicd

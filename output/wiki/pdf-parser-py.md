@@ -1,0 +1,47 @@
+# Pdf Parser Py
+
+## Overview
+Pdf Parser Py is a malware analysis tool that appears across malware analysis workflows in this knowledge base. It is referenced as part of higher-level security analysis, investigation, monitoring, or validation activity rather than as an end in itself.
+
+## What It Is
+Pdf Parser Py is best understood as a malware-analysis tool in this knowledge base. Its role is conceptual and system-facing rather than procedural: it gives analysts or defenders a structured way to examine evidence, model system behavior, or reason about security state.
+
+## How It Works
+Pdf Parser Py works by turning technical inputs into more interpretable outputs at the system level. Across the source skills, it appears as part of larger analysis, investigation, monitoring, or validation loops rather than as a standalone end state.
+
+## Core Concepts
+- malware analysis
+- pdf
+- peepdf
+- pdfid
+- pdf parser
+- static analysis
+- reverse engineering
+- dfir
+
+## Typical Workflow
+- 1. **Triage with pdfid**: Scan PDF for suspicious keywords (/JS, /JavaScript, /OpenAction, /Launch, /EmbeddedFile).
+- 2. **Interactive Analysis**: Open PDF in peepdf interactive mode to explore object structure.
+- 3. **Identify Suspicious Objects**: Locate objects containing JavaScript, streams, or encoded data.
+- 4. **Extract Content**: Dump suspicious streams and decode filters (FlateDecode, ASCIIHexDecode).
+- 5. **Deobfuscate JavaScript**: Analyze extracted JS for shellcode, heap sprays, or exploit code.
+- 6. **Check VirusTotal**: Use peepdf vtcheck to cross-reference file hash with AV detections.
+- 7. **Generate IOCs**: Extract URLs, domains, hashes, and shellcode signatures.
+
+## Use Cases
+- When triaging suspicious PDF attachments from phishing emails
+- During malware analysis of PDF-based exploit documents
+- When extracting embedded JavaScript, shellcode, or executables from PDFs
+- For forensic examination of weaponized document artifacts
+- When building detection signatures for PDF-based threats
+
+## Limitations
+- Output still depends on context, data quality, and surrounding analysis.
+- The tool should be interpreted as part of a broader workflow, not as a complete answer by itself.
+- Capabilities and visibility vary depending on environment, integrations, and available inputs.
+
+## Related Tools
+- CyberChef, Pdfid.py, Peepdf, Peepdf 3, VirusTotal
+
+## Sources
+- analyzing-malicious-pdf-with-peepdf

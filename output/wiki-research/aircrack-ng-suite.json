@@ -1,0 +1,154 @@
+{
+  "canonical_name": "Aircrack-ng Suite",
+  "aliases": [
+    "aircrack ng suite",
+    "aircrack-ng suite",
+    "Aircrack-ng"
+  ],
+  "classification": "Open-source wireless (802.11) security auditing toolkit",
+  "short_description": "A collection of command-line tools for monitoring, testing, and auditing Wi‑Fi networks, including packet capture, frame injection, and offline key recovery for WEP and WPA/WPA2‑PSK.",
+  "overview_notes": "Aircrack-ng is a long-standing, actively maintained suite focused on assessing Wi‑Fi security at the 802.11 MAC layer. The toolkit spans four main capability areas described by the project: monitoring (frame capture/export), attacking (e.g., replay, deauthentication, fake AP), testing (adapter/driver capability checks), and cracking (offline key recovery for WEP and WPA/WPA2‑PSK, including PMKID workflows). It is CLI-first, scriptable, and primarily used on Linux, with limited support on other platforms. Official docs emphasize driver and adapter compatibility for monitor mode and injection. While widely used in offensive testing, the suite is equally relevant for defenders validating wireless monitoring, WIDS/WIPS tuning, and policy controls such as Protected Management Frames (PMF/802.11w).",
+  "what_it_is_notes": "- A modular toolkit rather than a single program; core components include airmon-ng (monitor mode management), airodump-ng (802.11 frame capture and discovery), aireplay-ng (frame injection/replay), aircrack-ng (offline key recovery), airdecap-ng (decrypt captures with known keys), airbase-ng (fake AP/client attack lab tool), airolib-ng (PMK precomputation), and others. - Its cracking functionality targets WEP and WPA/WPA2‑PSK using captured handshakes or PMKIDs; the project highlights PMKID support and handling of captures that include 802.11w (PMF). - The suite is positioned for assessment; legality and authorization are stressed by the community and vendors.",
+  "how_it_works_notes": "- Operates at the 802.11 MAC layer using compatible wireless chipsets/drivers that support monitor mode and (for active tests) raw frame injection. - Passive discovery: airodump-ng captures management and data frames, enumerating BSSIDs, SSIDs, channels, cipher suites, and clients; results can be exported for downstream analysis/graphing. - Active tests: aireplay-ng crafts/transmits frames (e.g., replay, deauthentication) to assess network/client behavior and to facilitate capture of authentication material where permitted. - Offline key recovery: aircrack-ng computes candidate keys against captured WPA/WPA2 handshakes or PMKIDs, and against WEP IVs, verifying by deriving and comparing MICs/keys. - Fake AP/client emulation: airbase-ng can emulate AP/client roles to study client behavior and test defenses against rogue infrastructure.",
+  "inputs": [
+    "Live 802.11 frames from compatible Wi‑Fi adapters in monitor mode",
+    "Recorded capture files (pcap/pcapng/ivs) containing WEP IVs, EAPOL handshakes, or PMKIDs",
+    "Wordlists/dictionaries and (optionally) precomputed PMKs (airolib-ng) for WPA/WPA2‑PSK",
+    "Configuration data for test APs/clients (channels, BSSIDs/ESSIDs, cipher/auth suites)",
+    "Adapter/driver capabilities (monitor mode, injection) for validation tests"
+  ],
+  "outputs": [
+    "Capture files (pcap/pcapng/ivs) with wireless frames and metadata",
+    "Parsed text/CSV logs summarizing BSSIDs/clients/channels/cipher suites",
+    "Recovered keys (WEP, WPA/WPA2‑PSK) when passwords are weak and material is sufficient",
+    "Decrypted capture files (airdecap-ng) when keys are known",
+    "Graphs/visualizations via companion tools (e.g., airgraph-ng)"
+  ],
+  "core_concepts": [
+    "802.11 management/data/control frames and monitor mode",
+    "Frame injection/replay for behavior and resiliency testing",
+    "Offline verification of WEP and WPA/WPA2‑PSK credentials using EAPOL handshakes or PMKIDs",
+    "PMF/802.11w implications for deauthentication and action frames",
+    "Adapter/driver dependencies for capture and injection",
+    "Scriptable CLI workflows enabling integration with other tools"
+  ],
+  "typical_workflow": [
+    "Plan an authorized assessment scope and confirm regulatory compliance and change windows.",
+    "Validate adapter/driver support for monitor mode and injection; baseline RF environment.",
+    "Passively map the wireless environment (BSSIDs, channels, cipher/auth suites, clients) and export results for inventory comparison.",
+    "Capture authentication material (e.g., EAPOL handshakes or PMKIDs) during permitted tests, minimizing disruption and documenting triggers/controls.",
+    "Perform offline key-strength assessment against captured material to evaluate password policy effectiveness; prefer wordlists reflective of the environment and policy.",
+    "Validate defensive controls (WIDS/WIPS alerts, PMF/802.11w behavior, rogue AP detection) and document detections/response.",
+    "Summarize findings with emphasis on configuration hygiene, credential strength, segmentation, and user/device onboarding practices."
+  ],
+  "use_cases": [
+    "Auditing Wi‑Fi configurations (ciphers, AKMs, PMF, transition modes) across enterprise, guest, and IoT SSIDs",
+    "Validating WIDS/WIPS detections for frame injection, deauth attempts, fake APs, and anomalous management frames",
+    "Assessing credential strength and password policy for WPA/WPA2‑PSK using offline testing of authorized captures",
+    "Building wireless asset inventories (BSSID/ESSID/channel/cipher) and spotting unmanaged/rogue infrastructure",
+    "Testing adapter/driver capabilities for security operations labs and red/blue team readiness drills",
+    "Supporting migration assessments to WPA3 by inventorying transition modes and PMF enforcement while using external tools for SAE-focused workflows"
+  ],
+  "limitations": [
+    "Requires compatible wireless chipsets/drivers; many adapters do not support monitor mode or reliable injection, which constrains capabilities.",
+    "Active techniques (e.g., deauthentication, fake AP) can be disruptive and unlawful without explicit authorization; testing windows and safety checks are essential.",
+    "Windows support is limited; official docs note additional, user-supplied DLL requirements and lack of support, making Linux the practical platform of record.",
+    "Cracking effectiveness is bounded by password entropy and capture quality; strong, random passphrases and enterprise EAP methods are not practically attackable via these offline PSK workflows.",
+    "Modern protections (e.g., Protected Management Frames/802.11w) mitigate some management-frame attacks and can alter test outcomes; WPA3‑SAE further reduces viability of traditional handshake capture attacks.",
+    "The project’s core cracking focus is WEP and WPA/WPA2‑PSK; for WPA3‑SAE and advanced hash formats, practitioners commonly integrate external tools."
+  ],
+  "related_tools": [
+    {
+      "name": "hcxdumptool/hcxtools",
+      "relationship": "Often used to capture/convert WPA{2,3} handshakes/PMKIDs to formats consumed by GPU crackers; complements Aircrack‑ng’s capture/cracking workflows."
+    },
+    {
+      "name": "Hashcat",
+      "relationship": "GPU-accelerated offline password cracker frequently used with WPA/WPA2/WPA3‑SAE material exported from Aircrack‑ng or hcxtools."
+    },
+    {
+      "name": "Kismet",
+      "relationship": "Passive wireless IDS/wardriving tool used for continuous RF monitoring; complements airodump‑ng for long-term discovery."
+    },
+    {
+      "name": "Wireshark",
+      "relationship": "Protocol analyzer used to inspect 802.11 captures collected by airodump‑ng and to validate handshake/PMKID content."
+    },
+    {
+      "name": "Bettercap",
+      "relationship": "Network attack/monitoring framework that includes Wi‑Fi client/AP manipulation; overlaps with some airbase‑ng/aireplay‑ng scenarios."
+    },
+    {
+      "name": "Wifite",
+      "relationship": "Wrapper that automates Aircrack‑ng and related tools for streamlined testing; not a replacement for controlled, scoped assessments."
+    }
+  ],
+  "evidence_gaps": [
+    "Official documentation highlights WPA1/2‑PSK and PMKID support but is sparse on first‑party, current details about WPA3‑SAE cracking capabilities within aircrack‑ng itself; many modern SAE workflows rely on hcxtools/hashcat. Clarify exact, current SAE support status in future updates.",
+    "Release cadence: the website prominently lists version 1.7 (May 10, 2022) while development continues on GitHub; verify future stable releases for updated capabilities.",
+    "Documentation pages for some subtools (e.g., airbase‑ng) are noted as under development or partially complete, limiting authoritative detail on lesser‑used flags."
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "Aircrack-ng — Main documentation (tool list, capabilities)",
+      "url": "https://www.aircrack-ng.org/documentation.html",
+      "publisher": "Aircrack-ng Project"
+    },
+    {
+      "title": "Aircrack-ng — Project homepage (capability areas, platforms, release note, PMKID mention)",
+      "url": "https://www.aircrack-ng.org/index.html",
+      "publisher": "Aircrack-ng Project"
+    },
+    {
+      "title": "Aircrack-ng — Wiki main page (capabilities and downloads)",
+      "url": "https://wiki.aircrack-ng.org/",
+      "publisher": "Aircrack-ng Project"
+    },
+    {
+      "title": "Aircrack-ng — GitHub repository (project overview, docs pointer)",
+      "url": "https://github.com/aircrack-ng/aircrack-ng",
+      "publisher": "GitHub / Aircrack-ng Project"
+    },
+    {
+      "title": "Aircrack-ng — Airbase‑ng documentation (fake AP/client emulation; doc status)",
+      "url": "https://www.aircrack-ng.org/doku.php?id=airbase-ng",
+      "publisher": "Aircrack-ng Project"
+    },
+    {
+      "title": "Aircrack-ng — Resources (official links, documentation hubs)",
+      "url": "https://www.aircrack-ng.org/resources.html",
+      "publisher": "Aircrack-ng Project"
+    },
+    {
+      "title": "Protected Management Frames (IEEE 802.11w) — IEEE SA page",
+      "url": "https://standards.ieee.org/ieee/802.11w/3736",
+      "publisher": "IEEE Standards Association"
+    },
+    {
+      "title": "Configure 802.11w (PMF) on Cisco WLC — implications for deauth/disassoc protection",
+      "url": "https://www.cisco.com/c/en/us/support/docs/wireless-mobility/wireless-lan-wlan/212576-configure-802-11w-management-frame-prote.html",
+      "publisher": "Cisco"
+    },
+    {
+      "title": "Wi‑Fi Alliance introduces Wi‑Fi CERTIFIED WPA3 (press announcement)",
+      "url": "https://www.globenewswire.com/news-release/2018/06/26/1529297/0/en/Wi-Fi-Alliance-introduces-Wi-Fi-CERTIFIED-WPA3-security.html",
+      "publisher": "Wi‑Fi Alliance via GlobeNewswire"
+    },
+    {
+      "title": "https://en.wikipedia.org/wiki/Aircrack-ng",
+      "url": "https://en.wikipedia.org/wiki/Aircrack-ng",
+      "publisher": "en.wikipedia.org"
+    },
+    {
+      "title": "https://es.wikipedia.org/wiki/Aircrack-ng",
+      "url": "https://es.wikipedia.org/wiki/Aircrack-ng",
+      "publisher": "es.wikipedia.org"
+    },
+    {
+      "title": "https://www.cyberglossary.study/aircrack-ng",
+      "url": "https://www.cyberglossary.study/aircrack-ng",
+      "publisher": "cyberglossary.study"
+    }
+  ]
+}

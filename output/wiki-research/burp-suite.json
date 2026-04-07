@@ -1,0 +1,156 @@
+{
+  "canonical_name": "Burp Suite",
+  "aliases": [
+    "burp suite",
+    "Burp",
+    "PortSwigger Burp Suite"
+  ],
+  "classification": "Commercial (with free Community edition) web application security testing and DAST platform",
+  "short_description": "An intercepting proxy–based toolkit and dynamic scanner for discovering and analyzing web application and API security issues across desktop and enterprise (DAST) editions.",
+  "overview_notes": "Burp Suite is a family of web security testing products from PortSwigger, centered on an intercepting HTTP(S)/WebSocket proxy and a web vulnerability scanner. Desktop editions (Community and Professional) provide integrated manual tools such as Proxy, Repeater, Intruder, Sequencer, Decoder, Comparer, Logger, and more, while Burp Suite DAST focuses on scalable, automated scanning for organizations. ([portswigger.net](https://portswigger.net/burp/documentation/desktop))",
+  "what_it_is_notes": "- A modular toolkit for hands-on testers (Professional/Community) and a DAST platform (Burp Suite DAST) for automated, at-scale scanning. \n- Key components include Burp Proxy (traffic interception/modification), Burp Scanner (active and passive checks with browser-powered crawling), and Burp Collaborator for out‑of‑band application security testing (OAST). \n- Extensibility is provided via the BApp Store and extension APIs for custom checks and workflows. ([portswigger.net](https://portswigger.net/burp/documentation/desktop))",
+  "how_it_works_notes": "- Traffic flows from a browser, mobile app, or other client through Burp Proxy. Burp dynamically generates and uses its own root CA certificate to intercept TLS and analyze HTTP(S) and WebSocket messages. ([portswigger.net](https://portswigger.net/burp/documentation/desktop)) \n- Burp Scanner augments manual testing with crawl-and-audit pipelines and runs passive checks (observing normal traffic) and active checks (sending crafted requests) to identify vulnerabilities; results are shown in the UI and can be reported. ([portswigger.net](https://portswigger.net/burp/documentation/scanner/auditing.html?utm_source=openai)) \n- Collaborator injects unique callback payloads and polls a dedicated server to detect otherwise invisible, out‑of‑band interactions (e.g., DNS/HTTP callbacks). ([portswigger.net](https://portswigger.net/burp/documentation/collaborator)) \n- Editions differ: Professional exposes the full desktop toolkit and automated scanning; Community focuses on manual tooling; DAST provides enterprise-wide automated scanning with CI/CD and management features. ([portswigger.net](https://portswigger.net/burp/documentation/desktop))",
+  "inputs": [
+    "HTTP/S requests and responses (including headers, bodies, cookies)",
+    "WebSocket messages",
+    "Target scope definitions and scan configurations",
+    "Authentication materials (sessions, tokens, credentials) for authorized testing",
+    "Custom payloads and insertion points (manual tools and scanner)",
+    "Project settings, CA certificates, and proxy settings",
+    "Extension modules and custom checks (BApps/BChecks)"
+  ],
+  "outputs": [
+    "Interactive traffic histories (HTTP and WebSocket) and site maps",
+    "Identified security issues with evidence and remediation guidance",
+    "Scan results from passive and active checks",
+    "Sequence analyses of tokens (entropy/quality)",
+    "Out-of-band interaction logs via Collaborator",
+    "Exportable reports (e.g., HTML/XML in Professional) and dashboards (DAST)"
+  ],
+  "core_concepts": [
+    "Intercepting proxy for HTTP(S)/WebSockets",
+    "Active vs. passive scanning and browser-powered crawling",
+    "Insertion points and audit coverage",
+    "Out-of-band testing (OAST) with Burp Collaborator",
+    "Scope management and project-based testing",
+    "Integrated manual tools: Repeater, Intruder, Sequencer, Decoder, Comparer, Logger",
+    "Extensibility via BApp Store, extensions, and custom scan checks (BChecks/Bambdas)",
+    "Embedded browser and client-side testing helpers (e.g., DOM Invader)",
+    "Automation and APIs (desktop/DAST)"
+  ],
+  "typical_workflow": [
+    "Define the authorized scope and configure the client (browser or device) to proxy through Burp.",
+    "Map the application and analyze the attack surface using Proxy, Target, and the embedded crawler as appropriate.",
+    "Augment manual exploration with Burp Scanner’s passive/active audits for in-scope content.",
+    "Iteratively probe endpoints and parameters with Repeater/Intruder; review tokens with Sequencer; compare and decode data with Comparer/Decoder.",
+    "Leverage extensions (BApps/BChecks) to extend checks or streamline repetitive tasks.",
+    "Aggregate findings, prioritize issues, and export reports or integrate results into organizational workflows (DAST/CI/CD)."
+  ],
+  "use_cases": [
+    "Authorized penetration testing and security assessments of web applications and APIs",
+    "Bug bounty and vulnerability research against permitted targets",
+    "Dynamic application security testing (DAST) at scale with CI/CD integration",
+    "Verification of authentication, session management, and access control behavior",
+    "Client-side and DOM-focused testing (e.g., DOM XSS) using built-in helpers",
+    "Mobile app traffic analysis by proxying device traffic through Burp for authorized tests",
+    "Regression testing of known issues or classes of issues across releases",
+    "Out-of-band detection of blind/secondary-vectored vulnerabilities via Collaborator"
+  ],
+  "limitations": [
+    "Must only be used with explicit authorization; active testing can disrupt fragile targets. ([portswigger.net](https://portswigger.net/burp/documentation))",
+    "Community Edition lacks automated scanning and certain features (e.g., Collaborator UI), whereas Professional includes full desktop capabilities; DAST is designed for organizational-scale automation. ([portswigger.net](https://portswigger.net/burp/documentation/desktop))",
+    "False positives/negatives are possible; human validation remains necessary. ([portswigger.net](https://portswigger.net/burp/documentation/scanner/auditing.html?utm_source=openai))",
+    "Intercepting TLS requires installing/trusting Burp’s CA certificate; mobile apps with certificate pinning or additional transport protections may block interception without additional, app-specific test accommodations. ([portswigger.net](https://portswigger.net/burp/documentation/desktop/tools/proxy/manage-certificates?utm_source=openai))",
+    "Resource usage and scan noise must be tuned to target risk tolerance and performance; misconfiguration can lead to excessive requests.",
+    "Coverage varies with authentication state, application workflows, and anti-automation controls; complex single-page apps may require guided interaction."
+  ],
+  "related_tools": [
+    {
+      "name": "OWASP ZAP",
+      "relationship": "Open-source alternative intercepting proxy and scanner for web apps; similar core concepts (proxy, crawler, automated and passive scanning). ([en.wikipedia.org](https://en.wikipedia.org/wiki/ZAP_%28software%29?utm_source=openai))"
+    },
+    {
+      "name": "mitmproxy",
+      "relationship": "Open-source intercepting proxy focused on traffic inspection/manipulation; complements Burp when scripting-heavy or headless workflows are needed. ([mitmproxy.org](https://www.mitmproxy.org/?utm_source=openai))"
+    },
+    {
+      "name": "Fiddler",
+      "relationship": "Web debugging proxy commonly used for HTTP(S) troubleshooting; not a security scanner but similar proxying role. ([fiddlerbook.com](https://fiddlerbook.com/Fiddler/help/hookup.asp?utm_source=openai))"
+    },
+    {
+      "name": "Postman",
+      "relationship": "API client for functional testing that can complement Burp’s security-focused traffic interception and scanning."
+    },
+    {
+      "name": "Nuclei",
+      "relationship": "Template-based vulnerability scanner often used alongside Burp to codify checks and run them at scale."
+    }
+  ],
+  "evidence_gaps": [
+    "The local evidence packet emphasizes iOS runtime tooling (Frida, Objection) that are not native Burp components; Burp primarily proxies and analyzes traffic rather than providing general-purpose mobile runtime instrumentation. Official docs confirm mobile proxying and TLS interception but do not extend to runtime hooking. ([portswigger.net](https://portswigger.net/burp/documentation/desktop/mobile?utm_source=openai))",
+    "Exact feature granularity evolves across releases (e.g., tool names and edition boundaries); users should verify current edition capabilities against PortSwigger’s product comparison and desktop documentation. ([portswigger.net](https://portswigger.net/burp/documentation/desktop))"
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "Burp Suite documentation (product and edition overview)",
+      "url": "https://portswigger.net/burp/documentation",
+      "publisher": "PortSwigger"
+    },
+    {
+      "title": "Burp Suite documentation: Desktop editions (tools index and Pro-only markers)",
+      "url": "https://portswigger.net/burp/documentation/desktop",
+      "publisher": "PortSwigger"
+    },
+    {
+      "title": "Burp Suite DAST vs. Professional (feature comparison and outputs)",
+      "url": "https://portswigger.net/burp/dast/resources/dast-vs-professional",
+      "publisher": "PortSwigger"
+    },
+    {
+      "title": "Burp Scanner (overview of passive/active checks and coverage)",
+      "url": "https://portswigger.net/burp/documentation/scanner",
+      "publisher": "PortSwigger"
+    },
+    {
+      "title": "Auditing with Burp Scanner (passive vs. active and JavaScript analysis)",
+      "url": "https://portswigger.net/burp/documentation/scanner/auditing.html",
+      "publisher": "PortSwigger"
+    },
+    {
+      "title": "Managing CA certificates (TLS interception model)",
+      "url": "https://portswigger.net/burp/documentation/desktop/tools/proxy/manage-certificates",
+      "publisher": "PortSwigger"
+    },
+    {
+      "title": "Mobile testing (proxying mobile traffic; pinning caveats)",
+      "url": "https://portswigger.net/burp/documentation/desktop/mobile",
+      "publisher": "PortSwigger"
+    },
+    {
+      "title": "Burp Collaborator (OAST concept and workflow)",
+      "url": "https://portswigger.net/burp/documentation/collaborator",
+      "publisher": "PortSwigger"
+    },
+    {
+      "title": "BApp Store (extensions ecosystem)",
+      "url": "https://portswigger.net/bappstore",
+      "publisher": "PortSwigger"
+    },
+    {
+      "title": "Burp Suite (encyclopedic overview)",
+      "url": "https://en.wikipedia.org/wiki/Burp_Suite",
+      "publisher": "Wikipedia"
+    },
+    {
+      "title": "https://github.com/PortSwigger/active-scan-plus-plus",
+      "url": "https://github.com/PortSwigger/active-scan-plus-plus",
+      "publisher": "github.com"
+    },
+    {
+      "title": "https://portswigger.net/burp/documentation/desktop/tutorials/augmenting-manual-testing-using-burp-scanner",
+      "url": "https://portswigger.net/burp/documentation/desktop/tutorials/augmenting-manual-testing-using-burp-scanner",
+      "publisher": "portswigger.net"
+    }
+  ]
+}

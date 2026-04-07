@@ -1,0 +1,44 @@
+# Sysinternals Handle
+
+## Overview
+Sysinternals Handle is a malware analysis tool that appears across ransomware defense workflows in this knowledge base. It is referenced as part of higher-level security analysis, investigation, monitoring, or validation activity rather than as an end in itself.
+
+## What It Is
+Sysinternals Handle is best understood as a ransomware-defense tool in this knowledge base. Its role is conceptual and system-facing rather than procedural: it gives analysts or defenders a structured way to examine evidence, model system behavior, or reason about security state.
+
+## How It Works
+Sysinternals Handle works by turning technical inputs into more interpretable outputs at the system level. Across the source skills, it appears as part of larger analysis, investigation, monitoring, or validation loops rather than as a standalone end state.
+
+## Core Concepts
+- ransomware
+- kill switch
+- mutex
+- detection
+- WannaCry
+- malware analysis
+- ransomware defense
+
+## Typical Workflow
+- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Ransomware creates a named mutex at startup
+- If mutex already exists → another instance is running → exit
+- Defense: Pre-create the mutex to prevent execution
+- Conti:        kasKDJSAFJauisiudUASIIQWUA82
+
+## Use Cases
+- Analyzing a ransomware sample to determine if it contains a kill switch mechanism (mutex, domain, registry)
+- Deploying proactive mutex vaccination across endpoints to prevent known ransomware families from executing
+- Monitoring DNS for kill switch domain lookups that indicate ransomware attempting to check before encrypting
+- During incident response to quickly determine if a ransomware variant can be stopped by activating its kill switch
+- Building detection signatures for ransomware mutex creation events using Sysmon or EDR telemetry
+
+## Limitations
+- Output still depends on context, data quality, and surrounding analysis.
+- The tool should be interpreted as part of a broader workflow, not as a complete answer by itself.
+- Capabilities and visibility vary depending on environment, integrations, and available inputs.
+
+## Related Tools
+- ANY.RUN, Malware Mutex, PassiveDNS, Sysmon, Velociraptor
+
+## Sources
+- implementing-ransomware-kill-switch-detection

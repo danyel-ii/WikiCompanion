@@ -1,0 +1,171 @@
+{
+  "canonical_name": "Volatility (Volatility Framework)",
+  "aliases": [
+    "Volatility",
+    "Volatility Framework",
+    "Volatility 3",
+    "Vol3"
+  ],
+  "classification": "Open-source memory forensics framework used in incident response and malware analysis",
+  "short_description": "Volatility is a Python-based framework for extracting and analyzing digital artifacts from volatile memory snapshots across Windows, Linux, and macOS; Volatility 3 is a modern rewrite that uses symbol tables instead of static profiles and a layered architecture to parse diverse memory image formats.",
+  "overview_notes": "The Volatility Foundation maintains Volatility as a widely used platform for above-OS memory analysis in DFIR and malware workflows. In 2019 the Foundation released Volatility 3, a ground-up rewrite addressing architectural and performance limitations of Volatility 2 and introducing a new licensing model (Volatility Software License). Volatility 3 aims to fully replace Volatility 2 for modern investigations, with ongoing releases and a growing community plugin ecosystem.",
+  "what_it_is_notes": "- A cross-platform, extensible framework for post-acquisition analysis of RAM images that reveals runtime system state independent of the compromised system.\n- Implements a plugin model for common forensic tasks (process and thread enumeration, module/DLL listing, handle and registry inspection, network artifact parsing, keyword/indicator scanning, object recovery, etc.).\n- Volatility 3 replaces Volatility 2’s OS-specific profiles with symbol tables (Intermediate Symbol Files, ISF) and formalizes a context/layer/object abstraction for image parsing.",
+  "how_it_works_notes": "- Layered architecture: raw image data and format-specific layers (e.g., AVML, LiME, Windows crash/hibernation) stack under CPU/MMU translation layers (e.g., Intel) to reconstruct virtual/physical address spaces within a Context container. Plugins request reads through these layers, which transparently translate addresses and combine sources when needed.\n- Symbols and object model: ISF symbol tables provide type information for kernel/user structures; objects are materialized from symbols to traverse OS internals. Windows symbols can be fetched/generated automatically; Linux/macOS ISFs are typically generated with dwarf2json.\n- Plugins operate against reconstructed memory views and symbolized structures to extract artifacts. Community plugins can be added without modifying core.\n- Analysis is host-agnostic: extraction occurs offline from the memory image, not by executing code on the suspect system.",
+  "inputs": [
+    "Volatile memory images from Windows, Linux, and macOS systems",
+    "Supported formats via layers (examples include raw/padded dumps, Windows crash dumps, Windows hibernation, LiME, AVML, certain hypervisor/VM formats as available through corresponding layers)",
+    "Associated symbol packs or ISFs (Windows, macOS, Linux)"
+  ],
+  "outputs": [
+    "Structured listings of processes/threads and parent-child trees",
+    "Loaded kernel modules, drivers, and user-mode modules/DLLs",
+    "Kernel/user object enumerations (handles, mutexes, sections)",
+    "Network-related artifacts where supported (e.g., connection tables on specific Windows versions)",
+    "Registry and configuration artifacts (where available in memory)",
+    "YARA-based hit reports over memory regions",
+    "Recovered data structures and selected dumps of memory regions/objects for offline examination"
+  ],
+  "core_concepts": [
+    "Offline, above-OS memory analysis",
+    "Context, layers, and translation (address-space reconstruction)",
+    "Symbol tables (ISF) replacing static profiles",
+    "Plugin-based extensibility for artifacts and OS support",
+    "Independence from live system state (resistant to rootkit hiding in live tools)",
+    "Cross-OS kernel data structure traversal"
+  ],
+  "typical_workflow": [
+    "Acquire memory from target system using a trusted acquisition tool, preserving chain of custody.",
+    "Prepare or obtain matching symbol tables (Windows automatic fetch/generation; Linux/macOS via dwarf2json or curated packs).",
+    "Load image in Volatility 3; framework auto-stacks relevant layers for the format.",
+    "Run foundational discovery plugins (system/version info, process/module enumeration) to validate parsing and scope analysis.",
+    "Pivot to targeted plugins (e.g., process scans, injected-code heuristics, registry- or credential-relevant artifacts, YARA scans).",
+    "Correlate with other evidence sources (disk, telemetry, network) and export selected objects/regions for deeper analysis.",
+    "Document findings with timestamps, offsets, and tool/version metadata."
+  ],
+  "use_cases": [
+    "Malware and rootkit investigations where in-memory state reveals injected code, hollowed processes, hooks, or hidden objects.",
+    "Rapid incident response triage to enumerate processes, drivers, and connections without trusting the live OS.",
+    "Ransomware investigations to identify responsible processes, keys present in memory, or runtime configuration artifacts.",
+    "Credential artifact hunting (e.g., LSASS-related memory regions) subject to legal/ethical constraints.",
+    "Detection and study of fileless or LOLBin-based techniques that primarily reside in memory.",
+    "Validation and research of boot- or kernel-level tampering as reflected in runtime structures (with deeper boot/firmware analysis requiring dedicated tools)."
+  ],
+  "limitations": [
+    "Symbol dependency: Accurate parsing requires correct symbol tables; Windows symbols are often automated, but Linux/macOS usually need custom ISFs via dwarf2json, and kernel variance can impede analysis.",
+    "Coverage variations: Some plugins target specific OS versions or have limited functionality depending on kernel changes; parity with Volatility 2 has improved but not every legacy behavior maps 1:1.",
+    "Image-format constraints: Certain hibernation/crash/VM formats and very new OS builds may need updated layers or symbols; unsupported formats require conversion or alternative acquisition.",
+    "Anti-forensics and noise: Memory compression, paging, and deliberate tampering can obscure artifacts; scans may yield false positives/negatives.",
+    "Operational boundaries: Volatility analyzes acquired memory; it does not perform acquisition itself, and legal/privacy considerations govern what can be extracted or reviewed.",
+    "Performance and resource use: Large images and symbol caching can be time- and memory-intensive, especially on first runs or with broad scans."
+  ],
+  "related_tools": [
+    {
+      "name": "WinPmem",
+      "relationship": "Memory acquisition for Windows; produces images Volatility can analyze."
+    },
+    {
+      "name": "AVML",
+      "relationship": "Microsoft’s acquisition tool for Linux; Volatility 3 has an AVML layer for parsing resulting images."
+    },
+    {
+      "name": "LiME",
+      "relationship": "Linux Memory Extractor; Volatility supports LiME-formatted images via a dedicated layer."
+    },
+    {
+      "name": "DumpIt",
+      "relationship": "Windows memory acquisition; outputs compatible raw images."
+    },
+    {
+      "name": "dwarf2json",
+      "relationship": "Volatility Foundation tool to generate Linux/macOS ISF symbol tables consumed by Volatility 3."
+    },
+    {
+      "name": "MemProcFS",
+      "relationship": "Alternative memory forensics/analysis environment; often used alongside or as a complement to Volatility."
+    },
+    {
+      "name": "Rekall",
+      "relationship": "Alternative/open-source memory forensics framework historically related to Volatility 2 lineage."
+    },
+    {
+      "name": "Sysmon",
+      "relationship": "Host telemetry source; Volatility findings are often correlated with Sysmon/Event Logs."
+    },
+    {
+      "name": "YARA",
+      "relationship": "Pattern-matching engine leveraged by Volatility’s yarascan plugin for indicator hunting."
+    },
+    {
+      "name": "Cuckoo Sandbox",
+      "relationship": "Dynamic malware analysis environment; memory dumps from sandbox VMs can be analyzed with Volatility."
+    }
+  ],
+  "evidence_gaps": [
+    "A fully authoritative, consolidated matrix of all image formats and OS build/version support in Volatility 3 is dispersed across code/doc modules; practitioners should verify format and plugin support per release.",
+    "Public documentation confirms Volatility 3 ‘parity’ with Volatility 2 at a high level, but precise feature-by-feature parity status and deprecations vary across versions and plugins.",
+    "UEFI/bootkit-specific analysis is not a primary focus of Volatility and may require specialized tools; Volatility’s role is indirect via kernel/runtime artifacts."
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "Volatility 3 GitHub (README, symbols, license, support)",
+      "url": "https://github.com/volatilityfoundation/volatility3",
+      "publisher": "Volatility Foundation (GitHub)"
+    },
+    {
+      "title": "Volatility 3 Documentation – Basics (context, layers, stacking)",
+      "url": "https://volatility3.readthedocs.io/en/latest/basics.html",
+      "publisher": "Read the Docs / Volatility Foundation"
+    },
+    {
+      "title": "Volatility 3 Documentation – Layers (crash/AVML/etc.)",
+      "url": "https://volatility3.readthedocs.io/en/latest/volatility3.framework.layers.html",
+      "publisher": "Read the Docs / Volatility Foundation"
+    },
+    {
+      "title": "Volatility Foundation – Official parity release announcement for Volatility 3",
+      "url": "https://volatilityfoundation.org/announcing-the-official-parity-release-of-volatility-3/",
+      "publisher": "The Volatility Foundation"
+    },
+    {
+      "title": "Volatility Foundation – FAQ (project background; format/OS context)",
+      "url": "https://volatilityfoundation.org/frequently-asked-questions/",
+      "publisher": "The Volatility Foundation"
+    },
+    {
+      "title": "dwarf2json (generate Linux/macOS ISF symbol tables)",
+      "url": "https://github.com/volatilityfoundation/dwarf2json",
+      "publisher": "Volatility Foundation (GitHub)"
+    },
+    {
+      "title": "Volatility 3 Documentation – Interfaces (context, objects, symbols)",
+      "url": "https://volatility3.readthedocs.io/en/latest/volatility3.framework.interfaces.context.html",
+      "publisher": "Read the Docs / Volatility Foundation"
+    },
+    {
+      "title": "Volatility 3 Documentation – Objects interface (object model)",
+      "url": "https://volatility3.readthedocs.io/en/latest/volatility3.framework.interfaces.objects.html",
+      "publisher": "Read the Docs / Volatility Foundation"
+    },
+    {
+      "title": "Volatility Foundation – Community3 repository (community plugins)",
+      "url": "https://github.com/volatilityfoundation/community3",
+      "publisher": "Volatility Foundation (GitHub)"
+    },
+    {
+      "title": "https://cybersecuritymaster.it/wp-content/uploads/2022/02/memory_forensics.pdf",
+      "url": "https://cybersecuritymaster.it/wp-content/uploads/2022/02/memory_forensics.pdf",
+      "publisher": "cybersecuritymaster.it"
+    },
+    {
+      "title": "https://en.wikipedia.org/wiki/Volatility_%28software%29",
+      "url": "https://en.wikipedia.org/wiki/Volatility_%28software%29",
+      "publisher": "en.wikipedia.org"
+    },
+    {
+      "title": "https://www.mnin.org/",
+      "url": "https://www.mnin.org/",
+      "publisher": "mnin.org"
+    }
+  ]
+}

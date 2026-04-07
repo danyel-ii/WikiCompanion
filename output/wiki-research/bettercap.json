@@ -1,0 +1,155 @@
+{
+  "canonical_name": "Bettercap",
+  "aliases": [
+    "bettercap"
+  ],
+  "classification": "offensive-security toolkit (network and wireless)",
+  "short_description": "An extensible, cross‑platform network attack and reconnaissance framework for 802.11 Wi‑Fi, Ethernet/IPv4/IPv6, BLE, HID, and CAN‑bus, featuring MITM components, sniffing, spoofing, and scriptable automation via caplets.",
+  "overview_notes": "Bettercap is positioned as a general‑purpose, interactive framework (“Swiss Army knife”) to perform network reconnaissance and active manipulation across wired and wireless mediums. It provides modular capabilities for Wi‑Fi scanning, deauthentication, PMKID and WPA/WPA2/WPA3 handshake capture, rogue AP beacon injection, Ethernet MITM (ARP/DNS/NDP/DHCPv6 spoofing), packet/TCP/HTTP(S) proxies, credential harvesting via sniffing, BLE discovery and interaction, HID wireless attacks, and a REST/web UI. Its behavior is orchestrated with caplets (scripts) and an interactive console. These capabilities make it common in red‑team assessments, wireless security testing, and lab research, but it is not a network QoS or traffic‑shaping utility per se. ([github.com](https://github.com/bettercap/bettercap?utm_source=openai))",
+  "what_it_is_notes": "- A Go‑based, portable framework for reconnaissance and MITM attacks across multiple protocols and radios, exposing modules (wifi, net.*, arp.spoof, dns.spoof, http(s).proxy, ble, hid, can, etc.) and a REST/web UI.  - Scriptable through “caplets” to automate multi‑stage scenarios (e.g., start spoofers, enable sniffers, apply proxy scripts).  - Provides both passive (sniffing, recon) and active (spoofing, deauth, rogue AP) mechanisms. ([github.com](https://github.com/bettercap/bettercap?utm_source=openai))",
+  "how_it_works_notes": "- Interface and modules: Users select a network interface (Ethernet or a Wi‑Fi NIC with monitor/injection support). Modules operate within link‑layer and network‑layer contexts (e.g., wifi.recon for channel‑hopping scans; arp.spoof/dns.spoof/ndp.spoof for MITM; net.sniff for capture/filtering/fuzzing).  - Wireless: The Wi‑Fi module uses monitor mode to enumerate APs/clients, perform deauthentication, capture WPA/WPA2/WPA3 handshakes and PMKID material, and inject management beacons to create rogue APs.  - Application‑layer interception: HTTP/HTTPS proxies and scripts/caplets can modify or observe application traffic within the limits imposed by modern browser defenses (e.g., HSTS).  - Automation and control: Caplets coordinate modules and proxies; a REST API and web UI expose telemetry and control for orchestration. ([bettercap.org](https://www.bettercap.org/modules/wifi/?utm_source=openai))",
+  "inputs": [
+    "Network interfaces (Ethernet, Wi‑Fi with monitor/injection capability) and associated drivers",
+    "Privileges to place interfaces in required modes and perform spoofing/injection",
+    "Target selection parameters (e.g., BSSID/ESSID, channels, IP ranges)",
+    "Wordlists or rules for specific auth tests (e.g., Wi‑Fi auth wordlist attacks)",
+    "Caplets and proxy scripts to define automated behaviors",
+    "Optional: certificates/keys for interception labs, where lawful and controlled"
+  ],
+  "outputs": [
+    "Live inventories of hosts, APs, clients, BLE devices, and services",
+    "Packet captures (pcap) and structured logs from sniffer and proxies",
+    "Recovered metadata and credentials from insecure protocols",
+    "Events/metrics via REST API and web UI",
+    "Artifacts from Wi‑Fi operations (e.g., WPA/PMKID captures)"
+  ],
+  "core_concepts": [
+    "Modular MITM framework (ARP/DNS/NDP/DHCPv6 spoofing)",
+    "Wi‑Fi reconnaissance and attack primitives (scan, deauth, PMKID, handshake capture, rogue beacons)",
+    "Sniffing and fuzzing (BPF/regex filters)",
+    "Scriptable automation with caplets",
+    "Application‑layer proxies (HTTP/HTTPS) with pluggable scripts",
+    "Limitations imposed by modern defenses (e.g., HSTS; WPA3/PMF management‑frame protection)",
+    "Cross‑medium coverage (Ethernet/IP, 802.11, BLE, HID, CAN‑bus)"
+  ],
+  "typical_workflow": [
+    "Define lawful assessment scope and obtain authorization for active testing.",
+    "Select interface(s); for Wi‑Fi, ensure monitor and injection capabilities are supported by the NIC/driver.",
+    "Use recon modules to enumerate the environment (APs/clients, IP hosts, BLE devices).",
+    "Optionally initiate controlled MITM (ARP/DNS/NDP spoofing) or Wi‑Fi actions (targeted deauth, channel announcements, rogue beaconing) to observe defensive controls and user experience.",
+    "Capture and analyze traffic and events via net.sniff and proxies; persist artifacts (pcap, logs, handshakes/PMKIDs).",
+    "Automate multi‑stage scenarios with caplets and monitor/steer via the REST API or web UI.",
+    "Report only aggregated, approved findings; preserve chain‑of‑custody for captured evidence."
+  ],
+  "use_cases": [
+    "Wireless security assessment of WPA2/WPA3 deployments, including validation of Protected Management Frames (PMF) resilience and WIDS/WIPS coverage",
+    "Red‑team or adversary emulation of local‑network MITM to test detection/response (ARP/DNS spoofing, credential harvesting on insecure services)",
+    "Rogue AP/beacon and deauthentication simulations to validate enterprise wireless policy enforcement and user awareness",
+    "Controlled lab research on HTTPS interception behaviors and modern browser protections (HSTS) without targeting production users",
+    "Inventory and monitoring of local subnets and BLE surroundings during onsite security evaluations",
+    "Integration into automated testbeds via REST/web UI and caplets for repeatable scenarios"
+  ],
+  "limitations": [
+    "Not a QoS or traffic‑shaping tool; bandwidth throttling is outside its primary feature set.",
+    "Active operations (spoofing, deauth, rogue beacons) are intrusive, often illegal without authorization, and easily trigger WIDS/WIPS and endpoint/network alerts.",
+    "Modern browsers and sites with HTTPS‑Only policies and HSTS (including preload lists) prevent downgrade/sslstrip‑style interception in most real‑world scenarios.",
+    "WPA3 and WPA2 deployments with Protected Management Frames (PMF/802.11w) substantially mitigate deauthentication and related management‑frame attacks, limiting Evil Twin efficacy.",
+    "Wi‑Fi features require compatible hardware/drivers supporting monitor mode and packet injection; platform support varies.",
+    "Network segmentation, certificate pinning, and encrypted application protocols limit credential harvesting via passive sniffing.",
+    "Running as root/admin and manipulating network stacks may impact system/network stability in production environments."
+  ],
+  "related_tools": [
+    {
+      "name": "Aircrack‑ng suite",
+      "relationship": "Adjacent Wi‑Fi assessment toolkit (handshake capture, cracking, deauth); often compared or combined with Bettercap for wireless testing."
+    },
+    {
+      "name": "Ettercap",
+      "relationship": "Legacy MITM/sniffing tool for Ethernet/IP; shares spoofing/sniffing goals but lacks Bettercap’s broader radio support and caplets."
+    },
+    {
+      "name": "Responder/mitm6",
+      "relationship": "Targeted LLMNR/NetBIOS/NBNS/IPv6 spoofing on LANs; complements Bettercap’s general MITM modules."
+    },
+    {
+      "name": "WiFiphisher",
+      "relationship": "Specialized Evil Twin and phishing framework; overlaps with Bettercap’s rogue AP/beacon capabilities."
+    },
+    {
+      "name": "Scapy",
+      "relationship": "Packet crafting framework used for custom network tests; complements Bettercap’s ready‑to‑use modules."
+    },
+    {
+      "name": "Pwnagotchi",
+      "relationship": "Uses Bettercap for automated Wi‑Fi (handshake/PMKID) collection in research/education contexts."
+    }
+  ],
+  "evidence_gaps": [
+    "Local evidence characterized Bettercap as a “traffic shaping”/QoS tool; authoritative sources do not describe bandwidth throttling or QoS control as native capabilities. If such functionality exists, it is not prominent in official docs.",
+    "Some third‑party blogs discuss HTTPS downgrade and hstshijack usage, but effectiveness is highly variable and constrained by HSTS/HTTPS‑First; official documentation does not guarantee success against modern browsers.",
+    "Exact support nuances for WPA3 features evolve with releases; environment‑specific behavior (e.g., PMKID/handshake capture against certain AP chipsets) may require up‑to‑date release notes beyond general docs."
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "GitHub - bettercap/bettercap (project overview and features)",
+      "url": "https://github.com/bettercap/bettercap",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "WiFi module documentation (scan, deauth, PMKID, rogue AP/beacons)",
+      "url": "https://www.bettercap.org/modules/wifi/",
+      "publisher": "bettercap.org"
+    },
+    {
+      "title": "Installation (stable and from source)",
+      "url": "https://www.bettercap.org/project/installation/",
+      "publisher": "bettercap.org"
+    },
+    {
+      "title": "net.sniff module (sniffer/fuzzer)",
+      "url": "https://www.bettercap.org/modules/ethernet/netsniff/",
+      "publisher": "bettercap.org"
+    },
+    {
+      "title": "net.probe module (active probing)",
+      "url": "https://www.bettercap.org/modules/ethernet/netprobe",
+      "publisher": "bettercap.org"
+    },
+    {
+      "title": "Caplets module (scriptable automation)",
+      "url": "https://www.bettercap.org/modules/core/caplets/",
+      "publisher": "bettercap.org"
+    },
+    {
+      "title": "Strict-Transport-Security header (HSTS)",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security",
+      "publisher": "MDN Web Docs"
+    },
+    {
+      "title": "Cisco: Configure 802.11w/PMF and WPA3 security enhancements",
+      "url": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-16/config-guide/b_wl_17_16_cg/m_wpa3_security_enhancements.html",
+      "publisher": "Cisco"
+    },
+    {
+      "title": "NSA WPA3 guidance (management‑frame protection context)",
+      "url": "https://www.nsa.gov/portals/75/documents/what-we-do/cybersecurity/professional-resources/ctr-cybersecurity-technical-report-wpa3.pdf?v=1",
+      "publisher": "National Security Agency"
+    },
+    {
+      "title": "https://www.bettercap.org/index.html",
+      "url": "https://www.bettercap.org/index.html",
+      "publisher": "bettercap.org"
+    },
+    {
+      "title": "https://www.reddit.com/r/AskNetsec/comments/1chua84",
+      "url": "https://www.reddit.com/r/AskNetsec/comments/1chua84",
+      "publisher": "reddit.com"
+    },
+    {
+      "title": "https://www.reddit.com/r/HowToHack/comments/1chu8r0",
+      "url": "https://www.reddit.com/r/HowToHack/comments/1chu8r0",
+      "publisher": "reddit.com"
+    }
+  ]
+}

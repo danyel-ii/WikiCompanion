@@ -1,0 +1,40 @@
+# Alb
+
+## Overview
+Alb is a cloud security tool that appears across cloud security workflows in this knowledge base. It is referenced as part of higher-level security analysis, investigation, monitoring, or validation activity rather than as an end in itself.
+
+## What It Is
+Alb is best understood as a cloud-security tool in this knowledge base. Its role is conceptual and system-facing rather than procedural: it gives analysts or defenders a structured way to examine evidence, model system behavior, or reason about security state.
+
+## How It Works
+Alb works by turning technical inputs into more interpretable outputs at the system level. Across the source skills, it appears as part of larger analysis, investigation, monitoring, or validation loops rather than as a standalone end state.
+
+## Core Concepts
+- cloud security
+- aws
+- waf
+- api gateway
+- rate limiting
+- bot protection
+- owasp
+
+## Typical Workflow
+- Create a Web ACL with AWS Managed Rules for baseline protection against OWASP Top 10 attacks.
+
+## Use Cases
+- When deploying API Gateway endpoints that require protection against common web attacks
+- When implementing rate limiting and throttling to prevent API abuse and DDoS attacks
+- When building bot detection and mitigation for API endpoints exposed to the internet
+- When compliance requires WAF protection for all public-facing API endpoints
+- When customizing access controls based on IP reputation, geolocation, or request patterns
+
+## Limitations
+- Output still depends on context, data quality, and surrounding analysis.
+- The tool should be interpreted as part of a broader workflow, not as a complete answer by itself.
+- Capabilities and visibility vary depending on environment, integrations, and available inputs.
+
+## Related Tools
+- And AppSync Endpoints, And Counted Requests, AWS Firewall Manager, AWS Managed Rules, AWS WAF, Blocked, CloudFront, CloudWatch
+
+## Sources
+- securing-api-gateway-with-aws-waf

@@ -1,0 +1,150 @@
+{
+  "canonical_name": "WinPEAS",
+  "aliases": [
+    "winPEAS"
+  ],
+  "classification": "Windows post-exploitation enumeration tool for local privilege escalation (part of the PEASS-ng suite)",
+  "short_description": "WinPEAS is an open-source Windows host enumeration tool that scans for misconfigurations, weak permissions, and environmental clues that could enable local privilege escalation during penetration testing and red-team assessments.",
+  "overview_notes": "WinPEAS is one component of the PEASS-ng (Privilege Escalation Awesome Scripts – Next Generation) project maintained on GitHub. It is actively updated and distributed via the PEASS-ng releases, alongside LinPEAS (Linux) and other artifacts. WinPEAS focuses on collecting system, user, registry, service, and application context that commonly correlates with local privilege escalation vectors; it does not perform exploitation. The project is closely associated with the HackTricks knowledge base, authored by the maintainer, which documents the types of findings WinPEAS surfaces and why they matter.",
+  "what_it_is_notes": "A host-side discovery utility that runs under the current user context on Windows and performs a wide set of checks to highlight potential escalation paths (e.g., modifiable services, unquoted service paths, AlwaysInstallElevated settings, token privileges like SeImpersonatePrivilege, credentials in files/registry, DLL search-order hijack opportunities, weak ACLs, scheduled tasks, and security control states such as AppLocker or AV presence). Findings are printed in a color-emphasized report to aid triage; analysts must validate exploitability separately.",
+  "how_it_works_notes": "WinPEAS executes a modular series of checks implemented in the PEASS-ng codebase and aggregates results into formatted console output. The checks read local OS artifacts (e.g., Windows Registry hives, service configurations, file system ACLs, environment variables, scheduled tasks, user/group memberships, and network listeners) and compare them to known risky patterns documented by the project. Binaries are published for common Windows architectures, and a batch variant is also maintained in releases. The tool is frequently updated; release notes show ongoing additions (e.g., updating Windows-version vulnerability definitions). It is typically used after initial access to quickly surface likely escalation avenues that then guide manual verification or targeted tooling.",
+  "inputs": [
+    "Local code execution on a Windows host under a user context (low- or mid-privileged)",
+    "Access to system metadata and artifacts readable by that user (registry, services, file system, scheduled tasks, environment)",
+    "Optional command-line selection of subsets of checks (per current PEASS-ng implementations)",
+    "Analyst knowledge to interpret the report against organizational context and rules of engagement"
+  ],
+  "outputs": [
+    "Human-readable, color-highlighted console/text report of potential privilege-escalation leads",
+    "Artifacts listings (e.g., services with weak permissions, files/paths with write access, sensitive registry keys)",
+    "Optional redirection/saving of output for offline analysis and reporting"
+  ],
+  "core_concepts": [
+    "Local privilege escalation enumeration",
+    "Misconfiguration discovery (services, registry, ACLs, scheduled tasks)",
+    "Token privilege assessment (e.g., SeImpersonatePrivilege)",
+    "Credential and secret exposure discovery (files/registry)",
+    "DLL search-order and PATH hijacking opportunities",
+    "Security control context (UAC, AppLocker, AV/EDR presence)",
+    "Post-exploitation triage guiding manual validation"
+  ],
+  "typical_workflow": [
+    "Obtain initial code execution on a Windows endpoint during an authorized assessment.",
+    "Run WinPEAS under the current user to enumerate host configuration and security posture.",
+    "Review the color-emphasized findings to identify high-probability escalation vectors (e.g., modifiable services or AlwaysInstallElevated).",
+    "Pivot to targeted validation using focused tools or manual inspection to confirm exploitability and impact.",
+    "Document confirmed issues, applicable mitigations, and detection/monitoring insights."
+  ],
+  "use_cases": [
+    "Speed up local post-exploitation discovery to find viable Windows privilege-escalation paths during pentests and red-team exercises.",
+    "Baseline and hardening validation: compare WinPEAS findings against expected security baseline (e.g., service ACLs, UAC/AppLocker policy, token privileges).",
+    "Control efficacy checks: observe how EDR/AV and logging configurations react to broad local enumeration activity.",
+    "Training and labs: help learners map raw host signals to common Windows PE techniques using the HackTricks checklist as reference."
+  ],
+  "limitations": [
+    "Enumeration-only: WinPEAS highlights opportunities but does not guarantee exploitability; analyst validation is required.",
+    "Operational noise: broad host interrogation can trigger EDR/AV or sandboxing alerts; execution should be authorized and deconflicted.",
+    "Access-bound visibility: results are limited by the current user’s permissions and environmental constraints (e.g., AppLocker, Constrained Language Mode).",
+    "Potential false positives/negatives due to environmental customizations, non-default hardening, or rapidly changing Windows versions.",
+    "Large, dense output can overwhelm inexperienced users; findings should be triaged against context and risk.",
+    "Variant/console quirks (e.g., color/ANSI rendering or bat vs. exe behavior) may affect readability depending on terminal settings."
+  ],
+  "related_tools": [
+    {
+      "name": "LinPEAS",
+      "relationship": "Sister tool in PEASS-ng for Linux local privilege-escalation enumeration; often used alongside WinPEAS in multi-OS environments."
+    },
+    {
+      "name": "Seatbelt (GhostPack)",
+      "relationship": "Windows situational-awareness enumerator; complementary to WinPEAS for host configuration and credential artifacts."
+    },
+    {
+      "name": "SharpUp",
+      "relationship": "Windows privilege-escalation checks implemented in C#; overlaps some WinPEAS checks."
+    },
+    {
+      "name": "PowerUp (PowerSploit)",
+      "relationship": "PowerShell-based Windows privilege-escalation checks; alternative/complement to WinPEAS."
+    },
+    {
+      "name": "PrivescCheck",
+      "relationship": "PowerShell tool for modern Windows privilege-escalation misconfiguration discovery; similar purpose."
+    },
+    {
+      "name": "WinPwn",
+      "relationship": "Windows privilege-escalation and loot framework; can incorporate checks comparable to WinPEAS."
+    },
+    {
+      "name": "LOLBAS (Living Off The Land Binaries)",
+      "relationship": "Reference catalog used to assess potential abuse of native Windows binaries; informs exploitation paths after WinPEAS findings."
+    }
+  ],
+  "evidence_gaps": [
+    "Official, centralized feature list and exhaustive check catalog for WinPEAS is spread across code and HackTricks pages rather than a single maintained spec.",
+    "Precise OS/version support matrix and performance characteristics are not formally documented beyond community notes and release artifacts.",
+    "Structured output formats (e.g., first-class JSON) and report-generation pipelines are discussed in project TODOs but are not guaranteed across versions."
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "PEASS-ng GitHub Releases (active updates incl. winPEAS assets)",
+      "url": "https://github.com/peass-ng/PEASS-ng/releases",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "HackTricks – Checklist: Local Windows Privilege Escalation (project-endorsed reference to WinPEAS and checks)",
+      "url": "https://book.hacktricks.wiki/rs/windows-hardening/checklist-windows-privilege-escalation.html",
+      "publisher": "HackTricks"
+    },
+    {
+      "title": "OffSec Community KB – WinPEAS (tool overview and pointers)",
+      "url": "https://kb.offsec.nl/tools/framework/peass-ng/winpeas/",
+      "publisher": "OffSec Community (kb.offsec.nl)"
+    },
+    {
+      "title": "Author profile indicating PEASS-ng/HackTricks authorship",
+      "url": "https://book.hacktricks.wiki/welcome/about-the-author.html",
+      "publisher": "HackTricks"
+    },
+    {
+      "title": "ANY.RUN sandbox report noting winPEAS binary observation (illustrates AV/sandbox sensitivity)",
+      "url": "https://any.run/report/1748a7f82f680e1f370228957dc541cc9d7f1798a9f946c9e7dfcf27506297c8/f1548f61-a841-44ad-af72-9489ea8a40f2",
+      "publisher": "ANY.RUN"
+    },
+    {
+      "title": "https://winpeas.com/",
+      "url": "https://winpeas.com/",
+      "publisher": "winpeas.com"
+    },
+    {
+      "title": "https://winpeas.com/what-is-winpeas-and-what-is-its-primary-purpose/",
+      "url": "https://winpeas.com/what-is-winpeas-and-what-is-its-primary-purpose/",
+      "publisher": "winpeas.com"
+    },
+    {
+      "title": "https://www.gm7.org/archives/48862",
+      "url": "https://www.gm7.org/archives/48862",
+      "publisher": "gm7.org"
+    },
+    {
+      "title": "https://www.reddit.com/r/oscp/comments/16njoe0",
+      "url": "https://www.reddit.com/r/oscp/comments/16njoe0",
+      "publisher": "reddit.com"
+    },
+    {
+      "title": "https://winpeas.com/how-to-master-winpeas-for-lab-reports/",
+      "url": "https://winpeas.com/how-to-master-winpeas-for-lab-reports/",
+      "publisher": "winpeas.com"
+    },
+    {
+      "title": "https://www.reddit.com/r/oscp/comments/q7d2p2",
+      "url": "https://www.reddit.com/r/oscp/comments/q7d2p2",
+      "publisher": "reddit.com"
+    },
+    {
+      "title": "https://arxiv.org/abs/2504.07287",
+      "url": "https://arxiv.org/abs/2504.07287",
+      "publisher": "arxiv.org"
+    }
+  ]
+}

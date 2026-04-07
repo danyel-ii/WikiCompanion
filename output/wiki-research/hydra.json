@@ -1,0 +1,152 @@
+{
+  "canonical_name": "Ory Hydra",
+  "aliases": [
+    "Hydra",
+    "ORY Hydra",
+    "Ory Hydra OAuth2/OIDC Server"
+  ],
+  "classification": "API security – OAuth 2.0/OpenID Connect authorization server (OpenID Certified)",
+  "short_description": "Ory Hydra is an open-source, OpenID Certified OAuth 2.0 and OpenID Connect (OIDC) authorization server that exposes headless APIs for issuing and managing tokens used to protect APIs and applications.",
+  "overview_notes": "In API security contexts, “Hydra” commonly refers to Ory Hydra, not the unrelated THC Hydra password brute‑forcer. Ory Hydra provides the authorization server component for OAuth 2.0 and an OIDC Provider (OP). It is designed to integrate with an external identity provider or custom login/consent app, and it focuses on standards compliance, scale, and API-first operation rather than user management or UI.",
+  "what_it_is_notes": "- A standards‑compliant OAuth 2.0/OIDC authorization server and OpenID Provider you can self‑host or consume as a service.\n- OpenID Foundation Certified implementation, used to issue access tokens, refresh tokens, and ID tokens to clients that call protected APIs.\n- Part of the Ory ecosystem; integrates with (but does not require) Ory Kratos for identity and Ory Keto for authorization.",
+  "how_it_works_notes": "- Hydra exposes two primary surfaces: a Public API (authorization, token, discovery, logout, revocation) and an Admin API (client management, token introspection, key management, login/consent handling callbacks).\n- End‑user authentication and consent are delegated to an external login/consent application. That app authenticates users against your identity store (e.g., IdP or Ory Kratos) and then calls Hydra to accept or deny login/consent challenges.\n- Hydra signs tokens and publishes its public keys via standard OIDC/OAuth discovery and JWKS endpoints so resource servers can validate tokens locally; alternatively, token state can be queried via introspection (admin-side) depending on deployment mode.\n- Supports dynamic client registration, standard OIDC discovery metadata, and JWKS key lifecycle via admin endpoints.",
+  "inputs": [
+    "Authorization requests (OAuth 2.0/OIDC, including PKCE where applicable)",
+    "Client registrations and metadata (including redirect URIs, grant types, scopes)",
+    "Login and consent callbacks from the external app (accept/deny with subject and claims)",
+    "JSON Web Keys (generation/rotation via admin API)",
+    "Token introspection and revocation requests (from resource servers/admin)"
+  ],
+  "outputs": [
+    "Access tokens (opaque or JWT depending on configuration)",
+    "ID tokens (JWT with OIDC claims)",
+    "Refresh tokens (per configuration)",
+    "OIDC discovery documents (e.g., .well-known/openid-configuration)",
+    "JWKS (/.well-known/jwks.json) for signature verification",
+    "Token introspection responses (active/inactive and metadata)",
+    "Logout endpoints and revocation responses"
+  ],
+  "core_concepts": [
+    "OAuth 2.0 Authorization Server and OIDC Provider roles",
+    "Login/Consent application (externalizes user auth and consent)",
+    "Public vs. Admin API separation",
+    "Token issuance and validation (JWT/JWKS, discovery, introspection)",
+    "Dynamic client registration and discovery",
+    "Standards compliance and OpenID Certification"
+  ],
+  "typical_workflow": [
+    "A client starts an OAuth 2.0/OIDC flow with Hydra’s public endpoints.",
+    "Hydra delegates end‑user authentication and consent to a separate login/consent app.",
+    "The login/consent app authenticates the user against an IdP and returns accept/deny to Hydra’s admin API with subject and approved scopes/claims.",
+    "Hydra issues tokens at the token endpoint; clients use access tokens against APIs.",
+    "Resource servers validate tokens using JWKS (for JWTs) or call introspection (admin side) depending on deployment mode.",
+    "Administrators manage clients, keys, and policies via the admin API or CLI."
+  ],
+  "use_cases": [
+    "Provide a standards‑compliant authorization server for protecting REST/GraphQL APIs and microservices.",
+    "Model and test OAuth 2.0/OIDC flows during API security design reviews and threat modeling.",
+    "Validate token handling in downstream services (e.g., ID token claims, audience/scope enforcement).",
+    "Integrate with existing identity stores by delegating authentication to a custom login/consent app or IdP.",
+    "Run conformance‑oriented deployments where discovery, JWKS, introspection, and revocation are required by policy."
+  ],
+  "limitations": [
+    "Not an identity provider or user management system; it does not handle registration, password resets, or MFA by itself—these live in the external login/consent app/IdP.",
+    "Requires correct segregation of Public and Admin APIs; exposing admin endpoints publicly is unsafe.",
+    "Configuration choices affect capabilities: in stateless JWT mode, some operations (e.g., introspection, revocation, userinfo) may not be available.",
+    "Misconfiguration of clients, redirect URIs, scopes, or key rotation can undermine security even if the server is standards‑compliant.",
+    "Hydra focuses on the authorization server role; fine‑grained authorization decisions (ABAC/RBAC/relationships) are typically handled by resource servers or separate systems (e.g., Ory Keto)."
+  ],
+  "related_tools": [
+    {
+      "name": "Ory Kratos",
+      "relationship": "Complementary identity provider/user management used as the login/consent backend."
+    },
+    {
+      "name": "Ory Keto",
+      "relationship": "Complementary authorization service for fine‑grained permissions beyond token issuance."
+    },
+    {
+      "name": "Keycloak",
+      "relationship": "Alternative self‑hosted IdP/OP that combines identity management and OIDC/OAuth2 server features."
+    },
+    {
+      "name": "Auth0 / Okta",
+      "relationship": "Commercial IdP/OP platforms that provide OAuth2/OIDC and user management."
+    },
+    {
+      "name": "OpenID Conformance Suite",
+      "relationship": "Certification and testing harness used to validate OIDC/OAuth server behavior."
+    },
+    {
+      "name": "jwt_tool, Burp Suite JWT Editor",
+      "relationship": "Security analysis tools for inspecting and validating JWT behavior issued by an authorization server."
+    }
+  ],
+  "evidence_gaps": [
+    "The term “Hydra” is ambiguous in security contexts; sources must distinguish Ory Hydra (authorization server) from THC Hydra (password brute‑forcer).",
+    "Exact current release version may change frequently; confirm version and change notes for time‑sensitive claims in a given deployment."
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "Ory Hydra – product/overview page",
+      "url": "https://www.ory.com/hydra",
+      "publisher": "Ory"
+    },
+    {
+      "title": "Ory Hydra – GitHub repository (official)",
+      "url": "https://github.com/ory/hydra",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "OpenID Foundation – Certified OpenID Connect Implementations (includes Ory Hydra)",
+      "url": "https://openid.net/developers/certified-openid-connect-implementations/",
+      "publisher": "OpenID Foundation"
+    },
+    {
+      "title": "Hydra official guide (archived) – Ory Hydra does not include user authentication; uses login/consent app",
+      "url": "https://ory.gitbooks.io/hydra/content/2-overview/1-oauth2.html",
+      "publisher": "Ory"
+    },
+    {
+      "title": "DeepWiki mirror of Ory docs – Public/Admin APIs and JWKS endpoints",
+      "url": "https://deepwiki.com/ory/hydra/7.1-admin-api",
+      "publisher": "DeepWiki"
+    },
+    {
+      "title": "DeepWiki mirror of Ory docs – JSON Web Key Management and JWKS",
+      "url": "https://deepwiki.com/ory/hydra/3.4-json-web-key-management",
+      "publisher": "DeepWiki"
+    },
+    {
+      "title": "Ory Changelog – Advisory and changes affecting Hydra behavior",
+      "url": "https://changelog.ory.com/announcements/ory-hydra-ory-keto-ory-network-v25-4-3-released",
+      "publisher": "Ory Changelog"
+    },
+    {
+      "title": "Ory blog – When to use OAuth2 (Hydra issues access/refresh/ID tokens; identity via Kratos)",
+      "url": "https://www.ory.com/blog/when-to-use-oauth2-scaling-enterprise-authentication-and-authorization",
+      "publisher": "Ory"
+    },
+    {
+      "title": "Ory community discussion – token validation and JWKS vs introspection",
+      "url": "https://community.ory.sh/t/how-to-validate-a-token-when-api-server-is-outside-of-internal-subnet/1236",
+      "publisher": "Ory Community"
+    },
+    {
+      "title": "Ory blog – Hydra v1 stable and certification announcement",
+      "url": "https://www.ory.sh/blog/hydra-v1-stable-release",
+      "publisher": "Ory"
+    },
+    {
+      "title": "https://www.ory.com/hydra/",
+      "url": "https://www.ory.com/hydra/",
+      "publisher": "ory.com"
+    },
+    {
+      "title": "https://github.com/ory/hydra/releases",
+      "url": "https://github.com/ory/hydra/releases",
+      "publisher": "github.com"
+    }
+  ]
+}

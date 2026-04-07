@@ -1,0 +1,153 @@
+{
+  "canonical_name": "Metasploit Framework",
+  "aliases": [
+    "metasploit framework",
+    "Metasploit"
+  ],
+  "classification": "open‑source penetration testing and exploit development framework",
+  "short_description": "An extensible Ruby-based platform from Rapid7 for developing, testing, and executing exploits, payloads, and related modules against target systems, with data management and remote APIs for integration into security workflows.",
+  "overview_notes": "Metasploit Framework is the best‑known subproject of Metasploit and is maintained by Rapid7. It provides a large, continuously updated corpus of exploit, auxiliary, post-exploitation, payload, encoder, and NOP modules, as well as interactive and programmatic interfaces (console, RPC, and web services). The project is distributed under a 3‑clause BSD‑style license and is widely used in authorized security testing and research contexts. Module counts and specific content change frequently via community and vendor contributions, and Rapid7 publishes ongoing release notes and wrap‑ups to track new modules and platform changes. Sources consistently emphasize authorized, ethical use and project documentation centralization at docs.metasploit.com. ([en.wikipedia.org](https://en.wikipedia.org/wiki/Metasploit?utm_source=openai))",
+  "what_it_is_notes": "Conceptually, Metasploit is a modular platform that: (1) models offensive techniques as loadable modules; (2) provides payload generation and session handling (including Meterpreter); (3) exposes a datastore for module configuration; (4) stores and reports testing artifacts (hosts, services, credentials, loot) in workspaces; and (5) offers local and remote interfaces for human and automated use. Official documentation recognizes six primary module types: exploit, auxiliary, post, payload, encoder, and nop. ([docs.rapid7.com](https://docs.rapid7.com/metasploit/msf-overview?utm_source=openai))",
+  "how_it_works_notes": "- Architecture and modules: Modules encapsulate functionality such as exploitation, scanning/enumeration, post‑exploitation tasks, encoding, and NOP sled generation. Modules define options (via the datastore) and metadata (rank, references). Compatible payloads are resolved per exploit. ([docs.rapid7.com](https://docs.rapid7.com/metasploit/modules/?utm_source=openai))\n- Payloads and sessions: On success, payloads create sessions (e.g., standard shells or Meterpreter). Meterpreter is a reflective, in‑memory, extensible payload that supports interactive control and on‑the‑fly extension loading. ([docs.rapid7.com](https://docs.rapid7.com/metasploit/msf-overview?utm_source=openai))\n- Data management: Results are organized into projects/workspaces with hosts, services, credentials, loot, and notes. Data can be exported/imported and reported. ([docs.rapid7.com](https://docs.rapid7.com/metasploit/managing-workspaces/?utm_source=openai))\n- Interfaces and automation: The primary UX is msfconsole. Automation and integration use the JSON‑RPC API (standard API methods) and daemon/service modes, enabling remote control and module execution from other tools. ([docs.rapid7.com](https://docs.rapid7.com/metasploit/standard-api-methods-reference?utm_source=openai))\n- External scanning integration: Metasploit documentation notes built‑in discovery and the ability to leverage Nmap for TCP port scanning as part of host discovery. ([docs.rapid7.com](https://docs.rapid7.com/metasploit/?utm_source=openai))",
+  "inputs": [
+    "Target information such as IPs/DNS names, ports, service banners, and versions",
+    "Module selection and configuration via datastore options (e.g., RHOSTS, RPORT, credentials)",
+    "Payload parameters (e.g., LHOST/LPORT, format) for generation or session handling",
+    "Credentials, wordlists, and keys for authentication testing and post‑exploitation modules",
+    "Workspace/project context for organizing hosts, services, notes, credentials, and loot",
+    "Automation inputs via RPC/web service calls from orchestrators or scripts"
+  ],
+  "outputs": [
+    "Sessions (shell or Meterpreter) and associated telemetry",
+    "Enumerated host/service data and vulnerability references captured in the workspace database",
+    "Credentials and validated logins; associated reports and exports (CSV, XML, HTML, PDF/RTF)",
+    "Loot artifacts (files, dumps) and module‑specific evidence",
+    "Module execution metadata (job IDs, status, timestamps) via RPC and console"
+  ],
+  "core_concepts": [
+    "Module types: exploit, auxiliary, post, payload, encoder, nop",
+    "Payloads and Meterpreter sessions",
+    "Datastore options and global vs module‑level configuration",
+    "Workspaces/projects and data (hosts, services, credentials, loot)",
+    "Automation and integration via JSON‑RPC and service/daemon modes",
+    "Integration with external scanners (e.g., Nmap) for discovery"
+  ],
+  "typical_workflow": [
+    "Select or create a workspace and import or collect host/service data; optionally leverage Nmap through Metasploit for discovery.",
+    "Search and select modules by CVE, service, or platform; review module info and requirements, including compatible payloads.",
+    "Configure module datastore options (targets, network parameters, credentials) and set payload parameters as appropriate for the test scope.",
+    "Run modules and monitor results; successful exploitation yields sessions for interaction (shell or Meterpreter).",
+    "Perform authorized post‑exploitation tasks to validate impact and gather evidence (credentials, configuration data, files).",
+    "Record results in the workspace and generate exports or reports for stakeholders; optionally automate repeated steps via the RPC API."
+  ],
+  "use_cases": [
+    "Authorized penetration testing of networked services and systems, including validation of exploitable conditions mapped to disclosed CVEs.",
+    "Security control validation, e.g., verifying detection and blocking by IDS/IPS/EDR/SIEM when known offensive techniques are exercised.",
+    "Red‑team emulation of initial access and lateral movement techniques under a defined rules‑of‑engagement.",
+    "Research and exploit development using the framework’s module and payload APIs.",
+    "Integration into larger testing pipelines or orchestrations via JSON‑RPC to run modules and collect results programmatically.",
+    "Credential lifecycle assessment: harvesting, reuse testing, and consolidated credential reporting within a project/workspace."
+  ],
+  "limitations": [
+    "Legality and authorization: Use is intended for lawful, authorized testing; misuse is illegal. Project materials and docs are oriented to ethical use; practitioners must obtain explicit permission before testing.",
+    "Exploit reliability varies by environment and patch level; many modules are version‑specific and may fail or be unstable on fully patched systems.",
+    "Modern defenses (EDR/AV, behavioral analytics, application control) can detect or block common payloads and techniques; public payloads like Meterpreter are well‑known to defenders.",
+    "Module inventory and counts change frequently; any static count can become outdated quickly, and not all modules are maintained at the same level.",
+    "Network impact risk: scanning and exploitation modules can disrupt fragile services; production testing requires careful scoping and change control.",
+    "Operational security: Generated payloads and artifacts may be flagged or quarantined; storing sensitive loot/credentials requires secure handling and export controls."
+  ],
+  "related_tools": [
+    {
+      "name": "Nmap",
+      "relationship": "Often used alongside Metasploit for host/service discovery; Metasploit can leverage Nmap scans for basic TCP scanning."
+    },
+    {
+      "name": "Nessus / Rapid7 InsightVM (Nexpose) / OpenVAS",
+      "relationship": "Vulnerability scanners whose findings can inform Metasploit module selection for exploitation validation."
+    },
+    {
+      "name": "CrackMapExec",
+      "relationship": "Adjacency for credential spraying and SMB/WinRM/Lateral Movement tasks that can complement Metasploit post‑exploitation."
+    },
+    {
+      "name": "Impacket",
+      "relationship": "Library and toolset for network protocol operations (e.g., SMB/LDAP/Kerberos) often used before/after Metasploit exploitation."
+    },
+    {
+      "name": "Armitage",
+      "relationship": "Historical GUI front end for Metasploit that visualizes targets and coordinates collaborative use."
+    },
+    {
+      "name": "Cobalt Strike",
+      "relationship": "Commercial red‑team platform with post‑exploitation beacons; often compared as a complementary/alternative tool to Metasploit’s post‑exploitation."
+    }
+  ],
+  "evidence_gaps": [
+    "Exact, current module counts and supported CVE coverage are highly dynamic; authoritative numbers change week by week in release notes and the repository.",
+    "Some public references describe behaviors (e.g., evasion characteristics of Meterpreter) at a high level; detection bypass efficacy will vary by specific EDR/AV versions and configurations and is not guaranteed.",
+    "Documentation spanning Framework, Pro (EOL/legacy), and community resources can be conflated; care is needed to distinguish Framework features from historical Pro‑only UI/reporting features."
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "Metasploit (Wikipedia)",
+      "url": "https://en.wikipedia.org/wiki/Metasploit",
+      "publisher": "Wikipedia"
+    },
+    {
+      "title": "Metasploit Framework – GitHub repository (README)",
+      "url": "https://github.com/rapid7/metasploit-framework",
+      "publisher": "Rapid7 (GitHub)"
+    },
+    {
+      "title": "Metasploit Framework overview",
+      "url": "https://docs.rapid7.com/metasploit/msf-overview",
+      "publisher": "Rapid7"
+    },
+    {
+      "title": "Standard API Methods Reference (JSON‑RPC)",
+      "url": "https://docs.rapid7.com/metasploit/standard-api-methods-reference",
+      "publisher": "Rapid7"
+    },
+    {
+      "title": "Running Metasploit Remotely (RPC/daemon usage)",
+      "url": "https://docs.rapid7.com/metasploit/running-metasploit-remotely/",
+      "publisher": "Rapid7"
+    },
+    {
+      "title": "Managing Workspaces",
+      "url": "https://docs.rapid7.com/metasploit/managing-workspaces/",
+      "publisher": "Rapid7"
+    },
+    {
+      "title": "Exporting Project Data / Exporting and Importing Data",
+      "url": "https://docs.rapid7.com/metasploit/exporting-project-data",
+      "publisher": "Rapid7"
+    },
+    {
+      "title": "Quick Start Guide (discovery and Nmap note)",
+      "url": "https://docs.rapid7.com/metasploit/",
+      "publisher": "Rapid7"
+    },
+    {
+      "title": "Manage Meterpreter and Shell Sessions",
+      "url": "https://docs.rapid7.com/metasploit/manage-meterpreter-and-shell-sessions/",
+      "publisher": "Rapid7"
+    },
+    {
+      "title": "Meterpreter ‘getsystem’ (privilege elevation overview)",
+      "url": "https://docs.rapid7.com/metasploit/meterpreter-getsystem",
+      "publisher": "Rapid7"
+    },
+    {
+      "title": "The Modules Page (module statistics and types)",
+      "url": "https://docs.rapid7.com/metasploit/the-modules-page/",
+      "publisher": "Rapid7"
+    },
+    {
+      "title": "Modules (definition of module categories)",
+      "url": "https://docs.rapid7.com/metasploit/modules/",
+      "publisher": "Rapid7"
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "canonical_name": "Hashcat",
+  "aliases": [
+    "hashcat"
+  ],
+  "classification": "Open-source password recovery and auditing utility (GPU/accelerator-enabled)",
+  "short_description": "A high-performance, cross‑platform password recovery tool that supports hundreds of hash and key-derivation formats, multiple attack modes, and GPU/accelerator backends for offline credential security testing.",
+  "overview_notes": "Hashcat is a mature password recovery/auditing utility used to assess the strength of stored credentials and secrets across many systems and protocols. It supports CPUs and hardware accelerators via CUDA, OpenCL, HIP, and Metal backends, offers several core attack modes (straight/dictionary, combinator, mask/brute-force, and hybrids), and works with an extensive catalog of hash-modes (e.g., NTLM, bcrypt, PBKDF2, WPA/WPA2 PMKID/EAPOL, and HMAC‑signed JWT). It is widely used in security testing, incident response, and digital forensics to validate password policies and detect weak secrets. Hashcat is released under the MIT license and maintained in an active public repository.",
+  "what_it_is_notes": "- A command-line password recovery framework focused on offline cracking of password hashes, password-derived encryption keys, and certain protocol artifacts (e.g., WPA/WPA2 handshakes and JWT HMAC tokens).\n- It is not an exploitation framework and does not target live online authentication endpoints; it operates on captured/known cryptographic material.\n- In the API-security context, it is applicable when auditing HMAC-based secrets (e.g., HS256 JWTs) or verifying the strength of password-derived credentials used by backend systems.",
+  "how_it_works_notes": "- Inputs are normalized into a specific hash-mode format. Hashcat selects optimized kernels for the chosen hash and executes candidate-generation attacks on CPU/GPU backends (CUDA, OpenCL, HIP, Metal) to test password/secret guesses at high speed.\n- Candidate generation supports dictionary (straight) with powerful rule-based mutations, combinator (wordlist combinations), mask/brute-force, and hybrid approaches (wordlist+mask or mask+wordlist). External generators (e.g., maskprocessor, statsprocessor, princeprocessor) can also feed candidates.\n- For Wi‑Fi auditing, handshakes/PMKIDs are converted to the unified 22000/22001 text format to enable efficient PBKDF2 reuse. For JWT auditing, mode 16500 targets HMAC‑signed tokens (HS*) by attempting to recover the secret key; public‑key JWTs (RS*/ES*) are not in scope for secret recovery.\n- Results are recorded in a persistent potfile and status/metrics can be exported for analysis and reporting.",
+  "inputs": [
+    "Offline hash digests and formats (e.g., NTLM, bcrypt, PBKDF2, scrypt, Argon2, etc.)",
+    "Hash metadata/parameters where required (salts, cost/iteration factors)",
+    "Wi‑Fi WPA/WPA2 artifacts in hash-mode 22000/22001 (PMKID/EAPOL)",
+    "JSON Web Tokens signed with HMAC (HS*) for mode 16500",
+    "Candidate sources: wordlists, masks/charsets, rule sets, or external generators",
+    "Optional hardware backends and compatible drivers (CUDA/OpenCL/HIP/Metal)"
+  ],
+  "outputs": [
+    "Recovered plaintexts/secrets written to a potfile and optional outfiles",
+    "Per-hash crack status and performance metrics",
+    "Uncracked hash lists for further analysis or policy improvement",
+    "Structured status/benchmark data (including JSON status output)"
+  ],
+  "core_concepts": [
+    "Offline password/secret auditing",
+    "GPU and hardware-accelerated cracking backends (CUDA/OpenCL/HIP/Metal)",
+    "Attack modes: straight (dictionary), combinator, mask/brute-force, hybrids",
+    "Rule-based wordlist mutation",
+    "Hash-mode catalog (over 300 algorithms) including NTLM, bcrypt, WPA PMKID/EAPOL, JWT (HMAC)",
+    "Unified WPA hash-mode 22000/22001 workflow",
+    "Potfile for recovered credentials",
+    "Distributed/at-scale workflows (supported via community tools)"
+  ],
+  "typical_workflow": [
+    "Acquire authorization and scope for credential/secret assessment; ensure only in-scope material is handled.",
+    "Collect or extract hashes/artifacts and normalize to supported formats (e.g., convert WPA captures to 22000 text; assemble hash lists with required salts/parameters).",
+    "Select the correct hash-mode and design an attack strategy combining wordlists, rules, masks, or hybrids informed by organizational context and password policy.",
+    "Run attacks on appropriate hardware backends, monitor progress and correctness (drivers, temperatures, performance counters), and iterate strategies based on interim results.",
+    "Record outcomes (cracked vs. uncracked), analyze patterns to inform security posture (policy tuning, user education), and coordinate remediation for weak credentials or secrets."
+  ],
+  "use_cases": [
+    "Enterprise credential audits to validate password policy effectiveness and detect weak or reused passwords.",
+    "Incident response triage on leaked hash dumps to assess exposure and prioritize resets.",
+    "Wireless security assessments of WPA/WPA2‑PSK deployments using PMKID/EAPOL artifacts (e.g., segmentation of guest vs. corporate WLAN depends on PSK strength).",
+    "API-security assessments of HMAC‑signed JWTs to evaluate secret key strength and identify weak/shared secrets that enable offline forgery.",
+    "Validation of hardening initiatives (e.g., migration to stronger KDFs or increased iteration counts) by measuring practical cracking resistance.",
+    "Benchmarking hardware and algorithm configurations to set realistic organizational password requirements."
+  ],
+  "limitations": [
+    "Works only with offline material; does not test live online rate-limited endpoints.",
+    "Effectiveness is bounded by cryptographic design and cost parameters; modern slow KDFs (e.g., bcrypt, scrypt, Argon2 with high cost) and high-entropy passwords may remain infeasible to crack.",
+    "For JWTs, applicability is limited to HMAC‑based tokens (HS*); RSA/ECDSA‑signed tokens (RS*/ES*) do not expose a recoverable secret key.",
+    "Success for Wi‑Fi depends on quality and type of capture; the unified 22000/22001 format supersedes older .cap/.hccapx workflows and must be used for current versions.",
+    "Performance relies on correct GPU/accelerator drivers and supported hardware; mismatched or broken drivers are a common failure point.",
+    "Legal/ethical constraints apply; use is restricted to authorized testing and analysis."
+  ],
+  "related_tools": [
+    {
+      "name": "John the Ripper",
+      "relationship": "Alternative offline password cracker; complements hashcat and supports some differing formats."
+    },
+    {
+      "name": "hcxdumptool / hcxtools",
+      "relationship": "Preferred modern tools to capture and convert WPA/WPA2 artifacts into hash-mode 22000/22001 for use with Hashcat."
+    },
+    {
+      "name": "maskprocessor, statsprocessor, princeprocessor",
+      "relationship": "Candidate generators used alongside Hashcat to produce structured guesses for mask, Markov, or PRINCE-based attacks."
+    },
+    {
+      "name": "hashcat-utils",
+      "relationship": "Supplemental utilities maintained by the project to assist with advanced cracking workflows."
+    },
+    {
+      "name": "Hashtopolis",
+      "relationship": "Community orchestration platform for distributing Hashcat jobs across multiple systems."
+    }
+  ],
+  "evidence_gaps": [
+    "Official documentation lists JWT hash-mode 16500 but does not explicitly state in one place that it targets only HMAC‑signed JWTs; this limitation is inferred from JWT standards and the hashcat mode’s nature.",
+    "Mapping Hashcat usage specifically into broader API-security workflows (beyond JWT secret auditing) is community practice rather than a dedicated vendor guide."
+  ],
+  "confidence": "high",
+  "sources": [
+    {
+      "title": "hashcat/hashcat – GitHub repository (README: description, platforms, license, attack modes, algorithms)",
+      "url": "https://github.com/hashcat/hashcat",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "Hashcat wiki – Project overview, attack modes, options, and hash-mode listings (incl. 16500 JWT)",
+      "url": "https://hashcat.net/wiki/doku.php?id=hashcat",
+      "publisher": "hashcat.net"
+    },
+    {
+      "title": "Hashcat wiki – Cracking WPA/WPA2 with hashcat (unified 22000/22001 formats and deprecation of legacy formats)",
+      "url": "https://hashcat.net/wiki/doku.php?id=cracking_wpawpa2",
+      "publisher": "hashcat.net"
+    },
+    {
+      "title": "Kali Linux Tools: hashcat (summary of capabilities and attack modes)",
+      "url": "https://www.kali.org/tools/hashcat/",
+      "publisher": "Offensive Security"
+    },
+    {
+      "title": "JWT (JSON Web Token) – overview of HMAC vs. RSA/ECDSA signing (standards context)",
+      "url": "https://en.wikipedia.org/wiki/JSON_Web_Token",
+      "publisher": "Wikipedia"
+    },
+    {
+      "title": "Hashcat v4.1.0 forum notes – Added hash-mode 16500 (JWT)",
+      "url": "https://hashcat.net/forum/thread-7317.html",
+      "publisher": "hashcat.net"
+    },
+    {
+      "title": "Hashcat FAQ – Driver correctness and troubleshooting (wrongdriver)",
+      "url": "https://hashcat.net/faq/wrongdriver",
+      "publisher": "hashcat.net"
+    },
+    {
+      "title": "Hashcat wiki – Start page (core attack modes; related utilities such as maskprocessor/statsprocessor/princeprocessor)",
+      "url": "https://hashcat.net/wiki/",
+      "publisher": "hashcat.net"
+    },
+    {
+      "title": "ZerBea/hcxdumptool – modern Wi‑Fi capture tooling referenced by Hashcat docs",
+      "url": "https://github.com/ZerBea/hcxdumptool",
+      "publisher": "GitHub"
+    },
+    {
+      "title": "John the Ripper – official project site (related/alternative tool)",
+      "url": "https://openwall.com/john/",
+      "publisher": "Openwall Project"
+    },
+    {
+      "title": "https://www.hashcat.io/",
+      "url": "https://www.hashcat.io/",
+      "publisher": "hashcat.io"
+    },
+    {
+      "title": "https://www.yonlabs.com/2020/10/hashcat-to-crack-jwt/index.html",
+      "url": "https://www.yonlabs.com/2020/10/hashcat-to-crack-jwt/index.html",
+      "publisher": "yonlabs.com"
+    }
+  ]
+}
