@@ -33,6 +33,15 @@ interface WikiIndexEntry {
   confidence: string;
 }
 
+interface AndroidReleaseMetadata {
+  version: string;
+  apkFileName: string;
+  apkSizeBytes: number;
+  sha256: string;
+  releaseUrl: string;
+  downloadUrl: string;
+}
+
 const wikiJsonDir = path.join(process.cwd(), 'output', 'wiki-json');
 const wikiBaseUrl = 'https://danyel-ii.github.io/cyber-research-wiki/';
 
@@ -190,6 +199,13 @@ a:hover{text-decoration:underline}
 .hero p{margin:0;max-width:760px;color:var(--muted)}
 .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 .pill{display:inline-flex;align-items:center;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--muted);font-size:13px}
+.install-panel{margin:0 0 32px;padding:22px;border-radius:20px;border:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--panel-2))}
+.install-panel h2{margin:0 0 10px;font-size:24px;line-height:1.2}
+.install-panel p{margin:0 0 14px;color:var(--muted)}
+.install-actions{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}
+.button{display:inline-flex;align-items:center;justify-content:center;padding:11px 16px;border-radius:12px;border:1px solid var(--line);background:var(--text);color:var(--bg);font-weight:600}
+.button.secondary{background:transparent;color:var(--text)}
+.checksum{margin:0;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:#0d141c;overflow:auto;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent)}
 .search{margin:24px 0 28px}
 .search input{width:100%;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:15px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;padding-bottom:48px}
@@ -213,7 +229,41 @@ a:hover{text-decoration:underline}
 }`;
 }
 
-function indexTemplate(entries: WikiIndexEntry[]): string {
+function humanFileSize(bytes: number): string {
+  const mb = bytes / (1024 * 1024);
+  return `${mb.toFixed(1)} MB`;
+}
+
+function installPanel(metadata: AndroidReleaseMetadata | null): string {
+  if (!metadata) {
+    return `<section class="install-panel">
+  <p class="kicker">Android install</p>
+  <h2>Pocket Atlas install path</h2>
+  <p>The Android release metadata is not available in this build. Use the GitHub releases page for the latest signed APK.</p>
+  <div class="install-actions">
+    <a class="button" href="https://github.com/danyel-ii/WikiCompanion/releases">Open releases</a>
+  </div>
+</section>`;
+  }
+
+  return `<section class="install-panel">
+  <p class="kicker">Android install</p>
+  <h2>Install the Pocket Atlas app</h2>
+  <p>The wiki and the app ship from the same repository. If you want the mobile reader, download the signed Android APK for v${escapeHtml(metadata.version)} and verify its checksum before installing.</p>
+  <div class="meta">
+    <span class="pill">${escapeHtml(metadata.apkFileName)}</span>
+    <span class="pill">${escapeHtml(humanFileSize(metadata.apkSizeBytes))}</span>
+    <span class="pill">SHA-256 published</span>
+  </div>
+  <div class="install-actions">
+    <a class="button" href="${escapeHtml(metadata.downloadUrl)}">Download APK</a>
+    <a class="button secondary" href="${escapeHtml(metadata.releaseUrl)}">View release notes</a>
+  </div>
+  <pre class="checksum">${escapeHtml(metadata.sha256)}</pre>
+</section>`;
+}
+
+function indexTemplate(entries: WikiIndexEntry[], metadata: AndroidReleaseMetadata | null): string {
   const cards = entries
     .map(
       (entry) => `<a class="card" href="/cyber-research-wiki/tools/${entry.slug}/">
@@ -233,6 +283,7 @@ function indexTemplate(entries: WikiIndexEntry[]): string {
     <span class="pill">Generated from a shared tool pipeline</span>
   </div>
 </section>
+${installPanel(metadata)}
 <section class="search">
   <input id="wiki-search" type="search" placeholder="Search wiki entries" aria-label="Search wiki entries" />
 </section>
@@ -256,6 +307,9 @@ input?.addEventListener('input', () => {
 
 async function main() {
   const wikiFiles = (await readdir(outputWikiDir)).filter((file) => file.endsWith('.md')).sort((left, right) => left.localeCompare(right));
+  const androidReleaseMetadata = await readJson<AndroidReleaseMetadata>(
+    path.join(process.cwd(), 'content', 'release', 'android-release.json'),
+  ).catch(() => null);
   await rm(wikiSiteDir, { recursive: true, force: true });
   await ensureDir(wikiSiteDir);
   await ensureDir(path.join(wikiSiteDir, 'tools'));
@@ -295,7 +349,7 @@ async function main() {
     );
   }
 
-  await writeText(path.join(wikiSiteDir, 'index.html'), indexTemplate(indexEntries));
+  await writeText(path.join(wikiSiteDir, 'index.html'), indexTemplate(indexEntries, androidReleaseMetadata));
   await writeText(path.join(wikiSiteDir, 'assets', 'wiki.css'), stylesCss());
   await writeText(
     path.join(wikiSiteDir, '404.html'),

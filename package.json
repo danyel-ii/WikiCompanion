@@ -17,6 +17,7 @@
     "build:admin:web": "npm --prefix apps/admin-web run build",
     "build:android:apk": "bash scripts/build-android-apk.sh debug",
     "build:android:release": "bash scripts/build-android-apk.sh release",
+    "release:metadata:android": "tsx scripts/write-android-release-metadata.ts",
     "content:sync": "tsx scripts/fetch-upstream.ts && tsx scripts/parse-skills.ts",
     "content:generate": "tsx scripts/build-tools.ts && tsx scripts/generate-articles.ts && tsx scripts/build-manifest.ts",
     "content:all": "npm run content:sync && npm run content:generate",

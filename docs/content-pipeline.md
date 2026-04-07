@@ -21,7 +21,8 @@ The Android packaging flow is separate from the content pipeline:
 
 1. regenerate content if needed
 2. run `npm run build:android:release`
-3. install `releases/android/cyber-tool-atlas-v<version>-release.apk`
+3. run `npm run release:metadata:android`
+4. verify and install `releases/android/cyber-tool-atlas-v<version>-release.apk`
 
 For repo hygiene and security checks:
 
@@ -29,6 +30,11 @@ For repo hygiene and security checks:
 2. `npm run lint`
 3. `npm run test`
 4. `npm audit`
+
+For Android release verification:
+
+1. `shasum -a 256 releases/android/cyber-tool-atlas-v<version>-release.apk`
+2. compare it against `content/release/android-release.json`
 
 ## Script responsibilities
 
@@ -46,6 +52,8 @@ For repo hygiene and security checks:
   - the editorial manifest at `content/generated/tools-editorial-manifest.json`
 - `scripts/build-wiki-site.ts`
   Converts `output/wiki/*.md` plus the final article JSON into a static GitHub Pages wiki under `site/wiki-build/`.
+- `scripts/write-android-release-metadata.ts`
+  Computes the current signed APK checksum and writes `content/release/android-release.json` for docs and wiki install surfaces.
 
 ## Deterministic vs optional enhanced articles
 

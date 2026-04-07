@@ -67,19 +67,26 @@ For a local debug install:
 npm run build:android:apk
 ```
 
-For a signed release APK:
+For the signed release APK:
 
 ```bash
 npm run build:android:release
+npm run release:metadata:android
 ```
 
-Artifacts are copied to:
+The current Android release metadata is tracked in:
 
 ```bash
-releases/android/
+content/release/android-release.json
 ```
 
-The release build script will generate a local keystore under `.secrets/android/` if one does not already exist. Keep that directory private.
+The APK itself is written to `releases/android/`, and the build script generates a local keystore under `.secrets/android/` if one does not already exist. Keep that directory private.
+
+For `v1.2.1`:
+
+- Release page: `https://github.com/danyel-ii/WikiCompanion/releases/tag/v1.2.1`
+- Direct APK: `https://github.com/danyel-ii/WikiCompanion/releases/download/v1.2.1/cyber-tool-atlas-v1.2.1-release.apk`
+- SHA-256: `58e5033a51c6c9884f5300db952884b6abf70e35323973b480b3b18e21add7f7`
 
 ## Security notes
 
@@ -87,10 +94,16 @@ The release build script will generate a local keystore under `.secrets/android/
 - The app no longer depends on `react-native-markdown-display`; article rendering is handled by the local renderer in `components/article/ArticleMarkdown.tsx`.
 - `npm audit` should currently return no unresolved production vulnerabilities after install.
 
-Install a built APK on a connected Android device with:
+Verify the APK before installing:
 
 ```bash
-adb install -r releases/android/cyber-tool-atlas-v1.1.0-release.apk
+shasum -a 256 releases/android/cyber-tool-atlas-v1.2.1-release.apk
+```
+
+Install the release APK on a connected Android device with:
+
+```bash
+adb install -r releases/android/cyber-tool-atlas-v1.2.1-release.apk
 ```
 
 ## Key files
